@@ -17,6 +17,7 @@ Once it can be used by any user with basic knowledge of computer, it will be tag
 ## Sample Deployment
 
 Check Sample deployment on heroku.
+(NOTE: Site is down as heroku doesn't honor india issued credit card due to new RBI regulation. Still exploring an alternative deployment.)
 
 https://gotolong.herokuapp.com/
 
@@ -109,6 +110,8 @@ http://127.0.0.1:8000/
 # Heroku Deployment
 
 Check Sample deployment
+
+(NOTE: Site is down as heroku doesn't honor india issued credit card due to new RBI regulation. Still looking for an altenative solution.)
 
 https://gotolong.herokuapp.com/
 
