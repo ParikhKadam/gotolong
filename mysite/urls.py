@@ -21,13 +21,10 @@ from django.conf.urls.static import static
 
 from django.views.generic import TemplateView, RedirectView
 
-from django_gotolong.amfi.views import AmfiListView, AmfiAmountView, AmfiDeficitView, \
-    AmfiNotableInclusionView, AmfiNotableExclusionView, amfi_upload, AmfiPortfWeightView
-
 from django_gotolong.bhav.views import BhavListView, bhav_fetch, bhav_upload
 
-from django_gotolong.broker.icidir.isum.views import BrokerIcidirSumListView, BrokerIcidirSumUpload
-from django_gotolong.broker.icidir.itxn.views import BrokerIcidirTxnListView, BrokerIcidirTxnUpload
+#from django_gotolong.broker.icidir.isum.views import BrokerIcidirSumListView, BrokerIcidirSumUpload
+#from django_gotolong.broker.icidir.itxn.views import BrokerIcidirTxnListView, BrokerIcidirTxnUpload
 
 from django_gotolong.bstmtdiv.views import BstmtDivListView, bstmtdiv_upload
 from django_gotolong.bstmtdiv.views import BstmtDivYearArchiveView, BstmtDivMonthArchiveView, BstmtDivAmountView, \
@@ -68,15 +65,7 @@ urlpatterns = [
                   path('accounts/', include('django.contrib.auth.urls')),
                   path('admin/', admin.site.urls),
                   path('advisor/', include('django_gotolong.advisor.urls')),
-                  path('amfi/list/', AmfiListView.as_view(), name='amfi-list'),
-                  path('amfi/upload/', amfi_upload, name='amfi-upload'),
-                  path('amfi/amount/', AmfiAmountView.as_view(), name='amfi-amount-list'),
-                  path('amfi/deficit/', AmfiDeficitView.as_view(), name='amfi-deficit-list'),
-                  path('amfi/portf-weight/', AmfiPortfWeightView.as_view(), name='amfi-portf-weight-list'),
-                  path('amfi/notable-exclusion/', AmfiNotableExclusionView.as_view(),
-                       name='amfi-notable-exclusion-list'),
-                  path('amfi/notable-inclusion/', AmfiNotableInclusionView.as_view(),
-                       name='amfi-notable-inclusion-list'),
+                  path('amfi/', include('django_gotolong.amfi.urls')),
                   path('bhav/list/', BhavListView.as_view(), name='bhav-list'),
                   path('bhav/fetch/', bhav_fetch, name='bhav-fetch'),
                   path('bhav/upload/', bhav_upload, name='bhav-upload'),
@@ -94,7 +83,10 @@ urlpatterns = [
                      name='bstmtdiv-frequency-list'),
                 path('bstmtdiv/upload/', bstmtdiv_upload, name='bstmt-upload'),
                 path('bhav/fetch/', bhav_fetch, name='bhav-fetch'),
-                  path('broker/', include('django_gotolong.broker.urls')),
+#                  path('broker/', include('django_gotolong.broker.urls')),
+                  path('brokersum/', include('django_gotolong.brokersum.urls')),
+                  path('brokertxn/', include('django_gotolong.brokertxn.urls')),
+                  path('brokermf/', include('django_gotolong.brokermf.urls')),
                   path('corpact/list/', CorpactListView.as_view(), name='corpact-list'),
                   path('corpact/upload/', corpact_upload, name='corpact-upload'),
                   path('dbstat/list/', DbstatListView.as_view(), name='dbstat-list'),

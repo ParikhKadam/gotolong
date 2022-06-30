@@ -1,10 +1,15 @@
 {% include "top.html" %}
-{% include "user_broker_icidir_top.html" %}
+{% include "user_broker_top.html" %}
 
-<h1> Mutual Fund </h1>
+<h1> Broker Mutual Fund </h1>
 
-<form action="/broker/icidir/imf/upload/" method="POST" enctype="multipart/form-data">
+<form action="/brokermf/upload/" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
+    <select name="broker" id="broker">
+  <option value="Isec">Icidirect</option>
+  <option value="Zerodha">Zerodha</option>
+</select>
+
     <label for="file1"> Upload a file</label>
     <input type="file" id="file1" name="file">
     <small>Only accepts CSV/XLS/XLSX files</small>
@@ -26,52 +31,52 @@ Sum total : {{sum_total}}
         </td>
     </tr>
 
-    {% for bim_row in object_list %}
+    {% for bmf_row in object_list %}
     <tr>
         <td>
-            {{ bim_row.bim_amc }}
+            {{ bmf_row.bmf_amc }}
         </td>
         <td>
-            {{ bim_row.bim_name }}
+            {{ bmf_row.bmf_name }}
         </td>
         <td>
-            {{ bim_row.bim_category }}
+            {{ bmf_row.bmf_category }}
         </td>
         <td>
-            {{ bim_row.bim_subcat }}
+            {{ bmf_row.bmf_subcat }}
         </td>
         <td>
-            {{ bim_row.bim_rating }}
+            {{ bmf_row.bmf_rating }}
         </td>
         <td>
-            {{ bim_row.bim_units }}
+            {{ bmf_row.bmf_units }}
         </td>
         <td>
-            {{ bim_row.bim_acp }}
+            {{ bmf_row.bmf_acp }}
         </td>
         <td>
-            {{ bim_row.bim_cost_value }}
+            {{ bmf_row.bmf_cost_value }}
         </td>
         <td>
-            {{ bim_row.bim_nav_date }}
+            {{ bmf_row.bmf_nav_date }}
         </td>
         <td>
-            {{ bim_row.bim_nav }}
+            {{ bmf_row.bmf_nav }}
         </td>
         <td>
-            {{ bim_row.bim_nav_value }}
+            {{ bmf_row.bmf_nav_value }}
         </td>
         <td>
-            {{ bim_row.bim_pnl_realized }}
+            {{ bmf_row.bmf_pnl_realized }}
         </td>
         <td>
-            {{ bim_row.bim_pnl }}
+            {{ bmf_row.bmf_pnl }}
         </td>
         <td>
-            {{ bim_row.bim_pnl_pct }}
+            {{ bmf_row.bmf_pnl_pct }}
         </td>
         <td>
-            {{ bim_row.bim_research_reco }}
+            {{ bmf_row.bmf_research_reco }}
         </td>
 
         <td>

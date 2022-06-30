@@ -20,9 +20,9 @@ from django_gotolong.trendlyne.models import Trendlyne
 from django_gotolong.fofeti.models import Fofeti
 from django_gotolong.mfund.models import Mfund
 
-from django_gotolong.broker.icidir.isum.models import BrokerIcidirSum
-from django_gotolong.broker.icidir.itxn.models import BrokerIcidirTxn
-from django_gotolong.broker.icidir.imf.models import BrokerIcidirMf
+from django_gotolong.brokersum.models import BrokerSum
+from django_gotolong.brokertxn.models import BrokerTxn
+from django_gotolong.brokermf.models import BrokerMf
 
 
 class DbstatListView(ListView):
@@ -34,9 +34,9 @@ class DbstatListView(ListView):
     db_stat = {}
 
     db_stat['amfi'] = Amfi.objects.count()
-    db_stat['bim'] = BrokerIcidirMf.objects.count()
-    db_stat['bis'] = BrokerIcidirSum.objects.count()
-    db_stat['bit'] = BrokerIcidirTxn.objects.count()
+    db_stat['bim'] = BrokerMf.objects.count()
+    db_stat['bis'] = BrokerSum.objects.count()
+    db_stat['bit'] = BrokerTxn.objects.count()
     db_stat['bhav'] = Bhav.objects.count()
     db_stat['bstmtdiv'] = BstmtDiv.objects.count()
     db_stat['corpact'] = Corpact.objects.count()

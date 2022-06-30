@@ -1,0 +1,126 @@
+{% include "top.html" %}
+{% include "user_broker_top.html" %}
+
+<h1>Broker Sum</h1>
+
+<form action="/brokersum/upload/" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <select name="broker" id="broker">
+  <option value="Isec">Icidirect</option>
+  <option value="Zerodha">Zerodha</option>
+</select>
+
+    <label for="file1"> Upload a file</label>
+    <input type="file" id="file1" name="file">
+    <small>Only accepts CSV/XLS/XLSX files</small>
+    <button type="submit">Upload</button>
+</form>
+
+<a href="/brokersum/reset/">Clear/Reset the data</a> <br>
+
+Number of object: {{ object_list|length }}
+<br>
+
+<table>
+    {% for bs_row in object_list %}
+    <tr>
+        <td>
+            {{ bs_row.bs_stock_symbol }}
+        </td>
+
+        <td>
+            {{ bs_row.bs_company_name }}
+        </td>
+
+        <td>
+            {{ bs_row.bs_isin_code }}
+        </td>
+
+        <td>
+            {{ bs_row.bs_qty }}
+        </td>
+
+        <td>
+            {{ bs_row.bs_acp }}
+        </td>
+
+        <td>
+            {{ bs_row.bs_cmp }}
+        </td>
+
+        <td>
+            {{ bs_row.bs_pct_change }}
+        </td>
+
+        <td>
+            {{ bs_row.bs_value_cost }}
+        </td>
+
+        <td>
+            {{ bs_row.bs_value_market }}
+        </td>
+
+        <td>
+            {{ bs_row.bs_days_gain }}
+        </td>
+
+        <td>
+            {{ bs_row.bs_days_gain_pct }}
+        </td>
+
+        <td>
+            {{ bs_row.bs_realized_pl }}
+        </td>
+
+        <td>
+            {{ bs_row.bs_unrealized_pl }}
+        </td>
+
+        <td>
+            {{ bs_row.bs_unrealized_pl_pct }}
+        </td>
+
+        <td>
+            {{ bs_row.unused1 }}
+        </td>
+
+        <td>
+            {{ bs_row.comp_rank }}
+        </td>
+
+        <td>
+            {{ bs_row.cap_type }}
+        </td>
+
+        <td>
+            {{ bs_row.funda_reco_type }}
+        </td>
+
+        <td>
+            {{ bs_row.funda_reco_cause }}
+        </td>
+
+        <td>
+            {{ bs_row.cap_weight }}
+        </td>
+
+        <td>
+            {{ bs_row.cap_count }}
+        </td>
+        <td>
+            {{ bs_row.cap_cost }}
+        </td>
+
+    </tr>
+    {% empty %}
+    <tr>
+        <td>
+            No dematsum yet.
+        </td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% include "bottom.html" %}

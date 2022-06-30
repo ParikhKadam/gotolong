@@ -26,7 +26,7 @@ from django.http import HttpResponseRedirect
 
 from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update
 
-from django_gotolong.broker.icidir.itxn.models import BrokerIcidirTxn
+from django_gotolong.brokertxn.models import BrokerTxn
 
 from plotly.offline import plot
 import plotly.graph_objs as go
@@ -610,22 +610,22 @@ class DematTxnRefreshView(View):
             print('max_dt_id ', max_dt_id)
 
         unique_id = max_dt_id
-        for brec in BrokerIcidirTxn.objects.all().filter(bit_user_id=request.user.id):
+        for brec in BrokerTxn.objects.all().filter(bt_user_id=request.user.id):
             unique_id += 1
             if self.debug_level:
-                print(brec.bit_user_id, brec.bit_stock_symbol, brec.bit_isin_code,
-                      brec.bit_action, brec.bit_quantity, brec.bit_txn_price, brec.bit_txn_date)
+                print(brec.bt_user_id, brec.bt_stock_symbol, brec.bt_isin_code,
+                      brec.bt_action, brec.bt_quantity, brec.bt_txn_price, brec.bt_txn_date)
             _, created = DematTxn.objects.update_or_create(
                 dt_id=unique_id,
-                dt_user_id=brec.bit_user_id,
-                dt_broker='icidir',
-                dt_ticker=brec.bit_stock_symbol,
-                dt_isin=brec.bit_isin_code,
-                dt_action=brec.bit_action,
-                dt_quantity=brec.bit_quantity,
-                dt_price=brec.bit_txn_price,
-                dt_amount=(brec.bit_quantity * brec.bit_txn_price),
-                dt_date=brec.bit_txn_date
+                dt_user_id=brec.bt_user_id,
+                dt_broker=brec.bt_broker,
+                dt_ticker=brec.bt_stock_symbol,
+                dt_isin=brec.bt_isin_code,
+                dt_action=brec.bt_action,
+                dt_quantity=brec.bt_quantity,
+                dt_price=brec.bt_txn_price,
+                dt_amount=(brec.bt_quantity * brec.bt_txn_price),
+                dt_date=brec.bt_txn_date
             )
 
         # breakpoint()

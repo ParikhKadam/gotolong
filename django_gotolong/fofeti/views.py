@@ -324,7 +324,7 @@ def Fofeti_upload(request):
                 print(df.columns)
 
             # change column name of data frame
-            columns_list = ["scheme_name", "benchmark", "nav_date", "nav_regular", "nav_direct",
+            columns_list = ["scheme_name", "benchmark", "risk_scheme", "risk_benchmark", "nav_date", "nav_regular", "nav_direct",
                             "return_1y_pct_regular", "return_1y_pct_direct", "return_1y_pct_benchmark",
                             "return_3y_pct_regular", "return_3y_pct_direct", "return_3y_pct_benchmark",
                             "return_5y_pct_regular", "return_5y_pct_direct", "return_5y_pct_benchmark",
@@ -349,7 +349,7 @@ def Fofeti_upload(request):
             df[["daily_aum"]] = df[["daily_aum"]].astype(int)
 
             # drop columns that are not required
-            skip_columns_list = ["nav_date", "nav_regular", "nav_direct",
+            skip_columns_list = ["risk_scheme", "risk_benchmark", "nav_date", "nav_regular", "nav_direct",
                                  "return_1y_pct_regular", "return_1y_pct_direct", "return_1y_pct_benchmark",
                                  "return_3y_pct_regular", "return_3y_pct_direct", "return_3y_pct_benchmark",
                                  "return_5y_pct_regular", "return_5y_pct_direct", "return_5y_pct_benchmark",

@@ -29,7 +29,7 @@ from django.http import HttpResponseRedirect
 
 from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update
 
-from django_gotolong.broker.icidir.imf.models import BrokerIcidirMf
+from django_gotolong.brokermf.models import BrokerMf
 
 
 def Mfund_url():
@@ -236,25 +236,25 @@ class MfundRefreshView(View):
             print('max_mf_id ', max_mf_id)
 
         unique_id = max_mf_id
-        for brec in BrokerIcidirMf.objects.all().filter(bim_user_id=request.user.id):
+        for brec in BrokerMf.objects.all().filter(bmf_user_id=request.user.id):
             unique_id += 1
-            print(brec.bim_amc, brec.bim_name, brec.bim_category, brec.bim_subcat)
-            print(brec.bim_rating, brec.bim_units, brec.bim_cost_value, brec.bim_nav_value)
-            print(brec.bim_research_reco)
+            print(brec.bmf_amc, brec.bmf_name, brec.bmf_category, brec.bmf_subcat)
+            print(brec.bmf_rating, brec.bmf_units, brec.bmf_cost_value, brec.bmf_nav_value)
+            print(brec.bmf_research_reco)
             # skip 0 units
-            if int(float(brec.bim_units)) != 0:
+            if int(float(brec.bmf_units)) != 0:
                 _, created = Mfund.objects.update_or_create(
                     mf_id=unique_id,
                     mf_user_id=request.user.id,
-                    mf_broker='icidir',
-                    mf_amc=brec.bim_amc,
-                    mf_name=brec.bim_name,
-                    mf_category=brec.bim_category,
-                    mf_subcat=brec.bim_subcat,
-                    mf_rating=brec.bim_rating,
-                    mf_cost_value=brec.bim_cost_value,
-                    mf_nav_value=brec.bim_nav_value,
-                    mf_research_reco=brec.bim_research_reco
+                    mf_broker=brec.bmf_broker,
+                    mf_amc=brec.bmf_amc,
+                    mf_name=brec.bmf_name,
+                    mf_category=brec.bmf_category,
+                    mf_subcat=brec.bmf_subcat,
+                    mf_rating=brec.bmf_rating,
+                    mf_cost_value=brec.bmf_cost_value,
+                    mf_nav_value=brec.bmf_nav_value,
+                    mf_research_reco=brec.bmf_research_reco
                 )
 
         # breakpoint()

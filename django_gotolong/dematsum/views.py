@@ -32,7 +32,7 @@ from django.http import HttpResponseRedirect
 
 from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update
 
-from django_gotolong.broker.icidir.isum.models import BrokerIcidirSum
+from django_gotolong.brokersum.models import BrokerSum
 
 
 
@@ -348,20 +348,20 @@ class DematSumRefreshView(View):
             print('max_ds_id ', max_ds_id)
 
         unique_id = max_ds_id
-        for brec in BrokerIcidirSum.objects.all().filter(bis_user_id=request.user.id):
+        for brec in BrokerSum.objects.all().filter(bs_user_id=request.user.id):
             unique_id += 1
-            print(brec.bis_stock_symbol, brec.bis_isin_code_id, brec.bis_qty)
-            print(brec.bis_acp, brec.bis_value_cost, brec.bis_value_market)
+            print(brec.bs_stock_symbol, brec.bs_isin_code_id, brec.bs_qty)
+            print(brec.bs_acp, brec.bs_value_cost, brec.bs_value_market)
             _, created = DematSum.objects.update_or_create(
                 ds_id=unique_id,
                 ds_user_id=request.user.id,
-                ds_broker='icidir',
-                ds_ticker=brec.bis_stock_symbol,
-                ds_isin=brec.bis_isin_code_id,
-                ds_qty=brec.bis_qty,
-                ds_acp=brec.bis_acp,
-                ds_costvalue=brec.bis_value_cost,
-                ds_mktvalue=brec.bis_value_market
+                ds_broker=brec.bs_broker,
+                ds_ticker=brec.bs_stock_symbol,
+                ds_isin=brec.bs_isin_code_id,
+                ds_qty=brec.bs_qty,
+                ds_acp=brec.bs_acp,
+                ds_costvalue=brec.bs_value_cost,
+                ds_mktvalue=brec.bs_value_market
             )
 
         # breakpoint()

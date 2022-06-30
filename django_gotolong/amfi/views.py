@@ -39,7 +39,7 @@ class AmfiListView(ListView):
         return context
 
 
-class AmfiAmountView(ListView):
+class AmfiAmountAllView(ListView):
     dematsum_qs = DematSum.objects.filter(ds_isin=OuterRef("comp_isin"))
     gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
     queryset = Amfi.objects.all(). \
@@ -54,6 +54,22 @@ class AmfiAmountView(ListView):
 
         return context
 
+
+class AmfiAmountPositiveView(ListView):
+    dematsum_qs = DematSum.objects.filter(ds_isin=OuterRef("comp_isin"))
+    gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+    queryset = Amfi.objects.all(). \
+        annotate(value_cost=Subquery(dematsum_qs.values('ds_costvalue')[:1])). \
+        annotate(cap_weight=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+        annotate(deficit=ExpressionWrapper(F('cap_weight') * 1000 - F('value_cost'), output_field=IntegerField())). \
+        filter(value_cost__isnull=False).\
+        values('comp_rank', 'comp_name', 'value_cost', 'deficit'). \
+        order_by('comp_rank')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
 
 class AmfiPortfWeightView(ListView):
 

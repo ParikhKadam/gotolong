@@ -187,7 +187,7 @@ def bstmtdiv_upload(request):
 
     # delete existing records
     print('Deleted existing BstmtDiv data')
-    BstmtDiv.objects.all().filter(bsdiv_user_id=request.id).delete()
+    BstmtDiv.objects.all().filter(bsdiv_user_id=request.user.id).delete()
 
     # req_file = request.FILES['file']
     unique_id = 0
@@ -410,7 +410,7 @@ def bstmtdiv_upload(request):
 
             _, created = BstmtDiv.objects.update_or_create(
                 bsdiv_id=unique_id,
-                bsdiv_user_id=request.id,
+                bsdiv_user_id=request.user.id,
                 bsdiv_date=bsdiv_date,
                 bsdiv_remarks=bsdiv_remarks,
                 bsdiv_amount=bsdiv_amount

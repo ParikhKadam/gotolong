@@ -1,0 +1,203 @@
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+HINDUSTHAN ZINC LTD. (JDHH00716C)	2
+Amount paid/credited	3,856
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+POWER GRID CORPORATION OF INDIA LIMITED (DELP32841E)	3
+Amount paid/credited	1,513
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+REC LIMITED (DELR38715F)	2
+Amount paid/credited	1,485
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+INFOSYS LIMITED (BLRI01423C)	2
+Amount paid/credited	1,182
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+POWER FINANCE CORPORATION LIMITED (DELP34120C)	1
+Amount paid/credited	1,016
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+SKF INDIA LTD (PNES00472D)	1
+Amount paid/credited	650
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+BRITANNIA INDUSTRIES LTD (CALB00275C)	2
+Amount paid/credited	555
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+VST INDUSTRIES LIMITED (HYDV00023C)	1
+Amount paid/credited	412
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+LIC HOUSING FINANCE LTD (MUML05003F)	1
+Amount paid/credited	400
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+THE TATA POWER COMPANY IMITED (MUMT24632G)	1
+Amount paid/credited	349
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+HERO MOTOCORP LIMITED (DELH00028A)	1
+Amount paid/credited	325
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+KAJARIA CERAMICS LTD (DELK05579A)	1
+Amount paid/credited	280
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+HEIDELBERGCEMENT INDIA LIMITED (RTKM04840D)	1
+Amount paid/credited	198
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+MINDTREE LIMITED (BLRM02397D)	2
+Amount paid/credited	175
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+NIPPON LIFE INDIA ASSET MANAGEMENT LIMITED (MUMR07433G)	2
+Amount paid/credited	146
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+MAHINDRA & MAHINDRA LTD. (MUMM18898F)	1
+Amount paid/credited	89
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+L&T TECHNOLOGY SERVICES LIMITED (MUML08914D)	3
+Amount paid/credited	84
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+DLF LIMITED (DELD00585E)	1
+Amount paid/credited	52
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+HAVELLS INDIA LIMITED (DELH03779G)	1
+Amount paid/credited	51
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+DR. LAL PATHLABS LIMITED (DELD03576G)	2
+Amount paid/credited	48
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+VOLTAS LIMITED (MUMV28259A)	1
+Amount paid/credited	40
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+MULTI COMMODITY EXCHANGE OF INDIA LIMITED (MUMM18035D)	1
+Amount paid/credited	30
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+ABB INDIA LIMITED (BLRA00533B)	1
+Amount paid/credited	24
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+TATA ELXSI LIMITED (BLRT00417E)	1
+Amount paid/credited	17
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+AEGIS LOGISTICS LIMITED (MUMA19866A)	1
+Amount paid/credited	11
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+BERGER PAINTS INDIA LIMITED (CALB00256E)	1
+Amount paid/credited	5
+
+Feedback Expected
+Dividend
+TDS-194
+Dividend received (Section 194)
+EPL LIMITED (MUME01100B)	1
+Amount paid/credited	0
+
+
+Income distributed by business trust
+TDS-194LBA
+Income from units of a business trust (Section 194LBA)
+EMBASSY OFFICE PARKS REIT (BLRE08579E)	2
+Amount paid/credited	1,192
+
+
+Income distributed by business trust
+TDS-194LBA
+Income from units of a business trust (Section 194LBA)
+MINDSPACE BUSINESS PARKS REIT (MUMM57067D)	1
+Amount paid/credited	212

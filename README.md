@@ -62,6 +62,26 @@ export GOTOLONG_PG_DATABASE_URL=postgres://postgres:root@localhost:5432/gotolong
 
 export DATABASE_URL=${GOTOLONG_MY_DATABASE_URL}
 
+## Modify DB configuration
+
+Modify data/config/gotolong-config.ini
+
+[DATABASE]
+
+db_type = mariadb
+
+db_name = gotolong
+
+db_user = root
+
+db_pass = root
+
+\# for postgresql
+
+pg_user = postgres
+
+pg_pass = root
+
 ## Create DB
 
 gotolong_db_schema_install.sh mysql create
@@ -77,8 +97,6 @@ gotolong_db_schema_install.sh pgsql import "${PG_DATABASE_URL}"
 ## Start using App
 
 The django project is capable of browsing the data stored in 'gotolong' database.
-
-cd django_gotolong/
 
 python manage.py runserver
 
