@@ -17,6 +17,7 @@ import re
 import openpyxl
 
 import pandas as pd
+import numpy as np
 
 from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update
 
@@ -156,6 +157,27 @@ class FofetiListView_NonGold_ETF(ListView):
         return context
 
 
+class FofetiListView_Global_ETF(ListView):
+    model = Fofeti
+
+    queryset = Fofeti.objects.all().filter(fofeti_type='ETF'). \
+        exclude(fofeti_benchmark__contains='Gold'). \
+        exclude(fofeti_benchmark__contains='NIFTY'). \
+        exclude(fofeti_benchmark__contains='Nifty'). \
+        exclude(fofeti_benchmark__contains='S&P BSE').order_by('-fofeti_aum')
+
+    # filter(Q(fofeti_benchmark__contains='MSCI')|Q(fofeti_benchmark__contains='Russell')
+    #       |Q(fofeti_benchmark__contains='NASDAQ') | Q(fofeti_benchmark__contains='Nasdaq')
+    #       |Q(fofeti_benchmark__contains='S&P 500') | Q(fofeti_benchmark__contains='NYSE')
+    #       |Q(fofeti_benchmark__contains='Hang Seng')).order_by('-fofeti_aum')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        refresh_url = Fofeti_url()
+        context["refresh_url"] = refresh_url
+        return context
+
+
 class FofetiListView_Nifty_ETF(ListView):
     model = Fofeti
 
@@ -220,12 +242,31 @@ class FofetiListView_Next_FOF(ListView):
         context["refresh_url"] = refresh_url
         return context
 
-
 class FofetiListView_Mid_FOF(ListView):
     model = Fofeti
 
     queryset = Fofeti.objects.all().filter(Q(fofeti_type='Index') | Q(fofeti_type='FoF')). \
         filter(fofeti_benchmark__contains='Midcap 150').order_by('-fofeti_aum')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        refresh_url = Fofeti_url()
+        context["refresh_url"] = refresh_url
+        return context
+
+
+class FofetiListView_Global_FOF(ListView):
+    model = Fofeti
+
+    queryset = Fofeti.objects.all().filter(Q(fofeti_type='Index') | Q(fofeti_type='FoF')). \
+        exclude(fofeti_benchmark__contains='Gold'). \
+        exclude(fofeti_benchmark__contains='NIFTY'). \
+        exclude(fofeti_benchmark__contains='Nifty'). \
+        exclude(fofeti_benchmark__contains='S&P BSE').order_by('-fofeti_aum')
+
+    # filter(Q(fofeti_benchmark__contains='MSCI') | Q(fofeti_benchmark__contains='Russell')
+    #       | Q(fofeti_benchmark__contains='NASDAQ') | Q(fofeti_benchmark__contains='Nasdaq')
+    #       | Q(fofeti_benchmark__contains='S&P 500')| Q(fofeti_benchmark__contains='NYSE'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -342,12 +383,6 @@ def Fofeti_upload(request):
             # Keep only top 1000 entries
             # df = df.iloc[:1000]
 
-            # round avg_mcap
-            # df = df.round({'avg_mcap' : 1})
-            # covert to numeric
-            # df[["avg_mcap"]] = df[["avg_mcap"]].apply(pd.to_numeric)
-            df[["daily_aum"]] = df[["daily_aum"]].astype(int)
-
             # drop columns that are not required
             skip_columns_list = ["risk_scheme", "risk_benchmark", "nav_date", "nav_regular", "nav_direct",
                                  "return_1y_pct_regular", "return_1y_pct_direct", "return_1y_pct_benchmark",
@@ -358,6 +393,21 @@ def Fofeti_upload(request):
                                  "return_since_launch_benchmark", ]
 
             df.drop(skip_columns_list, axis=1, inplace=True)
+
+            if debug_level > 0:
+                print(df)
+
+            # replace empty value with NaN
+            df['daily_aum'].replace('', np.nan, inplace=True)
+
+            # drop empty values
+            df.dropna(subset=['daily_aum'], inplace=True)
+
+            # round avg_mcap
+            # df = df.round({'avg_mcap' : 1})
+            # covert to numeric
+            # df[["avg_mcap"]] = df[["avg_mcap"]].apply(pd.to_numeric)
+            df[["daily_aum"]] = df[["daily_aum"]].astype(int)
 
             data_set = df.to_csv(header=True, index=False)
 
@@ -385,6 +435,8 @@ def Fofeti_upload(request):
                 fofeti_type = 'ETF'
             elif re.search('Fund', fofeti_scheme):
                 fofeti_type = 'Index'
+            elif re.search('FoF', fofeti_scheme):
+                fofeti_type = 'FoF'
             else:
                 fofeti_type = 'FoF'
             fofeti_benchmark = column[1].strip()
