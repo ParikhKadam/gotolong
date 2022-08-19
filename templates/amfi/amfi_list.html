@@ -26,6 +26,11 @@
 <br>
 Number of object: {{ object_list|length }}
 <br>
+Cost : {{costvalue}}
+Market : {{mktvalue}}
+<br>
+
+{% with sum_deficit=0 %}
 
 <table>
 
@@ -72,5 +77,11 @@ Number of object: {{ object_list|length }}
     <tr>No amfi yet.</tr>
     {% endfor %}
 </table>
+
+{% if sum_deficit %}
+Deficit : {{sum_deficit}}
+{% endif %}
+
+{% endwith %}
 
 {% include "bottom.html" %}

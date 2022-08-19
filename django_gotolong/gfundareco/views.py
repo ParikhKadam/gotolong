@@ -43,7 +43,7 @@ class GfundarecoListView2(ListView):
     # paginate_by = 300
     # filter_backends = [filters.OrderingFilter,]
     # ordering_fields = ['sno', 'nse_symbol']
-    tl_qs = Trendlyne.objects.filter(tl_isin=OuterRef("comp_isin"))
+    tl_qs = Trendlyne.objects.filter(tl_nse=OuterRef("nse_symbol"))
     gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
     gfunda_reco_qs = Gfundareco.objects.filter(funda_reco_isin=OuterRef("comp_isin"))
     queryset = Amfi.objects.all(). \
@@ -68,7 +68,7 @@ class GfundarecoRefreshView(View):
     fr_buy = {}
     fr_hold = {}
     fr_enabled = {}
-    isin_industry_dict = {}
+    ticker_industry_dict = {}
     debug_level = 1
 
     def get(self, request):
@@ -78,7 +78,7 @@ class GfundarecoRefreshView(View):
     def __init__(self):
         super(GfundarecoRefreshView, self).__init__()
 
-    def gfunda_reco_get_reco(self, stock_name, isin, bat, der, roce3,
+    def gfunda_reco_get_reco(self, stock_name, ticker, isin, bat, der, roce3,
                              roe3, dpr2, sales2, profit5, icr,
                              pledge, low_3y, low_5y, notes):
 
@@ -94,13 +94,13 @@ class GfundarecoRefreshView(View):
 
         ignore_der = False
         # skip debt for Financial Services like Bank/NBFC.
-        if isin in self.isin_industry_dict:
+        if ticker in self.ticker_industry_dict:
             if self.debug_level > 1:
-                print('tl', 'isin', isin, 'industry', self.isin_industry[isin])
-            if self.isin_industry_dict[isin] == 'FINANCIAL SERVICES':
+                print('tl', 'isin', ticker, 'industry', self.ticker_industry_dict[ticker])
+            if self.ticker_industry_dict[ticker] == 'FINANCIAL SERVICES':
                 ignore_der = True
         else:
-            print(isin, 'not found in isin db')
+            print(ticker, isin, 'not found in ticker industry db')
 
         funda_reco_type = 'NONE'
         funda_reco_cause = ''
@@ -226,10 +226,10 @@ class GfundarecoRefreshView(View):
 
         for ind in Indices.objects.all():
             # strip unwanted new line
-            ind.ind_isin = ind.ind_isin.rstrip()
+            ind.ind_ticker = ind.ind_ticker.rstrip()
             if debug_level > 1:
-                print(ind.ind_isin, ind.ind_industry)
-            self.isin_industry_dict[ind.ind_isin] = ind.ind_industry
+                print(ind.ind_ticker, ind.ind_industry)
+            self.ticker_industry_dict[ind.ind_ticker] = ind.ind_industry
 
         # breakpoint()
 
@@ -246,12 +246,12 @@ class GfundarecoRefreshView(View):
             # using 0 for roe3
             # using notes itself as notes
             (funda_reco_type, funda_reco_cause) = \
-                self.gfunda_reco_get_reco(tl.tl_stock_name, tl.tl_isin, tl.tl_bat, tl.tl_der, tl.tl_roce3,
+                self.gfunda_reco_get_reco(tl.tl_stock_name, tl.tl_nse, tl.tl_isin, tl.tl_bat, tl.tl_der, tl.tl_roce3,
                                           tl.tl_roe3, tl.tl_dpr2, tl.tl_sales2, tl.tl_profit5, tl.tl_icr,
                                           tl.tl_pledge, tl.tl_low_3y, tl.tl_low_5y, "notes")
 
             if debug_level > 1:
-                print(tl.tl_stock_name, tl.tl_isin, funda_reco_type, funda_reco_cause)
+                print(tl.tl_stock_name, tl.tl_nse, tl.tl_isin, funda_reco_type, funda_reco_cause)
 
             # isin_obj = Indices.objects.get(comp_isin=tl.isin)
             # print(isin_obj.comp_ticker)
@@ -260,11 +260,16 @@ class GfundarecoRefreshView(View):
             first_name = tl.tl_stock_name.split(' ', 1)[0]
             # use upper case
             first_name = first_name.upper()
-            amfi_obj = Amfi.objects.filter(comp_isin=tl.tl_isin).first()
+            # no longer using isin to name lookup
+
+            '''
+            # amfi_obj = Amfi.objects.filter(comp_isin=tl.tl_isin).first()
+            # amfi_obj = Amfi.objects.filter(nse_symbol=tl.tl_nse).first()
 
             # try lookup using name if isin has changed
-            if not amfi_obj:
-                print('amfi obj failed for isin', tl.tl_isin, 'stock_name', tl.tl_stock_name)
+            # if not amfi_obj:
+                # print('amfi obj failed for isin', tl.tl_isin, 'stock_name', tl.tl_stock_name)
+                print('amfi obj failed for nse ticker', tl.tl_nse, 'stock_name', tl.tl_stock_name)
                 amfi_obj = Amfi.objects.filter(comp_name__contains=first_name).first()
 
             if amfi_obj:
@@ -273,14 +278,20 @@ class GfundarecoRefreshView(View):
                 if tl.tl_isin == 'INE745G01035':
                     print('nse symbol', amfi_obj.nse_symbol)
                 if amfi_obj.nse_symbol != '':
-                    _, created = Gfundareco.objects.update_or_create(
-                        funda_reco_ticker=amfi_obj.nse_symbol,
-                        funda_reco_isin=tl.tl_isin,
-                        funda_reco_type=funda_reco_type,
-                        funda_reco_cause=funda_reco_cause
-                    )
+                    # earlier code ....
             else:
                 print('amfi obj failed for stock_name', tl.tl_stock_name, 'first name', first_name)
+            '''
+
+            if tl.tl_nse != '':
+                _, created = Gfundareco.objects.update_or_create(
+                    funda_reco_ticker=tl.tl_nse,
+                    funda_reco_isin=tl.tl_isin,
+                    funda_reco_type=funda_reco_type,
+                    funda_reco_cause=funda_reco_cause
+                )
+            else:
+                print('nse failed for stock_name', tl.tl_stock_name, 'first name', first_name)
 
         # Updated Gfundareco objects
         lastrefd_update("gfundareco")

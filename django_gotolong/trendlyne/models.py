@@ -5,7 +5,8 @@ from django.db import models
 
 class Trendlyne(models.Model):
     tl_stock_name = models.TextField(blank=True, null=True)
-    tl_isin = models.TextField(primary_key=True)
+    tl_nse = models.TextField(primary_key=True)
+    tl_isin = models.TextField(blank=True, null=True)
     tl_bat = models.FloatField(blank=True, null=True)
     tl_der = models.FloatField(blank=True, null=True)
     tl_roce3 = models.FloatField(blank=True, null=True)

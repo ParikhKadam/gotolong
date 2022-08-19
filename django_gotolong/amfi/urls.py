@@ -20,15 +20,19 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
-from django_gotolong.amfi.views import AmfiListView, AmfiAmountAllView, AmfiAmountPositiveView,\
-    AmfiDeficitView, AmfiNotableInclusionView, AmfiNotableExclusionView, amfi_upload, AmfiPortfWeightView
+from django_gotolong.amfi.views import AmfiListView, AmfiAmountAllView, AmfiAmountPositiveView, \
+    AmfiDeficitWeightView, AmfiDeficit25kView, AmfiDeficit50kView, AmfiDeficit100kView, \
+    AmfiNotableInclusionView, AmfiNotableExclusionView, amfi_upload, AmfiPortfWeightView
 
 urlpatterns = [
     path('list/', AmfiListView.as_view(), name='amfi-list'),
     path('upload/', amfi_upload, name='amfi-upload'),
     path('amount-all/', AmfiAmountAllView.as_view(), name='amfi-amount-all-list'),
     path('amount-positive/', AmfiAmountPositiveView.as_view(), name='amfi-amount-positive-list'),
-    path('deficit/', AmfiDeficitView.as_view(), name='amfi-deficit-list'),
+    path('deficit/weight/', AmfiDeficitWeightView.as_view(), name='amfi-deficit-weight-list'),
+    path('deficit/25k/', AmfiDeficit25kView.as_view(), name='amfi-deficit-25k-list'),
+    path('deficit/50k/', AmfiDeficit50kView.as_view(), name='amfi-deficit-50k-list'),
+    path('deficit/100k/', AmfiDeficit100kView.as_view(), name='amfi-deficit-100k-list'),
     path('portf-weight/', AmfiPortfWeightView.as_view(), name='amfi-portf-weight-list'),
     path('notable-exclusion/', AmfiNotableExclusionView.as_view(),
          name='amfi-notable-exclusion-list'),

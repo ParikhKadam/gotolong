@@ -153,6 +153,32 @@ Manual Deploy : Deploy a github branch (master) : Deploy Branch
 
 Your app was successfully deployed : View.
 
+# Screenshots
+
+## Home
+
+<img src="media/screenshots/gotolong-home-Screeenshot.png" >
+## Global Advisor
+<img src="media/screenshots/gotolong-advisor-Screeenshot.png" >
+## Global Fof/ETF
+<img src="media/screenshots/gotolong-fof-etf-Screeenshot.png" >
+
+## User broker summary
+
+<img src="media/screenshots/gotolong-user-broker-sum-Screeenshot.png" >
+
+## User broker transaction
+
+<img src="media/screenshots/gotolong-user-broker-txn-Screeenshot.png" >
+
+## User broker mutual fund
+
+<img src="media/screenshots/gotolong-user-broker-mf-Screeenshot.png" >
+
+## User portfolio health
+
+<img src="media/screenshots/gotolong-user-broker-phealth-Screeenshot.png" >
+
 # Modules Information
 
 ## amfi module

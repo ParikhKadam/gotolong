@@ -5,10 +5,10 @@ from django.urls import reverse
 from django.http import HttpResponseRedirect
 
 import urllib.request
-import csv
-import io
 from datetime import date, timedelta
 import pandas as pd
+import csv, io
+import openpyxl
 
 from django_gotolong.trendlyne.models import Trendlyne
 from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update
@@ -103,7 +103,8 @@ def trendlyne_upload(request):
                 print(df.columns)
 
             # change column name of data frame
-            columns_list = ['tl_stock_name', 'tl_isin', 'tl_bat', 'tl_der', 'tl_roce3',
+            columns_list = ['tl_stock_name', 'tl_nse', 'tl_bse', 'tl_isin', 'tl_cmp',
+                            'tl_industry', 'tl_bat', 'tl_der', 'tl_roce3',
                             'tl_roe3', 'tl_dpr2', 'tl_sales2', 'tl_profit5', 'tl_icr',
                             'tl_pledge', 'tl_low_3y', 'tl_low_5y']
             df.columns = columns_list
@@ -119,18 +120,26 @@ def trendlyne_upload(request):
             # df = df.round({'avg_mcap' : 1})
             # covert to numeric
             # df[["avg_mcap"]] = df[["avg_mcap"]].apply(pd.to_numeric)
-            df[["avg_mcap"]] = df[["avg_mcap"]].astype(int)
+            # df[["avg_mcap"]] = df[["avg_mcap"]].astype(int)
+
+            # replace empty values
+            df['tl_profit5'] = df['tl_profit5'].replace(['^\s*$'], '0.0', regex=True)
+            df['tl_pledge'].replace([''], '0.0', inplace=True)
+            df['tl_bat'].replace([''], '0.0', inplace=True)
+
+            # try to replace empty cell with 0.0
+            df.fillna(0.0, inplace=True)
 
             # drop columns that are not required
-            # skip_columns_list = ['bse_mcap', 'nse_mcap', 'mse_symbol', 'mse_mcap']
-            # df.drop(skip_columns_list, axis=1, inplace=True)
+            skip_columns_list = ['tl_bse', 'tl_cmp', 'tl_industry']
+            df.drop(skip_columns_list, axis=1, inplace=True)
 
             data_set = df.to_csv(header=True, index=False)
 
-        if req_file.name.endswith('.csv'):
+        elif req_file.name.endswith('.csv'):
             data_set = req_file.read().decode('UTF-8')
 
-        if not (req_file.name.endswith('.csv') or req_file.name.endswith('.xls') or req_file.name.endswith('.xlsx')):
+        elif not (req_file.name.endswith('.csv') or req_file.name.endswith('.xls') or req_file.name.endswith('.xlsx')):
             messages.error(request, req_file.name + ' : THIS IS NOT A XLS/XLSX/CSV FILE.')
             return HttpResponseRedirect(reverse("trendlyne-list"))
 
@@ -141,18 +150,19 @@ def trendlyne_upload(request):
 
         for column in csv.reader(io_string, delimiter=',', quotechar='"'):
             tl_stock_name = column[0].strip()
-            tl_isin = column[1].strip()
-            tl_bat = column[2].strip()
-            tl_der = column[3].strip()
-            tl_roce3 = column[4].strip()
-            tl_roe3 = column[5].strip()
-            tl_dpr2 = column[6].strip()
-            tl_sales2 = column[7].strip()
-            tl_profit5 = column[8].strip()
-            tl_icr = column[9].strip()
-            tl_pledge = column[10].strip()
-            tl_low_3y = column[11].strip()
-            tl_low_5y = column[12].strip()
+            tl_nse = column[1].strip()
+            tl_isin = column[2].strip()
+            tl_bat = column[3].strip()
+            tl_der = column[4].strip()
+            tl_roce3 = column[5].strip()
+            tl_roe3 = column[6].strip()
+            tl_dpr2 = column[7].strip()
+            tl_sales2 = column[8].strip()
+            tl_profit5 = column[9].strip()
+            tl_icr = column[10].strip()
+            tl_pledge = column[11].strip()
+            tl_low_3y = column[12].strip()
+            tl_low_5y = column[13].strip()
 
             # this should be handled somehow
             tl_der = tl_der.strip(' \n\t%')
@@ -202,11 +212,13 @@ def trendlyne_upload(request):
                 # not sure what to do with it
                 tl_pledge = 0.432
 
-            print(tl_stock_name)
+            if debug_level > 0:
+                print(tl_stock_name)
 
             try:
                 _, created = Trendlyne.objects.update_or_create(
                     tl_stock_name=tl_stock_name,
+                    tl_nse=tl_nse,
                     tl_isin=tl_isin,
                     tl_bat=tl_bat,
                     tl_der=tl_der,
@@ -222,6 +234,7 @@ def trendlyne_upload(request):
                 )
             except Exception as e:
                 print('exception for ' + tl_stock_name)
+                print(column)
                 print(e)
 
     lastrefd_update("trendlyne")
