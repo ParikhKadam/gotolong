@@ -157,27 +157,27 @@ Your app was successfully deployed : View.
 
 ## Home
 
-<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-home-Screeenshot.png" >
+<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-home-Screenshot.png" >
 ## Global Advisor
-<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-advisor-Screeenshot.png" >
+<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-advisor-Screenshot.png" >
 ## Global Fof/ETF
-<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-fof-etf-Screeenshot.png" >
+<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-fof-etf-Screenshot.png" >
 
 ## User broker summary
 
-<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-user-broker-sum-Screeenshot.png" >
+<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-user-broker-sum-Screenshot.png" >
 
 ## User broker transaction
 
-<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-user-broker-txn-Screeenshot.png" >
+<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-user-broker-txn-Screenshot.png" >
 
 ## User broker mutual fund
 
-<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-user-broker-mf-Screeenshot.png" >
+<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-user-broker-mf-Screenshot.png" >
 
 ## User portfolio health
 
-<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-user-broker-phealth-Screeenshot.png" >
+<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-user-broker-phealth-Screenshot.png" >
 
 # Modules Information
 
