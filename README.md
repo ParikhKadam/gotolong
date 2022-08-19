@@ -158,9 +158,13 @@ Your app was successfully deployed : View.
 ## Home
 
 <img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-home-Screenshot.png" >
+
 ## Global Advisor
+
 <img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-advisor-Screenshot.png" >
+
 ## Global Fof/ETF
+
 <img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-fof-etf-Screenshot.png" >
 
 ## User broker summary
@@ -177,7 +181,7 @@ Your app was successfully deployed : View.
 
 ## User portfolio health
 
-<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-user-broker-phealth-Screenshot.png" >
+<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-user-phealth-Screenshot.png" >
 
 # Modules Information
 
