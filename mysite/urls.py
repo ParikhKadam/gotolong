@@ -42,7 +42,7 @@ from django_gotolong.dividend.views import DividendListView, DividendRefreshView
 from django_gotolong.ftwhl.views import FtwhlListView, ftwhl_fetch, ftwhl_upload
 from django_gotolong.fratio.views import FratioListView
 from django_gotolong.gfundareco.views import GfundarecoListView, GfundarecoRefreshView
-from django_gotolong.gweight.views import GweightListView
+from django_gotolong.gcweight.views import GcweightListView
 
 from django_gotolong.indices.views import IndicesListView, IndicesIndustryView
 from django_gotolong.indices.views import Indices_fetch, Indices_upload
@@ -51,7 +51,6 @@ from django_gotolong.lastrefd.views import LastrefdListView
 
 from django_gotolong.nach.views import NachListView
 from django_gotolong.othinv.views import OthinvListView
-
 
 from django_gotolong.trendlyne.views import TrendlyneListView, TrendlyneRecoView, trendlyne_upload
 
@@ -104,7 +103,7 @@ urlpatterns = [
                   path('gfundareco/list/', GfundarecoListView.as_view(), name='gfundareco-list'),
                   path('gfundareco/refresh/', GfundarecoRefreshView.as_view(), name='gfundareco-refresh'),
                   path('fofeti/', include('django_gotolong.fofeti.urls')),
-                  path('gweight/list/', GweightListView.as_view(), name='gweight-list'),
+                  path('gcweight/list/', GcweightListView.as_view(), name='gcweight-list'),
                   path('indices/list/', IndicesListView.as_view(), name='indices-list'),
                   path('indices/industry/', IndicesIndustryView.as_view(), name='indices-industry-list'),
                   path('indices/fetch/', Indices_fetch, name='indices-fetch'),
@@ -131,6 +130,7 @@ urlpatterns = [
                   path('uploaddoc/list/', views.list, name='uploaddoc-list'),
                   path('uploaddoc/delete/<int:id>/', views.delete_view, name='uploaddoc-delete'),
                   path('users/', include('django_gotolong.users.urls')),
+                  path('uiweight/', include('django_gotolong.uiweight.urls')),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

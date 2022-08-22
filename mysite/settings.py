@@ -67,7 +67,7 @@ INSTALLED_APPS = [
     'django_gotolong.fratio',
     'django_gotolong.ftwhl',
     'django_gotolong.gfundareco',
-    'django_gotolong.gweight',
+    'django_gotolong.gcweight',
     'django_gotolong.indices',
     'django_gotolong.jsched',
     'django_gotolong.lastrefd',
@@ -78,7 +78,8 @@ INSTALLED_APPS = [
     'django_gotolong.phealth',
     'django_gotolong.screener',
     'django_gotolong.trendlyne',
-    'django_gotolong.uploaddoc'
+    'django_gotolong.uploaddoc',
+    'django_gotolong.uiweight'
 ]
 
 # added djdev_panel.middleware.DebugMiddleware for google chrome/developer panel django-developer-panel

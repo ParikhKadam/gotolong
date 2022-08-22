@@ -1,7 +1,7 @@
 {% include "top.html" %}
 {% include "global_config_top.html" %}
 
-<h1>Global Weight List </h1>
+<h1>Global Cap Weight List </h1>
 
 <table id="GoLoDataTable" class="display" cellspacing="0">
     <thead>
@@ -14,10 +14,10 @@
     {% for weight_row in object_list %}
     <tr>
         <td>
-            {{ weight_row.gw_cap_type }}
+            {{ weight_row.gcw_cap_type }}
         </td>
         <td>
-            {{ weight_row.gw_cap_weight }}
+            {{ weight_row.gcw_cap_weight }}
         </td>
     </tr>
     {% empty %}

@@ -16,7 +16,7 @@ from django_gotolong.demattxn.models import DematTxn
 from django_gotolong.ftwhl.models import Ftwhl
 
 from django_gotolong.gfundareco.models import Gfundareco
-from django_gotolong.gweight.models import Gweight
+from django_gotolong.gcweight.models import Gcweight
 
 from django_gotolong.trendlyne.models import Trendlyne
 
@@ -52,12 +52,12 @@ class AdvisorListView_AllButNone(ListView):
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id).filter(ds_isin=OuterRef("comp_isin"))
         demattxn_qs = DematTxn.objects.filter(dt_user_id=self.request.user.id).filter(
             dt_isin=OuterRef("comp_isin")).order_by('-dt_date').values('dt_date')
-        gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+        gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
             cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
-            annotate(plan_oku=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+            annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
             annotate(bat=Subquery(tl_qs.values('tl_bat')[:1])). \
             annotate(ca_total=Subquery(ca_qs.values('ca_total')[:1])). \
@@ -128,12 +128,12 @@ class AdvisorListView_All(ListView):
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id).filter(ds_isin=OuterRef("comp_isin"))
         demattxn_qs = DematTxn.objects.filter(dt_user_id=self.request.user.id).filter(
             dt_isin=OuterRef("comp_isin")).order_by('-dt_date').values('dt_date')
-        gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+        gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
             cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
-            annotate(plan_oku=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+            annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
             annotate(bat=Subquery(tl_qs.values('tl_bat')[:1])). \
             annotate(ca_total=Subquery(ca_qs.values('ca_total')[:1])). \
@@ -203,12 +203,12 @@ class AdvisorListView_Insuf(ListView):
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id).filter(ds_isin=OuterRef("comp_isin"))
         demattxn_qs = DematTxn.objects.filter(dt_user_id=self.request.user.id).filter(
             dt_isin=OuterRef("comp_isin")).order_by('-dt_date').values('dt_date')
-        gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+        gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
             cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
-            annotate(plan_oku=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+            annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
             annotate(bat=Subquery(tl_qs.values('tl_bat')[:1])). \
             annotate(ca_total=Subquery(ca_qs.values('ca_total')[:1])). \
@@ -272,12 +272,12 @@ class AdvisorListView_Strong(ListView):
     tl_qs = Trendlyne.objects.filter(tl_nse=OuterRef("nse_symbol"))
     dematsum_qs = DematSum.objects.filter(ds_isin=OuterRef("comp_isin"))
     demattxn_qs = DematTxn.objects.filter(dt_isin=OuterRef("comp_isin")).order_by('-dt_date').values('dt_date')
-    gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+    gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
     queryset = Amfi.objects.all(). \
         annotate(
         cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
                                   output_field=IntegerField())). \
-        annotate(plan_oku=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+        annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
         annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
         annotate(bat=Subquery(tl_qs.values('tl_bat')[:1])). \
         annotate(ca_total=Subquery(ca_qs.values('ca_total')[:1])). \
@@ -337,12 +337,12 @@ class AdvisorListView_Weak(ListView):
     tl_qs = Trendlyne.objects.filter(tl_nse=OuterRef("nse_symbol"))
     dematsum_qs = DematSum.objects.filter(ds_isin=OuterRef("comp_isin"))
     demattxn_qs = DematTxn.objects.filter(dt_isin=OuterRef("comp_isin")).order_by('-dt_date').values('dt_date')
-    gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+    gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
     queryset = Amfi.objects.all(). \
         annotate(
         cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
                                   output_field=IntegerField())). \
-        annotate(plan_oku=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+        annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
         annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
         annotate(bat=Subquery(tl_qs.values('tl_bat')[:1])). \
         annotate(ca_total=Subquery(ca_qs.values('ca_total')[:1])). \
@@ -402,12 +402,12 @@ class AdvisorListView_Moderate(ListView):
     tl_qs = Trendlyne.objects.filter(tl_nse=OuterRef("nse_symbol"))
     dematsum_qs = DematSum.objects.filter(ds_isin=OuterRef("comp_isin"))
     demattxn_qs = DematTxn.objects.filter(dt_isin=OuterRef("comp_isin")).order_by('-dt_date').values('dt_date')
-    gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+    gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
     queryset = Amfi.objects.all(). \
         annotate(
         cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
                                   output_field=IntegerField())). \
-        annotate(plan_oku=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+        annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
         annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
         annotate(bat=Subquery(tl_qs.values('tl_bat')[:1])). \
         annotate(ca_total=Subquery(ca_qs.values('ca_total')[:1])). \

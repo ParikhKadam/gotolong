@@ -17,6 +17,14 @@
 
 <form action="/amfi/upload/" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
+
+    Download the .xlsx file from following location under 'Categorization of Large Cap, Mid Cap and Small Cap Stocks':
+    <br/>
+    <a href="https://www.amfiindia.com/research-information/other-data/categorization-of-stocks" target="_blank">
+        https://www.amfiindia.com/research-information/other-data/categorization-of-stocks
+    </a>
+    <br/>
+
     <label for="file1"> Upload a file</label>
     <input type="file" id="file1" name="file">
     <small>Only accepts CSV/XLS/XLSX files</small>
@@ -52,6 +60,9 @@ Market : {{mktvalue}}
             {{ amfi_row.nse_symbol }}
         </td>
         <td>
+            {{ amfi_row.mse_symbol }}
+        </td>
+        <td>
             {{ amfi_row.avg_mcap }}
         </td>
         <td>
@@ -68,6 +79,9 @@ Market : {{mktvalue}}
         </td>
         <td>
             {{ amfi_row.deficit }}
+        </td>
+        <td>
+            {{ amfi_row.industry }}
         </td>
         <td>
             {{ amfi_row.portf_weight|floatformat:2 }}

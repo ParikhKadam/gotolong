@@ -768,8 +768,8 @@ DROP TABLE IF EXISTS `global_weight`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `global_weight` (
-  `gw_cap_type` text DEFAULT NULL,
-  `gw_cap_weight` int(11) DEFAULT NULL
+  `gcw_cap_type` text DEFAULT NULL,
+  `gcw_cap_weight` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

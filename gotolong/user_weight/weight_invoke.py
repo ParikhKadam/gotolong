@@ -1,13 +1,13 @@
 #!/usr/bin/python
 
 import sys
-from django_gotolong import gweight
+from django_gotolong import gcweight
 
 # Main caller
 program_name = sys.argv[0]
 
 if len(sys.argv) < 6:
-    print("usage: " + program_name + " <debug_level : 1-4> <amfi.csv> <gweight.csv> ... ")
+    print("usage: " + program_name + " <debug_level : 1-4> <amfi.csv> <gcweight.csv> ... ")
     sys.exit(1)
 
 debug_level = int(sys.argv[1])
@@ -19,7 +19,7 @@ out_filename_phase3 = sys.argv[5]
 if debug_level > 1:
     print('args :', len(sys.argv))
 
-weight = gweight.Weight()
+weight = gcweight.Weight()
 
 weight.set_debug_level(debug_level)
 

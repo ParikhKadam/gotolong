@@ -26,6 +26,10 @@ Number of object: {{ object_list|length }}
     {% for bt_row in object_list %}
     <tr>
         <td>
+            {{ bt_row.bt_broker }}
+        </td>
+
+        <td>
             {{ bt_row.bt_stock_symbol }}
         </td>
 

@@ -16,7 +16,7 @@ from django_gotolong.demattxn.models import DematTxn
 from django_gotolong.ftwhl.models import Ftwhl
 
 from django_gotolong.gfundareco.models import Gfundareco
-from django_gotolong.gweight.models import Gweight
+from django_gotolong.gcweight.models import Gcweight
 
 from django_gotolong.trendlyne.models import Trendlyne
 
@@ -32,66 +32,6 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 # from django_gotolong.ftwhl.views import ftwhl_fetch
 
-import plotly.graph_objects as go
-from plotly.offline import plot
-
-
-class PhealthListView_Rebalance(ListView):
-    def get_queryset(self):
-        dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id).filter(ds_isin=OuterRef("ind_isin"))
-        self.queryset = Indices.objects.all(). \
-            annotate(cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
-                                               output_field=IntegerField())). \
-            filter(cur_oku__isnull=False). \
-            values('ind_industry'). \
-            annotate(cur_oku_sum=Sum('cur_oku')). \
-            order_by('ind_industry')
-        return self.queryset
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(PhealthListView_Rebalance, self).dispatch(*args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        funda_reco_list = (
-            Gfundareco.objects.all().values('funda_reco_type').annotate(funda_reco_count=Count('funda_reco_type')).
-                order_by('funda_reco_count'))
-
-        context["funda_reco_list"] = funda_reco_list
-
-        labels = []
-        values = []
-        labels_values_dict = {}
-        sum_total = 0
-        for q_row in self.queryset:
-            # sum_total += q_row['scheme_sum']
-            labels_values_dict[q_row['ind_industry']] = q_row['cur_oku_sum']
-        # context['sum_total'] = int(sum_total)
-
-        print('labels values dict', labels_values_dict)
-
-        for k, v in sorted(labels_values_dict.items(), key=lambda item: item[1]):
-            labels.append(k)
-            values.append(v)
-
-        print('labels ', labels)
-        print('values ', values)
-
-        fig = go.Figure(data=[go.Pie(labels=labels, values=values)])
-        fig.update_traces(textposition='inside', textinfo='percent+label')
-        # fig.show()
-
-        plot_div_1 = plot(fig, output_type='div', include_plotlyjs=False)
-        context['plot_div_1'] = plot_div_1
-
-        return context
-
-    def get_template_names(self):
-        app_label = 'phealth'
-        template_name_first = app_label + '/' + 'phealth_rebalance.html'
-        template_names_list = [template_name_first]
-        return template_names_list
 
 
 class PhealthListView_AllButNone(ListView):
@@ -114,12 +54,12 @@ class PhealthListView_AllButNone(ListView):
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id).filter(ds_isin=OuterRef("comp_isin"))
         demattxn_qs = DematTxn.objects.filter(dt_user_id=self.request.user.id).filter(
             dt_isin=OuterRef("comp_isin")).order_by('-dt_date').values('dt_date')
-        gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+        gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
             cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
-            annotate(plan_oku=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+            annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
             annotate(bat=Subquery(tl_qs.values('tl_bat')[:1])). \
             annotate(ca_total=Subquery(ca_qs.values('ca_total')[:1])). \
@@ -191,12 +131,12 @@ class PhealthListView_All(ListView):
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id).filter(ds_isin=OuterRef("comp_isin"))
         demattxn_qs = DematTxn.objects.filter(dt_user_id=self.request.user.id).filter(
             dt_isin=OuterRef("comp_isin")).order_by('-dt_date').values('dt_date')
-        gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+        gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
             cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
-            annotate(plan_oku=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+            annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
             annotate(bat=Subquery(tl_qs.values('tl_bat')[:1])). \
             annotate(ca_total=Subquery(ca_qs.values('ca_total')[:1])). \
@@ -267,12 +207,12 @@ class PhealthListView_Insuf(ListView):
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id).filter(ds_isin=OuterRef("comp_isin"))
         demattxn_qs = DematTxn.objects.filter(dt_user_id=self.request.user.id).filter(
             dt_isin=OuterRef("comp_isin")).order_by('-dt_date').values('dt_date')
-        gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+        gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
             cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
-            annotate(plan_oku=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+            annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
             annotate(bat=Subquery(tl_qs.values('tl_bat')[:1])). \
             annotate(ca_total=Subquery(ca_qs.values('ca_total')[:1])). \
@@ -339,12 +279,12 @@ class PhealthListView_Buy(ListView):
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id).filter(ds_isin=OuterRef("comp_isin"))
         demattxn_qs = DematTxn.objects.filter(dt_user_id=self.request.user.id).filter(
             dt_isin=OuterRef("comp_isin")).order_by('-dt_date').values('dt_date')
-        gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+        gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
             cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
-            annotate(plan_oku=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+            annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
             annotate(bat=Subquery(tl_qs.values('tl_bat')[:1])). \
             annotate(ca_total=Subquery(ca_qs.values('ca_total')[:1])). \
@@ -407,12 +347,12 @@ class PhealthListView_Sell(ListView):
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id).filter(ds_isin=OuterRef("comp_isin"))
         demattxn_qs = DematTxn.objects.filter(dt_user_id=self.request.user.id).filter(
             dt_isin=OuterRef("comp_isin")).order_by('-dt_date').values('dt_date')
-        gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+        gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
             cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
-            annotate(plan_oku=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+            annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
             annotate(bat=Subquery(tl_qs.values('tl_bat')[:1])). \
             annotate(ca_total=Subquery(ca_qs.values('ca_total')[:1])). \
@@ -474,12 +414,12 @@ class PhealthListView_Hold(ListView):
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id).filter(ds_isin=OuterRef("comp_isin"))
         demattxn_qs = DematTxn.objects.filter(dt_user_id=self.request.user.id).filter(
             dt_isin=OuterRef("comp_isin")).order_by('-dt_date').values('dt_date')
-        gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+        gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
             cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
-            annotate(plan_oku=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+            annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
             annotate(bat=Subquery(tl_qs.values('tl_bat')[:1])). \
             annotate(ca_total=Subquery(ca_qs.values('ca_total')[:1])). \
@@ -542,12 +482,12 @@ class PhealthListView_Mixed(ListView):
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id).filter(ds_isin=OuterRef("comp_isin"))
         demattxn_qs = DematTxn.objects.filter(dt_user_id=self.request.user.id).filter(
             dt_isin=OuterRef("comp_isin")).order_by('-dt_date').values('dt_date')
-        gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+        gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
             cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
-            annotate(plan_oku=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+            annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
             annotate(bat=Subquery(tl_qs.values('tl_bat')[:1])). \
             annotate(ca_total=Subquery(ca_qs.values('ca_total')[:1])). \

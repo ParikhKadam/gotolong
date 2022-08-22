@@ -21,7 +21,9 @@ from django.db.models import F, Count, Sum, Max, Min
 from django_gotolong.amfi.models import Amfi
 
 from django_gotolong.dematsum.models import DematSum
-from django_gotolong.gweight.models import Gweight
+from django_gotolong.gcweight.models import Gcweight
+
+from django_gotolong.indices.models import Indices
 
 from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update
 
@@ -44,10 +46,10 @@ class AmfiAmountAllView(ListView):
     def get_queryset(self):
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id). \
             filter(ds_isin=OuterRef("comp_isin"))
-        gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+        gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(value_cost=Subquery(dematsum_qs.values('ds_costvalue')[:1])). \
-            annotate(cap_weight=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+            annotate(cap_weight=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(deficit=ExpressionWrapper(F('cap_weight') * 1000 - F('value_cost'), output_field=IntegerField())). \
             values('comp_rank', 'comp_name', 'value_cost', 'deficit'). \
             order_by('comp_rank')
@@ -64,10 +66,10 @@ class AmfiAmountPositiveView(ListView):
     def get_queryset(self):
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id). \
             filter(ds_isin=OuterRef("comp_isin"))
-        gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+        gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(value_cost=Subquery(dematsum_qs.values('ds_costvalue')[:1])). \
-            annotate(cap_weight=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+            annotate(cap_weight=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(deficit=ExpressionWrapper(F('cap_weight') * 1000 - F('value_cost'), output_field=IntegerField())). \
             filter(value_cost__isnull=False). \
             values('comp_rank', 'comp_name', 'value_cost', 'deficit'). \
@@ -105,15 +107,17 @@ class AmfiPortfWeightView(ListView):
             print('DS: sum portf mkt', self.sum_portf_mkt)
             print('DS: sum portf cost', self.sum_portf_cost)
 
+        indices_qs = Indices.objects.filter(ind_isin=OuterRef("comp_isin"))
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id). \
             filter(ds_isin=OuterRef("comp_isin"))
         queryset = Amfi.objects.all(). \
+            annotate(industry=Subquery(indices_qs.values('ind_industry')[:1])). \
             annotate(mkt_value=Subquery(dematsum_qs.values('ds_mktvalue')[:1])). \
             annotate(
             portf_weight=ExpressionWrapper(F('mkt_value') * 100.0 / self.sum_portf_mkt, output_field=FloatField())). \
             exclude(portf_weight__isnull=True). \
             exclude(portf_weight__lt=0). \
-            values('comp_rank', 'comp_name', 'mkt_value', 'portf_weight'). \
+            values('comp_rank', 'comp_name', 'industry', 'mkt_value', 'portf_weight'). \
             order_by('comp_rank')
         return queryset
 
@@ -125,15 +129,61 @@ class AmfiPortfWeightView(ListView):
         return context
 
 
+class AmfiPortfWeightIndustryView(ListView):
+    sum_portf_mkt = 0
+    sum_portf_cost = 0
+
+    def get_queryset(self):
+        sum_portf_mkt_insts = DematSum.objects.filter(ds_user_id=self.request.user.id). \
+            aggregate(Sum('ds_mktvalue'))
+        sum_portf_cost_insts = DematSum.objects.filter(ds_user_id=self.request.user.id). \
+            aggregate(Sum('ds_costvalue'))
+        print('first mkt:', sum_portf_mkt_insts)
+        print('first cost:', sum_portf_cost_insts)
+        try:
+            print('second mkt', sum_portf_mkt_insts['ds_mktvalue__sum'])
+            print('second cost', sum_portf_cost_insts['ds_costvalue__sum'])
+            self.sum_portf_mkt = round(sum_portf_mkt_insts['ds_mktvalue__sum'])
+            self.sum_portf_cost = round(sum_portf_cost_insts['ds_costvalue__sum'])
+            print('DS: sum portf mkt ', self.sum_portf_mkt)
+            print('DS: sum portf cost ', self.sum_portf_cost)
+
+        except KeyError:
+            self.sum_portf_mkt = 0
+            self.sum_portf_cost = 0
+            print('DS: sum portf mkt', self.sum_portf_mkt)
+            print('DS: sum portf cost', self.sum_portf_cost)
+
+        indices_qs = Indices.objects.filter(ind_isin=OuterRef("comp_isin"))
+        dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id). \
+            filter(ds_isin=OuterRef("comp_isin"))
+        queryset = Amfi.objects.all(). \
+            annotate(industry=Subquery(indices_qs.values('ind_industry')[:1])). \
+            annotate(mkt_value=Subquery(dematsum_qs.values('ds_mktvalue')[:1])). \
+            annotate(
+            portf_weight=ExpressionWrapper(F('mkt_value') * 100.0 / self.sum_portf_mkt, output_field=FloatField())). \
+            exclude(portf_weight__isnull=True). \
+            exclude(portf_weight__lt=0). \
+            values('comp_rank', 'comp_name', 'industry', 'mkt_value', 'portf_weight'). \
+            order_by('industry', '-portf_weight', 'comp_rank')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['mktvalue'] = self.sum_portf_mkt
+        context['costvalue'] = self.sum_portf_cost
+
+        return context
+
 class AmfiDeficitWeightView(ListView):
 
     def get_queryset(self):
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id). \
             filter(ds_isin=OuterRef("comp_isin"))
-        gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+        gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(value_cost=Subquery(dematsum_qs.values('ds_costvalue')[:1])). \
-            annotate(cap_weight=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+            annotate(cap_weight=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(deficit=ExpressionWrapper(F('cap_weight') * 1000 - F('value_cost'), output_field=IntegerField())). \
             values('comp_rank', 'comp_name', 'value_cost', 'deficit'). \
             filter(value_cost__isnull=False). \
@@ -151,10 +201,10 @@ class AmfiDeficit25kView(ListView):
     def get_queryset(self):
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id). \
             filter(ds_isin=OuterRef("comp_isin"))
-        gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+        gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(value_cost=Subquery(dematsum_qs.values('ds_costvalue')[:1])). \
-            annotate(cap_weight=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+            annotate(cap_weight=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(deficit=ExpressionWrapper(25 * 1000 - F('value_cost'), output_field=IntegerField())). \
             values('comp_rank', 'comp_name', 'value_cost', 'deficit'). \
             filter(value_cost__isnull=False). \
@@ -172,10 +222,10 @@ class AmfiDeficit50kView(ListView):
     def get_queryset(self):
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id). \
             filter(ds_isin=OuterRef("comp_isin"))
-        gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+        gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(value_cost=Subquery(dematsum_qs.values('ds_costvalue')[:1])). \
-            annotate(cap_weight=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+            annotate(cap_weight=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(deficit=ExpressionWrapper(50 * 1000 - F('value_cost'), output_field=IntegerField())). \
             values('comp_rank', 'comp_name', 'value_cost', 'deficit'). \
             filter(value_cost__isnull=False). \
@@ -193,10 +243,10 @@ class AmfiDeficit100kView(ListView):
     def get_queryset(self):
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id). \
             filter(ds_isin=OuterRef("comp_isin"))
-        gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+        gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(value_cost=Subquery(dematsum_qs.values('ds_costvalue')[:1])). \
-            annotate(cap_weight=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+            annotate(cap_weight=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(deficit=ExpressionWrapper(100 * 1000 - F('value_cost'), output_field=IntegerField())). \
             values('comp_rank', 'comp_name', 'value_cost', 'deficit'). \
             filter(value_cost__isnull=False). \
@@ -214,11 +264,11 @@ class AmfiNotableExclusionView(ListView):
     def get_queryset(self):
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id). \
             filter(ds_isin=OuterRef("comp_isin"))
-        gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+        gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         # missing large cap and mid cap : top 250 only
         queryset = Amfi.objects.all(). \
             annotate(value_cost=Subquery(dematsum_qs.values('ds_costvalue')[:1])). \
-            annotate(cap_weight=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+            annotate(cap_weight=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(deficit=ExpressionWrapper(F('cap_weight') * 1000 - F('value_cost'), output_field=IntegerField())). \
             values('comp_rank', 'comp_name', 'value_cost', 'deficit'). \
             filter(value_cost__isnull=True).filter(comp_rank__lte=250).order_by('comp_rank')
@@ -235,11 +285,11 @@ class AmfiNotableInclusionView(ListView):
     def get_queryset(self):
         dematsum_qs = DematSum.objects.filter(ds_user_id=self.request.user.id). \
             filter(ds_isin=OuterRef("comp_isin"))
-        gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+        gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         # included nano cap and micro cap > 500 only
         queryset = Amfi.objects.all(). \
             annotate(value_cost=Subquery(dematsum_qs.values('ds_costvalue')[:1])). \
-            annotate(cap_weight=Subquery(gweight_qs.values('gw_cap_weight')[:1])). \
+            annotate(cap_weight=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(deficit=ExpressionWrapper(F('cap_weight') * 1000 - F('value_cost'), output_field=IntegerField())). \
             values('comp_rank', 'comp_name', 'value_cost', 'deficit'). \
             filter(value_cost__isnull=False).filter(comp_rank__gte=500).order_by('-comp_rank')
@@ -321,10 +371,11 @@ def amfi_upload(request):
         # df = df.round({'avg_mcap' : 1})
         # covert to numeric
         # df[["avg_mcap"]] = df[["avg_mcap"]].apply(pd.to_numeric)
-        df[["avg_mcap"]] = df[["avg_mcap"]].astype(int)
+        # using bse_mcap as avg_mcap is an excel formula
+        # df[["bse_mcap"]] = df[["bse_mcap"]].astype(int)
 
         # drop columns that are not required
-        skip_columns_list = ['bse_mcap', 'nse_mcap', 'mse_symbol', 'mse_mcap']
+        skip_columns_list = ['avg_mcap']
         df.drop(skip_columns_list, axis=1, inplace=True)
 
         data_set = df.to_csv(header=True, index=False)
@@ -349,8 +400,29 @@ def amfi_upload(request):
         column[1] = column[1].strip()
 
         comp_rank = int(column[0])
-        cap_type = column[6]
+        comp_name = column[1]
+        comp_isin = column[2]
+        bse_symbol = column[3]
+        # using bse mcap as average market cap is an excel formula
+        bse_mcap = column[4]
+        nse_symbol = column[5]
+        nse_mcap = column[6]
 
+        mse_symbol = column[7]
+        mse_mcap = column[8]
+
+        cap_type = column[9]
+
+        if bse_mcap == '':
+            if nse_mcap == '':
+                print("Fix: MSEI symbol and mcap")
+                avg_mcap = mse_mcap
+                # to allow lookup etc
+                # mse_symbol = mse_symbol
+            else:
+                avg_mcap = nse_mcap
+        else:
+            avg_mcap = bse_mcap
         '''
         if comp_rank > 500 and cap_type == 'Small Cap':
             if comp_rank > 750:
@@ -361,11 +433,12 @@ def amfi_upload(request):
 
         _, created = Amfi.objects.update_or_create(
             comp_rank=comp_rank,
-            comp_name=column[1],
-            comp_isin=column[2],
-            bse_symbol=column[3],
-            nse_symbol=column[4],
-            avg_mcap=column[5],
+            comp_name=comp_name,
+            comp_isin=comp_isin,
+            bse_symbol=bse_symbol,
+            nse_symbol=nse_symbol,
+            mse_symbol=mse_symbol,
+            avg_mcap=avg_mcap,
             cap_type=cap_type
         )
 

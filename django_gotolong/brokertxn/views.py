@@ -72,18 +72,27 @@ def BrokerTxnUpload(request):
     #
     # breakpoint()
 
-    template = "invalid-get-request.html"
-    # change column name of data frame
-    columns_list = ['bt_stock_symbol', 'bt_company_name', 'bt_isin_code', 'bt_action', 'bt_quantity',
-                    'bt_txn_price', 'bt_brokerage', 'bt_txn_charges', 'bt_stamp_duty',
-                    'bt_segment', 'bt_stt', 'bt_remarks', 'bt_txn_date',
-                    'bt_exchange', 'bt_unused1']
+    broker_name = request.POST["broker"]
+    print('broker is ', broker_name)
+
     list_url_name = "broker-txn-list"
+    template = "invalid-get-request.html"
+
+    if broker_name == "Isec" or broker_name == 'Zerodha':
+        # change column name of data frame
+        columns_list = ['bt_stock_symbol', 'bt_company_name', 'bt_isin_code', 'bt_action', 'bt_quantity',
+                        'bt_txn_price', 'bt_brokerage', 'bt_txn_charges', 'bt_stamp_duty',
+                        'bt_segment', 'bt_stt', 'bt_remarks', 'bt_txn_date',
+                        'bt_exchange', 'bt_unused1']
+    else:
+        print('Unsupported broker: ', broker_name)
+        return HttpResponseRedirect(reverse(list_url_name))
+
     data_set = comfun.comm_func_upload(request, template, columns_list, list_url_name)
 
     # delete existing records
     print('Deleted existing BrokerTxn data')
-    BrokerTxn.objects.all().filter(bt_user_id=request.user.id).delete()
+    BrokerTxn.objects.all().filter(bt_broker=broker_name).filter(bt_user_id=request.user.id).delete()
     max_id_instances = BrokerTxn.objects.aggregate(max_id=Max('bt_id'))
     max_id = max_id_instances['max_id']
     print('max_id ', max_id)
@@ -98,33 +107,90 @@ def BrokerTxnUpload(request):
     unique_id = max_id
     for column in csv.reader(io_string, delimiter=',', quotechar='"'):
         unique_id += 1
-        column[0] = column[0].strip()
-        column[1] = column[1].strip()
-
-        # convert dd-mmm-yy to YYYY-mm-dd
-        txn_date = txn_date_iso(request, column[12])
 
         print(unique_id, column)
+
+        bt_stock_symbol = 'UNmapped'
+        bt_company_name = 'Unmapped'
+        bt_isin_code = 'Unmapped'
+        bt_action = 'Unknown'
+        bt_quantity = 0
+        bt_txn_price = 0
+        bt_brokerage = 0
+        bt_txn_charges = 0
+        bt_stamp_duty = 0
+        bt_segment = 'Unknown'
+        bt_stt = 0
+        bt_remarks = 'Unknown'
+        bt_txn_date = ''
+        bt_exchange = 'Unknown'
+        bt_unused1 = ''
+
+        if broker_name == "Isec":
+            # Stock Symbol	Company Name	ISIN Code	Action	Quantity
+            # Transaction Price	Brokerage	Transaction Charges	StampDuty	Segment
+            # STT Paid/Not Paid	Remarks	Transaction Date	Exchange
+            column[0] = column[0].strip()
+            column[1] = column[1].strip()
+
+            bt_stock_symbol = column[0]
+            bt_company_name = column[1]
+            bt_isin_code = column[2]
+            bt_action = column[3]
+            bt_quantity = column[4]
+            bt_txn_price = column[5]
+            bt_brokerage = column[6]
+            bt_txn_charges = column[7]
+            bt_stamp_duty = column[8]
+            bt_segment = column[9]
+            bt_stt = column[10]
+            bt_remarks = column[11]
+            # convert dd-mmm-yy to YYYY-mm-dd
+            bt_txn_date = txn_date_iso(request, column[12])
+            bt_exchange = column[13]
+            bt_unused1 = column[14]
+        elif broker_name == 'Zerodha':
+            # Zerodha - trade_date	tradingsymbol	exchange	segment
+            # trade_type	quantity	price	order_id	trade_id
+            # order_execution_time
+            bt_stock_symbol = column[1]
+            # bt_company_name =
+            # bt_isin_code =
+            bt_action = column[4]
+            bt_quantity = int(float(column[5]))
+            bt_txn_price = column[6]
+            # bt_brokerage = column[6]
+            # bt_txn_charges = column[7]
+            # bt_stamp_duty = column[8]
+            bt_segment = column[3]
+            # bt_stt = column[10]
+            # bt_remarks = column[11]
+            # convert dd-mmm-yy to YYYY-mm-dd
+            bt_txn_date = column[0]
+            bt_exchange = column[2]
+            # bt_unused1 =
+        else:
+            print('Unknown broker:', broker_name)
 
         _, created = BrokerTxn.objects.update_or_create(
             bt_id=unique_id,
             bt_user_id=request.user.id,
-            bt_broker=request.POST["broker"],
-            bt_stock_symbol=column[0],
-            bt_company_name=column[1],
-            bt_isin_code=column[2],
-            bt_action=column[3],
-            bt_quantity=column[4],
-            bt_txn_price=column[5],
-            bt_brokerage=column[6],
-            bt_txn_charges=column[7],
-            bt_stamp_duty=column[8],
-            bt_segment=column[9],
-            bt_stt=column[10],
-            bt_remarks=column[11],
-            bt_txn_date=txn_date,
-            bt_exchange=column[13],
-            bt_unused1=column[14]
+            bt_broker=broker_name,
+            bt_stock_symbol=bt_stock_symbol,
+            bt_company_name=bt_company_name,
+            bt_isin_code=bt_isin_code,
+            bt_action=bt_action,
+            bt_quantity=bt_quantity,
+            bt_txn_price=bt_txn_price,
+            bt_brokerage=bt_brokerage,
+            bt_txn_charges=bt_txn_charges,
+            bt_stamp_duty=bt_stamp_duty,
+            bt_segment=bt_segment,
+            bt_stt=bt_stt,
+            bt_remarks=bt_remarks,
+            bt_txn_date=bt_txn_date,
+            bt_exchange=bt_exchange,
+            bt_unused1=bt_unused1
         )
 
     lastrefd_update("broker-txn")

@@ -238,7 +238,7 @@ class DematSumCapTypeView(ListView):
         context = super().get_context_data(**kwargs)
 
         amfi_qs = Amfi.objects.filter(comp_isin=OuterRef("ds_isin"))
-        self.queryset = DematSum.objects.all(). \
+        self.queryset = DematSum.objects.all().filter(ds_user_id=self.request.user.id). \
             annotate(comp_rank=Subquery(self.amfi_qs.values('comp_rank')[:1])). \
             annotate(cap_type=Lower(Trim(Subquery(amfi_qs.values('cap_type')[:1])))). \
             values('cap_type'). \

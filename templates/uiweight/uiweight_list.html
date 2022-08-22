@@ -1,0 +1,56 @@
+{% include "top.html" %}
+{% include "user_top.html" %}
+
+<h1>User Industry Weight List </h1>
+
+<a href="/uiweight/refresh/"> Refresh Weights (from DematSum) </a> |
+
+<br/>
+
+<table id="GoLoDataTable" class="display" cellspacing="0">
+    <thead>
+    <tr>
+        <th>uiw_user_id</th>
+        <th>uiw_name</th>
+        <th>uiw_value</th>
+        <th>uiw_value_pct</th>
+        <th>uiw_constituents</th>
+        <th>uiw_tickers</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for weight_row in object_list %}
+    <tr>
+        <td>
+            {{ weight_row.uiw_user_id }}
+        </td>
+        <td>
+            {{ weight_row.uiw_name }}
+        </td>
+        <td>
+            {{ weight_row.uiw_value }}
+        </td>
+        <td>
+            {{ weight_row.uiw_value_pct }}
+        </td>
+        <td>
+            {{ weight_row.uiw_constituents }}
+        </td>
+        <td>
+            {{ weight_row.uiw_tickers }}
+        </td>
+
+    </tr>
+    {% empty %}
+    <tr>No Weight yet.</tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% autoescape off %}
+{{ plot_div_1 }}
+<br/>
+{{ plot_div_2 }}
+{% endautoescape %}
+
+{% include "bottom.html" %}

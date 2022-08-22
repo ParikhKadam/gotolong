@@ -16,7 +16,7 @@ from django_gotolong.bstmtdiv.models import BstmtDiv
 from django_gotolong.indices.models import Indices
 from django_gotolong.fratio.models import Fratio
 from django_gotolong.trendlyne.models import Trendlyne
-from django_gotolong.gweight.models import Gweight
+from django_gotolong.gcweight.models import Gcweight
 from django_gotolong.dividend.models import Dividend
 
 from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update

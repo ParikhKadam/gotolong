@@ -9,6 +9,7 @@ class Amfi(models.Model):
     comp_isin = models.TextField(blank=True, null=True)
     bse_symbol = models.TextField(blank=True, null=True)
     nse_symbol = models.TextField(blank=True, null=True)
+    mse_symbol = models.TextField(blank=True, null=True)
     avg_mcap = models.TextField(blank=True, null=True)
     cap_type = models.TextField(blank=True, null=True)
 
@@ -22,3 +23,5 @@ def amfi_load_rank(amfi_rank_dict):
         amfi_rank_dict[amfi.nse_symbol] = amfi.comp_rank
         if amfi.nse_symbol != amfi.bse_symbol:
             amfi_rank_dict[amfi.bse_symbol] = amfi.comp_rank
+        if amfi.nse_symbol != amfi.mse_symbol:
+            amfi_rank_dict[amfi.mse_symbol] = amfi.comp_rank

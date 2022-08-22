@@ -1,6 +1,6 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Gweight
+from .models import Gcweight
 
-admin.site.register(Gweight)
+admin.site.register(Gcweight)

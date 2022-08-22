@@ -1,5 +1,5 @@
 {
-  "module": "gweight",
+  "module": "gcweight",
   "logging-level": "INFO",
   "debug-level": "1",
   "truncate-table": "Yes",
@@ -8,13 +8,13 @@
   "input-files": [
     {
       "dir-cfg-key": "GLOBAL_DATA",
-      "file": "gweight-data/gweight-data.csv"
+      "file": "gcweight-data/gcweight-data.csv"
     }
   ],
   "output-files": [
     {
       "dir-cfg-key": "GLOBAL_REPORTS",
-      "file": "gweight-reports/gweight-reports.csv"
+      "file": "gcweight-reports/gcweight-reports.csv"
     }
   ]
 }

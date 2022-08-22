@@ -39,8 +39,8 @@ else
       # ${TARGET}_invoke.sh
     done
 
-    # assign weights (global-gweight)
-    for TARGET in gweight
+    # assign weights (global-gcweight)
+    for TARGET in gcweight
     do
       gotolong_${TARGET}_invoke
     done

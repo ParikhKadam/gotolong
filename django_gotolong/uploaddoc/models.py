@@ -26,7 +26,7 @@ class UploadDocModel(models.Model):
         ('nach', "NACH"),
         ('screener', "SCREENER"),
         ('trendlyne', "TRNDLYNE"),
-        ('gweight', "WEIGHT"),
+        ('gcweight', "WEIGHT"),
         ('user', "---USER---"),
         ('dematsum', "DEMATSUM"),
         ('dematxn', "DEMATTXN"),

@@ -5,22 +5,22 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('gweight', '0001_initial'),
+        ('gcweight', '0001_initial'),
     ]
 
     operations = [
         migrations.RenameModel(
             old_name='Weight',
-            new_name='Gweight',
+            new_name='Gcweight',
         ),
         migrations.RenameField(
-            model_name='gweight',
+            model_name='gcweight',
             old_name='cap_type',
-            new_name='gw_cap_type',
+            new_name='gcw_cap_type',
         ),
         migrations.RenameField(
-            model_name='gweight',
+            model_name='gcweight',
             old_name='cap_weight',
-            new_name='gw_cap_weight',
+            new_name='gcw_cap_weight',
         ),
     ]

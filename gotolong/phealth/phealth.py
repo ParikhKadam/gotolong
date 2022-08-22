@@ -18,14 +18,14 @@ from gotolong.corpact.corpact import *
 from gotolong.demat.demat import *
 from gotolong.ftwhl.ftwhl import *
 from gotolong.gfundareco.gfundareco import *
-from gotolong.gweight.gweight import *
+from gotolong.gcweight.gcweight import *
 
 from gotolong.screener.screener import *
 from gotolong.trendlyne.trendlyne import *
 
 
 # gfundareco - includes fratio and trendlyne
-class Phealth(Screener, Gfundareco, Demat, Gweight, Bhav, Ftwhl, Corpact):
+class Phealth(Screener, Gfundareco, Demat, Gcweight, Bhav, Ftwhl, Corpact):
 
     def __init__(self):
         super(Phealth, self).__init__()
@@ -131,7 +131,7 @@ class Phealth(Screener, Gfundareco, Demat, Gweight, Bhav, Ftwhl, Corpact):
                 p_str += months
                 p_str += ','
 
-                weight = self.gweight_captype_dict[captype]
+                weight = self.gcweight_captype_dict[captype]
 
                 plan_units = int(weight)
                 current_units = self.demat_sum_get_units_by_ticker(ticker)
@@ -232,7 +232,7 @@ def main():
     phealth.screener_load_db()
     phealth.trendlyne_load_data_from_db()
     phealth.gfunda_reco_load_data_from_db()
-    phealth.gweight_load_data_from_db()
+    phealth.gcweight_load_data_from_db()
     phealth.bhav_load_data_from_db()
     phealth.ftwhl_load_data_from_db()
     phealth.corpact_load_data_from_db()

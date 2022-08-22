@@ -37,7 +37,7 @@ setup(
              'scripts/gotolong_dividend_invoke.sh'
              'scripts/gotolong_download_move.sh',
              'scripts/gotolong_ftwhl_invoke',
-             'scripts/gotolong_gweight_invoke',
+             'scripts/gotolong_gcweight_invoke',
              'scripts/gotolong_isin_invoke',
              'scripts/gotolong_nach_invoke',
              'scripts/gotolong_phealth_invoke',

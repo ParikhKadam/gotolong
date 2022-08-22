@@ -221,7 +221,7 @@ financial data of bse 500 for 10 years
 
 for broker average target of healthy stocks
 
-## gweight module
+## gcweight module
 
 global weight module
 

@@ -36,7 +36,7 @@ class Weight(Amfi):
             weight_type = row_list[1]
             weight_units = row_list[2]
             if self.debug_level > 1:
-                print('ticker, gweight type, gweight units ')
+                print('ticker, gcweight type, gcweight units ')
             if self.debug_level > 0:
                 print(':', ticker, ':', weight_type, ':', weight_units, ':')
             # use ticker as an input
@@ -85,13 +85,13 @@ class Weight(Amfi):
         if row_count == 0:
             self.weight_insert_data(in_filename)
         else:
-            print('gweight data already loaded in db', row_count)
+            print('gcweight data already loaded in db', row_count)
         print('display db data')
         self.weight_load_db()
 
     def weight_insert_data(self, in_filename):
         start_processing = False
-        SQL = """insert into gweight(comp_ticker, comp_weight_type, comp_weight_units) values(:comp_ticker, :comp_weight_type, :comp_weight_units)"""
+        SQL = """insert into gcweight(comp_ticker, comp_weight_type, comp_weight_units) values(:comp_ticker, :comp_weight_type, :comp_weight_units)"""
         cursor = self.db_conn.cursor()
         with open(in_filename, 'rt') as csvfile:
             # future

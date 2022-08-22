@@ -11,7 +11,7 @@ from django_gotolong.amfi.models import Amfi
 from django_gotolong.indices.models import Indices
 from django_gotolong.fratio.models import Fratio
 from django_gotolong.trendlyne.models import Trendlyne
-from django_gotolong.gweight.models import Gweight
+from django_gotolong.gcweight.models import Gcweight
 from django_gotolong.gfundareco.models import Gfundareco
 
 from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update
@@ -44,7 +44,7 @@ class GfundarecoListView2(ListView):
     # filter_backends = [filters.OrderingFilter,]
     # ordering_fields = ['sno', 'nse_symbol']
     tl_qs = Trendlyne.objects.filter(tl_nse=OuterRef("nse_symbol"))
-    gweight_qs = Gweight.objects.filter(gw_cap_type=OuterRef("cap_type"))
+    gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
     gfunda_reco_qs = Gfundareco.objects.filter(funda_reco_isin=OuterRef("comp_isin"))
     queryset = Amfi.objects.all(). \
         annotate(bat=Subquery(tl_qs.values('tl_bat')[:1])). \

@@ -10,7 +10,7 @@ gotolong-home/data/input-global-data/bse-data/readme.txt
 gotolong-home/data/input-global-data/ftwhl-data/ftwhl.csv
 gotolong-home/data/input-global-data/ftwhl-data/nse-holiday-list.txt
 gotolong-home/data/input-global-data/ftwhl-data/readme.txt
-gotolong-home/data/input-global-data/gweight-data/gweight-data.csv
+gotolong-home/data/input-global-data/gcweight-data/gcweight-data.csv
 gotolong-home/data/input-global-data/isin-data/isin-bse-500.csv
 gotolong-home/data/input-global-data/isin-data/isin-nse-500.csv
 gotolong-home/data/input-global-data/isin-data/readme.txt
@@ -41,7 +41,7 @@ gotolong-home/data/output-global-reports/corpact-reports/corpact-reports-phase-1
 gotolong-home/data/output-global-reports/corpact-reports/corpact-reports-phase-1.txt
 gotolong-home/data/output-global-reports/ftwhl-reports/ftwhl-reports.csv
 gotolong-home/data/output-global-reports/ftwhl-reports/ftwhl-reports.txt
-gotolong-home/data/output-global-reports/gweight-reports/gweight-reports.csv
+gotolong-home/data/output-global-reports/gcweight-reports/gcweight-reports.csv
 gotolong-home/data/output-global-reports/isin-reports/isin-reports-industry-only.csv
 gotolong-home/data/output-global-reports/isin-reports/isin-reports.csv
 gotolong-home/data/output-global-reports/mstar-reports/mstar-reports-phase-1.csv
@@ -239,7 +239,7 @@ gotolong/finratio/comp_price.py
 gotolong/ftwhl/__init__.py
 gotolong/ftwhl/ftwhl.py
 gotolong/global_weight/__init__.py
-gotolong/global_weight/gweight.py
+gotolong/global_weight/gcweight.py
 gotolong/isin/__init__.py
 gotolong/isin/isin.py
 gotolong/mstar/__init__.py
@@ -285,6 +285,6 @@ scripts/gotolong_daily_report.sh
 scripts/gotolong_db_gen.sh
 scripts/gotolong_db_stats.sh
 scripts/gotolong_download_move.sh
-scripts/gweight-invoke
+scripts/gcweight-invoke
 scripts/isin-invoke
 scripts/phealth-invoke

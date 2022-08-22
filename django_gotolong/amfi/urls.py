@@ -22,7 +22,8 @@ from django.views.generic import TemplateView
 
 from django_gotolong.amfi.views import AmfiListView, AmfiAmountAllView, AmfiAmountPositiveView, \
     AmfiDeficitWeightView, AmfiDeficit25kView, AmfiDeficit50kView, AmfiDeficit100kView, \
-    AmfiNotableInclusionView, AmfiNotableExclusionView, amfi_upload, AmfiPortfWeightView
+    AmfiNotableInclusionView, AmfiNotableExclusionView, amfi_upload, \
+    AmfiPortfWeightView, AmfiPortfWeightIndustryView
 
 urlpatterns = [
     path('list/', AmfiListView.as_view(), name='amfi-list'),
@@ -34,6 +35,7 @@ urlpatterns = [
     path('deficit/50k/', AmfiDeficit50kView.as_view(), name='amfi-deficit-50k-list'),
     path('deficit/100k/', AmfiDeficit100kView.as_view(), name='amfi-deficit-100k-list'),
     path('portf-weight/', AmfiPortfWeightView.as_view(), name='amfi-portf-weight-list'),
+    path('portf-weight/industry/', AmfiPortfWeightIndustryView.as_view(), name='amfi-portf-weight-industry-list'),
     path('notable-exclusion/', AmfiNotableExclusionView.as_view(),
          name='amfi-notable-exclusion-list'),
     path('notable-inclusion/', AmfiNotableInclusionView.as_view(),

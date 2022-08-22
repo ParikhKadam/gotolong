@@ -12,7 +12,7 @@ from django_gotolong.dividend.models import Dividend
 from django_gotolong.fratio.models import Fratio
 from django_gotolong.ftwhl.models import Ftwhl
 from django_gotolong.gfundareco.models import Gfundareco
-from django_gotolong.gweight.models import Gweight
+from django_gotolong.gcweight.models import Gcweight
 from django_gotolong.indices.models import Indices
 from django_gotolong.lastrefd.models import Lastrefd
 # from django_gotolong.screener.models import Screener
@@ -34,9 +34,9 @@ class DbstatListView(ListView):
     db_stat = {}
 
     db_stat['amfi'] = Amfi.objects.count()
-    db_stat['bim'] = BrokerMf.objects.count()
-    db_stat['bis'] = BrokerSum.objects.count()
-    db_stat['bit'] = BrokerTxn.objects.count()
+    db_stat['bmf'] = BrokerMf.objects.count()
+    db_stat['bsum'] = BrokerSum.objects.count()
+    db_stat['btxn'] = BrokerTxn.objects.count()
     db_stat['bhav'] = Bhav.objects.count()
     db_stat['bstmtdiv'] = BstmtDiv.objects.count()
     db_stat['corpact'] = Corpact.objects.count()
@@ -46,7 +46,7 @@ class DbstatListView(ListView):
     db_stat['fratio'] = Fratio.objects.count()
     db_stat['ftwhl'] = Ftwhl.objects.count()
     db_stat['gfundareco'] = Gfundareco.objects.count()
-    db_stat['gweight'] = Gweight.objects.count()
+    db_stat['gcweight'] = Gcweight.objects.count()
     db_stat['fofeti'] = Fofeti.objects.count()
     db_stat['indices'] = Indices.objects.count()
     db_stat['lastrefd'] = Lastrefd.objects.count()

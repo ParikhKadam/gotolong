@@ -22,7 +22,7 @@ from django.views.generic import TemplateView
 
 from django_gotolong.phealth.views import PhealthListView_AllButNone, PhealthListView_All, PhealthListView_Buy
 from django_gotolong.phealth.views import PhealthListView_Sell, PhealthListView_Hold, PhealthListView_Insuf
-from django_gotolong.phealth.views import PhealthListView_Rebalance, PhealthListView_Mixed
+from django_gotolong.phealth.views import PhealthListView_Mixed
 
 urlpatterns = [
     path('list/all-none/', PhealthListView_AllButNone.as_view(), name='phealth-list-all-but-none'),
@@ -32,5 +32,5 @@ urlpatterns = [
     path('list/sell/', PhealthListView_Sell.as_view(), name='phealth-list-sell'),
     path('list/mixed/', PhealthListView_Mixed.as_view(), name='phealth-list-mixed'),
     path('list/insuf/', PhealthListView_Insuf.as_view(), name='phealth-list-insuf'),
-    path('list/rebalance/', PhealthListView_Rebalance.as_view(), name='phealth-list-rebalance'),
+
 ]

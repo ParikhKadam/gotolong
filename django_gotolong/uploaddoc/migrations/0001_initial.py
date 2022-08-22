@@ -22,7 +22,7 @@ class Migration(migrations.Migration):
                 ('uploaddoc_type', models.CharField(
                     choices=[('global', '---GLOBAL---'), ('amfi', 'AMFI'), ('bhav', 'BHAV'), ('ftwhl', 'FTWHL'),
                              ('isin', 'ISIN'), ('nach', 'NACH'), ('screener', 'SCREENER'), ('trendlyne', 'TRNDLYNE'),
-                             ('gweight', 'WEIGHT'), ('user', '---USER---'), ('dematsum', 'DEMATSUM'),
+                             ('gcweight', 'WEIGHT'), ('user', '---USER---'), ('dematsum', 'DEMATSUM'),
                              ('dematxn', 'DEMATTXN'), ('dividend', 'DIVIDEND')], max_length=255)),
                 ('uploaddoc_year', models.CharField(blank=True, choices=[('all', 'ALL'), ('latest', 'LATEST'),
                                                                          ('FY 2011-2012', 'FY 2011-2012'),

@@ -13,13 +13,13 @@ import gotolong.cutil.cutil
 from gotolong.database.database import *
 
 
-class Gweight(Database):
+class Gcweight(Database):
     def __init__(self):
-        super(Gweight, self).__init__()
-        self.gweight_captype_dict = {}
-        self.gweight_table_truncate = False
-        self.gweight_table_name = "global_weight"
-        self.gweight_table_dict = {
+        super(Gcweight, self).__init__()
+        self.gcweight_captype_dict = {}
+        self.gcweight_table_truncate = False
+        self.gcweight_table_name = "global_weight"
+        self.gcweight_table_dict = {
             "cap_type": "text",
             "cap_weight": "int"
         }
@@ -28,16 +28,16 @@ class Gweight(Database):
     def set_debug_level(self, debug_level):
         self.debug_level = debug_level
 
-    def gweight_table_reload(self, truncate=False):
-        self.gweight_table_truncate = truncate
+    def gcweight_table_reload(self, truncate=False):
+        self.gcweight_table_truncate = truncate
 
-    def gweight_table_create(self):
+    def gcweight_table_create(self):
         # dump the sql for creation of table
-        create_sql = gotolong.cutil.cutil.get_create_sql(self.gweight_table_name, self.gweight_table_dict)
+        create_sql = gotolong.cutil.cutil.get_create_sql(self.gcweight_table_name, self.gcweight_table_dict)
         if self.debug_level > 0:
             print(create_sql)
 
-    def gweight_load_row(self, row):
+    def gcweight_load_row(self, row):
         try:
             row_list = row
             if len(row_list) == 0:
@@ -47,7 +47,7 @@ class Gweight(Database):
             cap_type = row_list[0]
             cap_weight = row_list[1]
 
-            self.gweight_captype_dict[cap_type] = cap_weight
+            self.gcweight_captype_dict[cap_type] = cap_weight
 
             if self.debug_level > 1:
                 print('cop_type : ', cap_type, '\n')
@@ -59,21 +59,21 @@ class Gweight(Database):
             print('except ', row)
             traceback.print_exc()
 
-    def gweight_load_data(self, in_filename):
-        table = self.gweight_table_name
+    def gcweight_load_data(self, in_filename):
+        table = self.gcweight_table_name
 
-        if self.gweight_table_truncate:
+        if self.gcweight_table_truncate:
             self.db_table_truncate(table)
 
         row_count = self.db_table_count_rows(table)
         if row_count == 0:
-            self.gweight_insert_data(in_filename)
+            self.gcweight_insert_data(in_filename)
         else:
-            print('gweight data already loaded in db', row_count)
+            print('gcweight data already loaded in db', row_count)
         print('display db data')
-        self.gweight_load_data_from_db()
+        self.gcweight_load_data_from_db()
 
-    def gweight_get_insert_row(self, line, row_bank):
+    def gcweight_get_insert_row(self, line, row_bank):
 
         # split on comma
         row_list = line.split(',')
@@ -93,34 +93,34 @@ class Gweight(Database):
         new_row = (cap_type, cap_weight)
         row_bank.append(new_row)
 
-    def gweight_insert_data(self, in_filename):
-        insert_sql = gotolong.cutil.cutil.get_insert_sql(self.gweight_table_name, self.gweight_table_dict)
+    def gcweight_insert_data(self, in_filename):
+        insert_sql = gotolong.cutil.cutil.get_insert_sql(self.gcweight_table_name, self.gcweight_table_dict)
 
         cursor = self.db_conn.cursor()
         with open(in_filename, 'rt') as csvfile:
             # insert row
             row_bank = []
             for line in csvfile:
-                self.gweight_get_insert_row(line, row_bank)
-            print('loaded gweight : ', len(row_bank))
+                self.gcweight_get_insert_row(line, row_bank)
+            print('loaded gcweight : ', len(row_bank))
             # insert row
             cursor.executemany(insert_sql, row_bank)
             # commit db changes
             self.db_conn.commit()
 
-    def gweight_load_data_from_db(self):
-        table_name = self.gweight_table_name
+    def gcweight_load_data_from_db(self):
+        table_name = self.gcweight_table_name
         cursor = self.db_table_load(table_name)
         for row in cursor.fetchall():
             if self.debug_level > 1:
                 print(row)
-            self.gweight_load_row(row)
+            self.gcweight_load_row(row)
 
-    def gweight_dump_report_full(self, out_filename):
+    def gcweight_dump_report_full(self, out_filename):
 
         fh = open(out_filename, "w")
         fh.write('cap_type, cap_weight\n')
-        for cap_type, cap_weight in self.gweight_captype_dict.items():
+        for cap_type, cap_weight in self.gcweight_captype_dict.items():
             p_str = str(cap_type)
             p_str += ', '
             p_str += str(cap_weight)
@@ -167,16 +167,16 @@ def main():
     if debug_level > 1:
         print('args :', len(sys.argv))
 
-    gweight = Gweight()
+    gcweight = Gcweight()
 
-    gweight.set_debug_level(debug_level)
+    gcweight.set_debug_level(debug_level)
 
     if truncate_table:
-        gweight.gweight_table_reload(truncate_table)
+        gcweight.gcweight_table_reload(truncate_table)
 
-    gweight.gweight_load_data(in_filename_phase[0])
+    gcweight.gcweight_load_data(in_filename_phase[0])
 
-    gweight.gweight_dump_report_full(out_filename_phase[0])
+    gcweight.gcweight_dump_report_full(out_filename_phase[0])
 
 
 if __name__ == "__main__":

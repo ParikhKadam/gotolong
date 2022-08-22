@@ -74,11 +74,12 @@ class FofetiListView_Benchmark_Select(ListView):
     model = Fofeti
 
     # too many variants of 'NIFTY 50'
+    # excluded hybrid funds by using , in it
     queryset = Fofeti.objects.all().filter(Q(fofeti_benchmark__contains='Domestic Price of Gold') | \
                                            Q(fofeti_benchmark__contains='NIFTY 50 Total Return Index') | Q(
         fofeti_benchmark__contains='Next 50') |
                                            Q(fofeti_benchmark__contains='Midcap 150')). \
-        exclude(fofeti_benchmark__contains='Bond').order_by('fofeti_benchmark', '-fofeti_aum'). \
+        exclude(fofeti_benchmark__contains=',').order_by('fofeti_benchmark', '-fofeti_aum'). \
         filter(fofeti_aum__gte=100)
 
     # queryset = q_gold | q_nifty | q_next | q_mid
@@ -88,19 +89,6 @@ class FofetiListView_Benchmark_Select(ListView):
         refresh_url = Fofeti_url()
         context["refresh_url"] = refresh_url
         return context
-
-
-class FofetiListView_NonGold_FOF(ListView):
-    model = Fofeti
-
-    queryset = Fofeti.objects.all().filter(Q(fofeti_type='Index') | Q(fofeti_type='FoF')).order_by('-fofeti_aum')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        refresh_url = Fofeti_url()
-        context["refresh_url"] = refresh_url
-        return context
-
 
 class FofetiListView_Nifty_FOF(ListView):
     model = Fofeti
@@ -144,45 +132,12 @@ class FofetiListView_Gold_FOF(ListView):
         return context
 
 
-class FofetiListView_NonGold_ETF(ListView):
-    model = Fofeti
-
-    queryset = Fofeti.objects.all().filter(fofeti_type='ETF'). \
-        exclude(fofeti_benchmark__contains='Gold').order_by('-fofeti_aum')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        refresh_url = Fofeti_url()
-        context["refresh_url"] = refresh_url
-        return context
-
-
-class FofetiListView_Global_ETF(ListView):
-    model = Fofeti
-
-    queryset = Fofeti.objects.all().filter(fofeti_type='ETF'). \
-        exclude(fofeti_benchmark__contains='Gold'). \
-        exclude(fofeti_benchmark__contains='NIFTY'). \
-        exclude(fofeti_benchmark__contains='Nifty'). \
-        exclude(fofeti_benchmark__contains='S&P BSE').order_by('-fofeti_aum')
-
-    # filter(Q(fofeti_benchmark__contains='MSCI')|Q(fofeti_benchmark__contains='Russell')
-    #       |Q(fofeti_benchmark__contains='NASDAQ') | Q(fofeti_benchmark__contains='Nasdaq')
-    #       |Q(fofeti_benchmark__contains='S&P 500') | Q(fofeti_benchmark__contains='NYSE')
-    #       |Q(fofeti_benchmark__contains='Hang Seng')).order_by('-fofeti_aum')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        refresh_url = Fofeti_url()
-        context["refresh_url"] = refresh_url
-        return context
-
-
 class FofetiListView_Nifty_ETF(ListView):
     model = Fofeti
 
     queryset = Fofeti.objects.all().filter(fofeti_type='ETF'). \
-        filter(fofeti_benchmark__contains='NIFTY 50 Total Return Index').order_by('-fofeti_aum')
+        filter(Q(fofeti_benchmark__contains='NIFTY 50 Total Return Index')
+               | Q(fofeti_benchmark__contains='S&P BSE Sensex Total Return Index')).order_by('-fofeti_aum')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -217,11 +172,60 @@ class FofetiListView_Mid_ETF(ListView):
         return context
 
 
+class FofetiListView_Global_ETF(ListView):
+    model = Fofeti
+
+    queryset = Fofeti.objects.all().filter(fofeti_type='ETF'). \
+        exclude(fofeti_benchmark__contains='Gold'). \
+        exclude(fofeti_benchmark__contains='NIFTY'). \
+        exclude(fofeti_benchmark__contains='Nifty'). \
+        exclude(fofeti_benchmark__contains='S&P BSE').order_by('-fofeti_aum')
+
+    # filter(Q(fofeti_benchmark__contains='MSCI')|Q(fofeti_benchmark__contains='Russell')
+    #       |Q(fofeti_benchmark__contains='NASDAQ') | Q(fofeti_benchmark__contains='Nasdaq')
+    #       |Q(fofeti_benchmark__contains='S&P 500') | Q(fofeti_benchmark__contains='NYSE')
+    #       |Q(fofeti_benchmark__contains='Hang Seng')).order_by('-fofeti_aum')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        refresh_url = Fofeti_url()
+        context["refresh_url"] = refresh_url
+        return context
+
+
+class FofetiListView_Hybrid_ETF(ListView):
+    model = Fofeti
+
+    queryset = Fofeti.objects.all().filter(fofeti_type='ETF'). \
+        filter(fofeti_benchmark__contains=',').order_by('-fofeti_aum')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        refresh_url = Fofeti_url()
+        context["refresh_url"] = refresh_url
+        return context
+
+
+class FofetiListView_NonGold_ETF(ListView):
+    model = Fofeti
+
+    queryset = Fofeti.objects.all().filter(fofeti_type='ETF'). \
+        exclude(fofeti_benchmark__contains='Gold').order_by('-fofeti_aum')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        refresh_url = Fofeti_url()
+        context["refresh_url"] = refresh_url
+        return context
+
+
+
 class FofetiListView_Nifty_FOF(ListView):
     model = Fofeti
 
     queryset = Fofeti.objects.all().filter(Q(fofeti_type='Index') | Q(fofeti_type='FoF')). \
-        filter(fofeti_benchmark__contains='NIFTY 50 Total Return Index').order_by('-fofeti_aum')
+        filter(Q(fofeti_benchmark__contains='NIFTY 50 Total Return Index')
+               | Q(fofeti_benchmark__contains='S&P BSE Sensex Total Return Index')).order_by('-fofeti_aum')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -258,8 +262,9 @@ class FofetiListView_Mid_FOF(ListView):
 class FofetiListView_Global_FOF(ListView):
     model = Fofeti
 
+    # Used Gold with space to include Golden Dragon
     queryset = Fofeti.objects.all().filter(Q(fofeti_type='Index') | Q(fofeti_type='FoF')). \
-        exclude(fofeti_benchmark__contains='Gold'). \
+        exclude(fofeti_benchmark__contains='Gold '). \
         exclude(fofeti_benchmark__contains='NIFTY'). \
         exclude(fofeti_benchmark__contains='Nifty'). \
         exclude(fofeti_benchmark__contains='S&P BSE').order_by('-fofeti_aum')
@@ -267,6 +272,34 @@ class FofetiListView_Global_FOF(ListView):
     # filter(Q(fofeti_benchmark__contains='MSCI') | Q(fofeti_benchmark__contains='Russell')
     #       | Q(fofeti_benchmark__contains='NASDAQ') | Q(fofeti_benchmark__contains='Nasdaq')
     #       | Q(fofeti_benchmark__contains='S&P 500')| Q(fofeti_benchmark__contains='NYSE'))
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        refresh_url = Fofeti_url()
+        context["refresh_url"] = refresh_url
+        return context
+
+
+class FofetiListView_Hybrid_FOF(ListView):
+    model = Fofeti
+
+    queryset = Fofeti.objects.all(). \
+        filter(Q(fofeti_type='Index') | Q(fofeti_type='FoF')). \
+        filter(fofeti_benchmark__contains=',').order_by('-fofeti_aum')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        refresh_url = Fofeti_url()
+        context["refresh_url"] = refresh_url
+        return context
+
+
+class FofetiListView_NonGold_FOF(ListView):
+    model = Fofeti
+
+    queryset = Fofeti.objects.all(). \
+        filter(Q(fofeti_type='Index') | Q(fofeti_type='FoF')). \
+        exclude(fofeti_benchmark__contains='Gold').order_by('-fofeti_aum')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

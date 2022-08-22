@@ -45,20 +45,29 @@ def BrokerSumUpload(request):
     #
     # breakpoint()
 
-    print('broker is ', request.POST["broker"])
+    broker_name = request.POST["broker"]
+    print('broker is ', broker_name)
 
     template = "invalid-get-request.html"
-    # change column name of data frame
-    columns_list = ['bs_stock_symbol', 'bs_company_name', 'bs_isin_code_id', 'bs_qty', 'bs_acp',
-                    'bs_cmp', 'bs_pct_change', 'bs_value_cost', 'bs_value_market',
-                    'bs_days_gain', 'bs_days_gain_pct', 'bs_realized_pl', 'bs_unrealized_pl',
-                    'bs_unrealized_pl_pct', 'bs_unused1']
+
     list_url_name = "broker-sum-list"
+
+    if broker_name == "Isec" or broker_name == 'Zerodha':
+        # change column name of data frame
+        columns_list = ['bs_stock_symbol', 'bs_company_name', 'bs_isin_code_id',
+                        'bs_qty', 'bs_acp', 'bs_cmp', 'bs_pct_change', 'bs_value_cost',
+                        'bs_value_market', 'bs_days_gain', 'bs_days_gain_pct',
+                        'bs_realized_pl', 'bs_unrealized_pl', 'bs_unrealized_pl_pct',
+                        'bs_unused1']
+    else:
+        print('Unsupported broker: ', broker_name)
+        return HttpResponseRedirect(reverse(list_url_name))
+
     data_set = comfun.comm_func_upload(request, template, columns_list, list_url_name)
 
     # delete existing records
     print('Deleted existing BrokerSum data')
-    BrokerSum.objects.all().filter(bs_user_id=request.user.id).delete()
+    BrokerSum.objects.all().filter(bs_broker=broker_name).filter(bs_user_id=request.user.id).delete()
 
     max_id_instances = BrokerSum.objects.aggregate(max_id=Max('bs_id'))
     max_id = max_id_instances['max_id']
@@ -74,28 +83,77 @@ def BrokerSumUpload(request):
     unique_id = max_id
     for column in csv.reader(io_string, delimiter=',', quotechar='"'):
         unique_id += 1
-        column[0] = column[0].strip()
-        column[1] = column[1].strip()
+
+        bs_stock_symbol = 'UNKNOWN'
+        bs_company_name = 'Unmapped'
+        bs_isin_code_id = 'Unmapped'
+        bs_qty = 0
+        bs_acp = 0
+        bs_cmp = 0
+        bs_pct_change = 0
+        bs_value_cost = 0
+        bs_value_market = 0
+        bs_days_gain = 0
+        bs_days_gain_pct = 0
+        bs_realized_pl = 0
+        bs_unrealized_pl = 0
+        bs_unrealized_pl_pct = 0
+        bs_unused1 = 'unused'
+
+        if broker_name == "Isec":
+            # Icidirect Summary
+            # Stock Symbol	Company Name	ISIN Code	Qty	Average Cost Price
+            # Current Market Price	% Change over prev close	Value At Cost
+            # Value At Market Price	Days Gain	Days Gain %	Realized Profit / Loss
+            # Unrealized Profit/Loss	Unrealized Profit/Loss %
+            column[0] = column[0].strip()
+            column[1] = column[1].strip()
+            bs_stock_symbol = column[0]
+            bs_company_name = column[1]
+            bs_isin_code_id = column[2]
+            bs_qty = column[3]
+            bs_acp = column[4]
+            bs_cmp = column[5]
+            bs_pct_change = column[6]
+            bs_value_cost = column[7]
+            bs_value_market = column[8]
+            bs_days_gain = column[9]
+            bs_days_gain_pct = column[10]
+            bs_realized_pl = column[11]
+            bs_unrealized_pl = column[12]
+            bs_unrealized_pl_pct = column[13]
+            bs_unused1 = column[14]
+        else:
+            # Zerodha Demat Data - excel sheet - first line
+            # Instrument, Qty., Avg. cost, LTP, Cur. val, P&L, Net chg., Day chg.
+            bs_stock_symbol = column[0]
+            bs_qty = column[1]
+            bs_acp = column[2]
+            bs_cmp = column[3]
+            bs_value_market = column[4]
+            bs_unrealized_pl = column[5]
+            # net change = column[6]
+            bs_days_gain = column[7]
 
         _, created = BrokerSum.objects.update_or_create(
             bs_id=unique_id,
             bs_user_id=request.user.id,
-            bs_broker=request.POST["broker"],
-            bs_stock_symbol=column[0],
-            bs_company_name=column[1],
-            bs_isin_code_id=column[2],
-            bs_qty=column[3],
-            bs_acp=column[4],
-            bs_cmp=column[5],
-            bs_pct_change=column[6],
-            bs_value_cost=column[7],
-            bs_value_market=column[8],
-            bs_days_gain=column[9],
-            bs_days_gain_pct=column[10],
-            bs_realized_pl=column[11],
-            bs_unrealized_pl=column[12],
-            bs_unrealized_pl_pct=column[13],
-            bs_unused1=column[14]
+            bs_broker=broker_name,
+            bs_stock_symbol=bs_stock_symbol,
+            bs_company_name=bs_company_name,
+            bs_isin_code_id=bs_isin_code_id,
+            bs_qty=bs_qty,
+            bs_acp=bs_acp,
+            bs_cmp=bs_cmp,
+            bs_pct_change=bs_pct_change,
+            bs_value_cost=bs_value_cost,
+            bs_value_market=bs_value_market,
+            bs_days_gain=bs_days_gain,
+            bs_days_gain_pct=bs_days_gain_pct,
+            bs_realized_pl=bs_realized_pl,
+            bs_unrealized_pl=bs_unrealized_pl,
+            bs_unrealized_pl_pct=bs_unrealized_pl_pct,
+            bs_unused1=bs_unused1
         )
 
     lastrefd_update("broker-sum")
