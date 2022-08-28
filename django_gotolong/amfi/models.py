@@ -25,3 +25,13 @@ def amfi_load_rank(amfi_rank_dict):
             amfi_rank_dict[amfi.bse_symbol] = amfi.comp_rank
         if amfi.nse_symbol != amfi.mse_symbol:
             amfi_rank_dict[amfi.mse_symbol] = amfi.comp_rank
+
+
+def amfi_load_isin2ticker(amfi_isin2ticker_dict):
+    # load amfi ticker by isin
+    for amfi in Amfi.objects.all():
+        amfi_isin2ticker_dict[amfi.comp_isin] = amfi.nse_symbol
+        if amfi.nse_symbol != amfi.bse_symbol:
+            amfi_isin2ticker_dict[amfi.comp_isin] = amfi.bse_symbol
+        if amfi.nse_symbol != amfi.mse_symbol:
+            amfi_isin2ticker_dict[amfi.comp_isin] = amfi.mse_symbol

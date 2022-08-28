@@ -19,9 +19,12 @@ from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
+from django_gotolong.amfi.models import Amfi
+
 from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update
 
 from django_gotolong.comm import comfun
+
 
 class BrokerTxnListView(ListView):
     model = BrokerTxn
@@ -78,7 +81,8 @@ def BrokerTxnUpload(request):
     list_url_name = "broker-txn-list"
     template = "invalid-get-request.html"
 
-    if broker_name == "Isec" or broker_name == 'Zerodha':
+    if broker_name == "IcicSec" or broker_name == 'Zerodha' or broker_name == 'HdfcSec':
+        # unused - right now
         # change column name of data frame
         columns_list = ['bt_stock_symbol', 'bt_company_name', 'bt_isin_code', 'bt_action', 'bt_quantity',
                         'bt_txn_price', 'bt_brokerage', 'bt_txn_charges', 'bt_stamp_duty',
@@ -88,7 +92,12 @@ def BrokerTxnUpload(request):
         print('Unsupported broker: ', broker_name)
         return HttpResponseRedirect(reverse(list_url_name))
 
-    data_set = comfun.comm_func_upload(request, template, columns_list, list_url_name)
+    # get rid of top 7 lines
+    if broker_name == 'HdfcSec':
+        ignore_top_lines = 7
+    else:
+        ignore_top_lines = 0
+    data_set = comfun.comm_func_upload(request, template, columns_list, list_url_name, ignore_top_lines)
 
     # delete existing records
     print('Deleted existing BrokerTxn data')
@@ -126,7 +135,7 @@ def BrokerTxnUpload(request):
         bt_exchange = 'Unknown'
         bt_unused1 = ''
 
-        if broker_name == "Isec":
+        if broker_name == "IcicSec":
             # Stock Symbol	Company Name	ISIN Code	Action	Quantity
             # Transaction Price	Brokerage	Transaction Charges	StampDuty	Segment
             # STT Paid/Not Paid	Remarks	Transaction Date	Exchange
@@ -169,6 +178,44 @@ def BrokerTxnUpload(request):
             bt_txn_date = column[0]
             bt_exchange = column[2]
             # bt_unused1 =
+        elif broker_name == 'HdfcSec':
+            # Trd Dt,	Trd No.,	Order No.,	Exch (NSE),	Sett No,  Sett Type, Trade Time, Order Time, 	Scrip Name,
+            # Buy/Sell (B|S), 	Qty, 	Mkt	Price, Mkt Value,	Squp/Del,	Brok Amount,	Service Tax, 	Stamp Duty,
+            # Transn Charge,	Serv Tax on Txn Charge, STT,	Sebi Turnover Tax, 	Edu	Cess, High Edu Cess,
+            # Other	charges, Net Amount, Product (Cash) , SIP Flag, 	SIP Ref No
+
+            scrip_name = column[8]
+            # get the first name from scrip name like 'CAMPUS ACTIVEWEAR LIMITED'
+            first_name = scrip_name.split(' ', 1)[0]
+            # use upper case
+            first_name = first_name.upper()
+            # no longer using isin to name lookup
+
+            scrip_ticker = scrip_name
+            amfi_obj = Amfi.objects.filter(comp_name__contains=first_name).first()
+            if amfi_obj:
+                scrip_ticker = amfi_obj.nse_symbol
+            else:
+                print('amfi obj failed for scrip name', scrip_name, 'first name', first_name)
+
+            bt_stock_symbol = scrip_ticker
+            # get rid of 00:00:00 from date
+            bt_txn_date = column[0].split(' ', 1)[0]
+            print('txn date', bt_txn_date)
+
+            bt_exchange = column[3]
+            bt_action = column[9]
+
+            if bt_action == 'B' or bt_action == 'S':
+                if bt_action == 'B':
+                    bt_action = 'Buy'
+                if bt_action == 'S':
+                    bt_action = 'Sell'
+
+            bt_quantity = int(float(column[10]))
+            bt_txn_price = column[11]
+            bt_segment = column[25]
+
         else:
             print('Unknown broker:', broker_name)
 

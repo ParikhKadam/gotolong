@@ -153,6 +153,14 @@ Manual Deploy : Deploy a github branch (master) : Deploy Branch
 
 Your app was successfully deployed : View.
 
+# DB ER Diagram
+
+<img src="https://github.com/gotolong/gotolong/blob/master/media/db-schema/gotolong_schema.png" >
+
+NOTE: maybe stale
+
+Regenerate it using <a href=https://dbdiagram.io/home target=_blank> dbdiagram.io </a>
+
 # Screenshots
 
 ## Home

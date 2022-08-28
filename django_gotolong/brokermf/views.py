@@ -67,19 +67,36 @@ def BrokerMf_upload(request):
     #
     # breakpoint()
 
+    broker_name = request.POST["broker"]
+    print('broker is ', broker_name)
+
     template = "broker-mf/BrokerMf_list.html"
-    # change column name of data frame
-    columns_list = ["amc", "name", "category", "subcat", "rating",
-                    "units", "acp", "cost_value",
-                    "nav_date", "nav", "nav_value",
-                    "pnl_realized", "pnl", "pnl_pct",
-                    "research_reco"]
+
     list_url_name = "broker-mf-list"
-    data_set = comfun.comm_func_upload(request, template, columns_list, list_url_name)
+
+    if broker_name == "IcicSec" or broker_name == 'Zerodha':
+        # change column name of data frame
+        columns_list = ["amc", "name", "category", "subcat", "rating",
+                        "units", "acp", "cost_value",
+                        "nav_date", "nav", "nav_value",
+                        "pnl_realized", "pnl", "pnl_pct",
+                        "research_reco"]
+
+    else:
+        print('Unsupported broker: ', broker_name)
+        return HttpResponseRedirect(reverse(list_url_name))
+
+    # get rid of top 4 lines
+    if broker_name == 'HdfcSec':
+        ignore_top_lines = 0
+    else:
+        ignore_top_lines = 0
+
+    data_set = comfun.comm_func_upload(request, template, columns_list, list_url_name, ignore_top_lines)
 
     # delete existing records
     print('Deleted existing BrokerMf data')
-    BrokerMf.objects.all().filter(bmf_user_id=request.user.id).delete()
+    BrokerMf.objects.all().filter(bmf_broker=broker_name).filter(bmf_user_id=request.user.id).delete()
 
     # note: what about using existing slots... how do we fill holes
     #
@@ -100,23 +117,44 @@ def BrokerMf_upload(request):
     unique_id = max_id
     for column in csv.reader(io_string, delimiter=',', quotechar='"'):
         unique_id += 1
-        bmf_user_id = request.user.id
-        bmf_amc = column[0].strip()
-        bmf_name = column[1].strip()
-        bmf_category = column[2].strip()
-        bmf_subcat = column[3].strip()
-        bmf_rating = column[4].strip()
-        bmf_units = column[5].strip()
-        bmf_acp = column[6].strip()
-        bmf_cost_value = column[7].strip()
-        bmf_nav_date = column[8].strip()
-        bmf_nav = column[9].strip()
-        bmf_nav_value = column[10].strip()
-        bmf_pnl_realized = column[10].strip()
-        bmf_pnl = column[12].strip()
-        bmf_pnl_pct = column[13].strip()
-        bmf_research_reco = column[14].strip()
 
+        bmf_id = unique_id
+        bmf_user_id = request.user.id
+        bmf_broker = broker_name
+        bmf_amc = 'Unknown'
+        bmf_name = 'Unknown'
+        bmf_category = 'Unknown'
+        bmf_subcat = 'Unknown'
+        bmf_rating = 'Unknown'
+        bmf_units = 0
+        bmf_acp = 0
+        bmf_cost_value = 0
+        bmf_nav_date = ''
+        bmf_nav = 0
+        bmf_nav_value = 0
+        bmf_pnl_realized = 0
+        bmf_pnl = 0
+        bmf_pnl_pct = 0
+        bmf_research_reco = 'Unknown'
+
+        if broker_name == "IcicSec":
+            bmf_amc = column[0].strip()
+            bmf_name = column[1].strip()
+            bmf_category = column[2].strip()
+            bmf_subcat = column[3].strip()
+            bmf_rating = column[4].strip()
+            bmf_units = column[5].strip()
+            bmf_acp = column[6].strip()
+            bmf_cost_value = column[7].strip()
+            bmf_nav_date = column[8].strip()
+            bmf_nav = column[9].strip()
+            bmf_nav_value = column[10].strip()
+            bmf_pnl_realized = column[10].strip()
+            bmf_pnl = column[12].strip()
+            bmf_pnl_pct = column[13].strip()
+            bmf_research_reco = column[14].strip()
+        else:
+            print('broker not supported: ', broker_name)
         # print('bmf_units ', bmf_units)
         # skip mutual funds with 0 holdings
         # if int(float(bmf_units)) !=  0 :
@@ -124,7 +162,7 @@ def BrokerMf_upload(request):
         _, created = BrokerMf.objects.update_or_create(
             bmf_id=unique_id,
             bmf_user_id=bmf_user_id,
-            bmf_broker=request.POST["broker"],
+            bmf_broker=bmf_broker,
             bmf_amc=bmf_amc,
             bmf_name=bmf_name,
             bmf_category=bmf_category,

@@ -64,7 +64,7 @@ CREATE TABLE `auth_permission` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `auth_permission_content_type_id_codename_01ab375a_uniq` (`content_type_id`,`codename`),
   CONSTRAINT `auth_permission_content_type_id_2f476e4b_fk_django_co` FOREIGN KEY (`content_type_id`) REFERENCES `django_content_type` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -143,86 +143,89 @@ CREATE TABLE `both_lastrefd` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `broker_icidir_mf`
+-- Table structure for table `broker_mf`
 --
 
-DROP TABLE IF EXISTS `broker_icidir_mf`;
+DROP TABLE IF EXISTS `broker_mf`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `broker_icidir_mf` (
-  `bim_id` int(11) DEFAULT NULL,
-  `bim_user_id` int(11) DEFAULT NULL,
-  `bim_amc` text DEFAULT NULL,
-  `bim_name` text DEFAULT NULL,
-  `bim_category` text DEFAULT NULL,
-  `bim_subcat` text DEFAULT NULL,
-  `bim_rating` text DEFAULT NULL,
-  `bim_units` float DEFAULT NULL,
-  `bim_acp` float DEFAULT NULL,
-  `bim_cost_value` float DEFAULT NULL,
-  `bim_nav_date` text DEFAULT NULL,
-  `bim_nav` float DEFAULT NULL,
-  `bim_nav_value` float DEFAULT NULL,
-  `bim_pnl_realized` float DEFAULT NULL,
-  `bim_pnl` float DEFAULT NULL,
-  `bim_pnl_pct` float DEFAULT NULL,
-  `bim_research_reco` text DEFAULT NULL
+CREATE TABLE `broker_mf` (
+  `bmf_id` int(11) DEFAULT NULL,
+  `bmf_user_id` int(11) DEFAULT NULL,
+  `bmf_broker` text DEFAULT NULL,
+  `bmf_amc` text DEFAULT NULL,
+  `bmf_name` text DEFAULT NULL,
+  `bmf_category` text DEFAULT NULL,
+  `bmf_subcat` text DEFAULT NULL,
+  `bmf_rating` text DEFAULT NULL,
+  `bmf_units` float DEFAULT NULL,
+  `bmf_acp` float DEFAULT NULL,
+  `bmf_cost_value` float DEFAULT NULL,
+  `bmf_nav_date` text DEFAULT NULL,
+  `bmf_nav` float DEFAULT NULL,
+  `bmf_nav_value` float DEFAULT NULL,
+  `bmf_pnl_realized` float DEFAULT NULL,
+  `bmf_pnl` float DEFAULT NULL,
+  `bmf_pnl_pct` float DEFAULT NULL,
+  `bmf_research_reco` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `broker_icidir_sum`
+-- Table structure for table `broker_sum`
 --
 
-DROP TABLE IF EXISTS `broker_icidir_sum`;
+DROP TABLE IF EXISTS `broker_sum`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `broker_icidir_sum` (
-  `bis_id` int(11) DEFAULT NULL,
-  `bis_user_id` int(11) DEFAULT NULL,
-  `bis_stock_symbol` text DEFAULT NULL,
-  `bis_company_name` text DEFAULT NULL,
-  `bis_isin_code_id` text DEFAULT NULL,
-  `bis_qty` int(11) DEFAULT NULL,
-  `bis_acp` float DEFAULT NULL,
-  `bis_cmp` text DEFAULT NULL,
-  `bis_pct_change` text DEFAULT NULL,
-  `bis_value_cost` float DEFAULT NULL,
-  `bis_value_market` float DEFAULT NULL,
-  `bis_days_gain` text DEFAULT NULL,
-  `bis_days_gain_pct` text DEFAULT NULL,
-  `bis_realized_pl` text DEFAULT NULL,
-  `bis_unrealized_pl` text DEFAULT NULL,
-  `bis_unrealized_pl_pct` text DEFAULT NULL,
-  `bis_unused1` text DEFAULT NULL
+CREATE TABLE `broker_sum` (
+  `bs_id` int(11) DEFAULT NULL,
+  `bs_user_id` int(11) DEFAULT NULL,
+  `bs_broker` text DEFAULT NULL,
+  `bs_stock_symbol` text DEFAULT NULL,
+  `bs_company_name` text DEFAULT NULL,
+  `bs_isin_code_id` text DEFAULT NULL,
+  `bs_qty` int(11) DEFAULT NULL,
+  `bs_acp` float DEFAULT NULL,
+  `bs_cmp` text DEFAULT NULL,
+  `bs_pct_change` text DEFAULT NULL,
+  `bs_value_cost` float DEFAULT NULL,
+  `bs_value_market` float DEFAULT NULL,
+  `bs_days_gain` text DEFAULT NULL,
+  `bs_days_gain_pct` text DEFAULT NULL,
+  `bs_realized_pl` text DEFAULT NULL,
+  `bs_unrealized_pl` text DEFAULT NULL,
+  `bs_unrealized_pl_pct` text DEFAULT NULL,
+  `bs_unused1` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `broker_icidir_txn`
+-- Table structure for table `broker_txn`
 --
 
-DROP TABLE IF EXISTS `broker_icidir_txn`;
+DROP TABLE IF EXISTS `broker_txn`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `broker_icidir_txn` (
-  `bit_id` int(11) DEFAULT NULL,
-  `bit_user_id` int(11) DEFAULT NULL,
-  `bit_stock_symbol` text DEFAULT NULL,
-  `bit_company_name` text DEFAULT NULL,
-  `bit_isin_code` text DEFAULT NULL,
-  `bit_action` text DEFAULT NULL,
-  `bit_quantity` int(11) DEFAULT NULL,
-  `bit_txn_price` float DEFAULT NULL,
-  `bit_brokerage` text DEFAULT NULL,
-  `bit_txn_charges` text DEFAULT NULL,
-  `bit_stamp_duty` text DEFAULT NULL,
-  `bit_segment` text DEFAULT NULL,
-  `bit_stt` text DEFAULT NULL,
-  `bit_remarks` text DEFAULT NULL,
-  `bit_txn_date` date DEFAULT NULL,
-  `bit_exchange` text DEFAULT NULL,
-  `bit_unused1` text DEFAULT NULL
+CREATE TABLE `broker_txn` (
+  `bt_id` int(11) DEFAULT NULL,
+  `bt_user_id` int(11) DEFAULT NULL,
+  `bt_broker` text DEFAULT NULL,
+  `bt_stock_symbol` text DEFAULT NULL,
+  `bt_company_name` text DEFAULT NULL,
+  `bt_isin_code` text DEFAULT NULL,
+  `bt_action` text DEFAULT NULL,
+  `bt_quantity` int(11) DEFAULT NULL,
+  `bt_txn_price` float DEFAULT NULL,
+  `bt_brokerage` text DEFAULT NULL,
+  `bt_txn_charges` text DEFAULT NULL,
+  `bt_stamp_duty` text DEFAULT NULL,
+  `bt_segment` text DEFAULT NULL,
+  `bt_stt` text DEFAULT NULL,
+  `bt_remarks` text DEFAULT NULL,
+  `bt_txn_date` date DEFAULT NULL,
+  `bt_exchange` text DEFAULT NULL,
+  `bt_unused1` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -271,6 +274,20 @@ CREATE TABLE `broker_zerodha_txn` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `cadmin_cadmin`
+--
+
+DROP TABLE IF EXISTS `cadmin_cadmin`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cadmin_cadmin` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cadmin_xyz` longtext DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `django_admin_log`
 --
 
@@ -307,7 +324,7 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_model_76bd3d3b_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -323,7 +340,7 @@ CREATE TABLE `django_migrations` (
   `name` varchar(255) NOT NULL,
   `applied` datetime(6) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -355,6 +372,7 @@ CREATE TABLE `global_amfi` (
   `comp_isin` text DEFAULT NULL,
   `bse_symbol` text DEFAULT NULL,
   `nse_symbol` text DEFAULT NULL,
+  `mse_symbol` text DEFAULT NULL,
   `avg_mcap` text DEFAULT NULL,
   `cap_type` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -375,6 +393,20 @@ CREATE TABLE `global_bhav` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `global_bucc`
+--
+
+DROP TABLE IF EXISTS `global_bucc`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `global_bucc` (
+  `bucc_id` int(11) DEFAULT NULL,
+  `bucc_name` varchar(256) DEFAULT NULL,
+  `bucc_value` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `global_corpact`
 --
 
@@ -387,6 +419,19 @@ CREATE TABLE `global_corpact` (
   `ca_bonus` int(11) DEFAULT NULL,
   `ca_buyback` int(11) DEFAULT NULL,
   `ca_dividend` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `global_cweight`
+--
+
+DROP TABLE IF EXISTS `global_cweight`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `global_cweight` (
+  `gcw_cap_type` text DEFAULT NULL,
+  `gcw_cap_weight` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -481,6 +526,22 @@ CREATE TABLE `global_nach` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `global_paytxn`
+--
+
+DROP TABLE IF EXISTS `global_paytxn`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `global_paytxn` (
+  `pt_made_by` int(11) DEFAULT NULL,
+  `pt_made_on` text DEFAULT NULL,
+  `pt_amount` int(11) DEFAULT NULL,
+  `pt_order_id` text DEFAULT NULL,
+  `pt_checksum` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=DYNAMIC;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `global_trendlyne`
 --
 
@@ -489,6 +550,7 @@ DROP TABLE IF EXISTS `global_trendlyne`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `global_trendlyne` (
   `tl_stock_name` text DEFAULT NULL,
+  `tl_nse` text DEFAULT NULL,
   `tl_isin` text DEFAULT NULL,
   `tl_bat` float DEFAULT NULL,
   `tl_der` float DEFAULT NULL,
@@ -501,19 +563,6 @@ CREATE TABLE `global_trendlyne` (
   `tl_pledge` float DEFAULT NULL,
   `tl_low_3y` float DEFAULT NULL,
   `tl_low_5y` float DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `global_weight`
---
-
-DROP TABLE IF EXISTS `global_weight`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `global_weight` (
-  `gcw_cap_type` text DEFAULT NULL,
-  `gcw_cap_weight` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -678,6 +727,24 @@ CREATE TABLE `user_doc` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `user_iweight`
+--
+
+DROP TABLE IF EXISTS `user_iweight`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `user_iweight` (
+  `uiw_user_id` int(11) DEFAULT NULL,
+  `uiw_name` text DEFAULT NULL,
+  `uiw_value` double DEFAULT NULL,
+  `uiw_value_pct` double DEFAULT NULL,
+  `uiw_constituents` tinyint(4) DEFAULT NULL,
+  `uiw_tickers` text DEFAULT NULL,
+  `uiw_companies` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `user_mfund`
 --
 
@@ -718,20 +785,6 @@ CREATE TABLE `user_othinv` (
   `othinv_realty` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `user_weight`
---
-
-DROP TABLE IF EXISTS `user_weight`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user_weight` (
-  `comp_ticker` text DEFAULT NULL,
-  `comp_weight_type` text DEFAULT NULL,
-  `comp_weight_units` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -742,4 +795,4 @@ CREATE TABLE `user_weight` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-12-10 15:50:39
+-- Dump completed on 2022-08-26 21:27:27

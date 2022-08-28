@@ -1,3 +1,7 @@
+import openpyxl
+import pandas as pd
+
+
 def comm_func_ticker_match(ticker, amfi_rank_dict, dematsum_list):
     if (ticker in amfi_rank_dict and amfi_rank_dict[ticker] <= 500) \
             or ticker in dematsum_list:
@@ -7,7 +11,7 @@ def comm_func_ticker_match(ticker, amfi_rank_dict, dematsum_list):
 
 
 # one parameter named request
-def comm_func_upload(request, template, columns_list, list_url_name):
+def comm_func_upload(request, template, columns_list, list_url_name, ignore_top_lines=0):
     # for quick debugging
     #
     # import pdb; pdb.set_trace()
@@ -54,15 +58,20 @@ def comm_func_upload(request, template, columns_list, list_url_name):
 
         # ignore top 6 line : Value Research, Fund Performance
         # remove top six line from dataframe
+
         # ignore the top 1 line
         # df = df.iloc[1:]
+        # ignore top number of lines
+        if ignore_top_lines != 0:
+            df = df.iloc[ignore_top_lines:]
 
         if debug_level > 0:
             print("old columns : ")
             print(df.columns)
 
+        # TBD
         # change column name of data frame
-        df.columns = columns_list
+        # df.columns = columns_list
 
         if debug_level > 0:
             print("new columns : ")
@@ -75,12 +84,11 @@ def comm_func_upload(request, template, columns_list, list_url_name):
         # df = df.round({'avg_mcap' : 1})
         # covert to numeric
         # df[["avg_mcap"]] = df[["avg_mcap"]].apply(pd.to_numeric)
-        df[["daily_aum"]] = df[["daily_aum"]].astype(int)
+        # df[["daily_aum"]] = df[["daily_aum"]].astype(int)
 
         # drop columns that are not required
-        skip_columns_list = ["none"]
-
-        df.drop(skip_columns_list, axis=1, inplace=True)
+        # skip_columns_list = ["none"]
+        # df.drop(skip_columns_list, axis=1, inplace=True)
 
         data_set = df.to_csv(header=True, index=False)
 

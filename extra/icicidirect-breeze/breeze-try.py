@@ -100,7 +100,6 @@ time_stamp = datetime.utcnow().isoformat()[:19] + '.000Z'
 checksum = hashlib.sha256((time_stamp+payload+secret_key).encode("utf-8")).hexdigest()
 
 
-
 # Generate ISO8601 Date/DateTime String
 import datetime
 iso_date_string = datetime.datetime.strptime("21/03/2022","%d/%m/%Y").isoformat()[:10] + 'T05:30:00.000Z'
