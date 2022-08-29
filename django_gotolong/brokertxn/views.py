@@ -136,9 +136,10 @@ def BrokerTxnUpload(request):
         bt_unused1 = ''
 
         if broker_name == "IcicSec":
-            # Stock Symbol	Company Name	ISIN Code	Action	Quantity
-            # Transaction Price	Brokerage	Transaction Charges	StampDuty	Segment
-            # STT Paid/Not Paid	Remarks	Transaction Date	Exchange
+            # ICICI Direct
+            # 0-4 Stock Symbol,	Company Name,	ISIN Code,	Action,	Quantity
+            # 5-9 Transaction Price,	Brokerage,	Transaction Charges,	StampDuty,	Segment
+            # 10-13 STT Paid/Not Paid,	Remarks,	Transaction Date,	Exchange
             column[0] = column[0].strip()
             column[1] = column[1].strip()
 
@@ -159,9 +160,9 @@ def BrokerTxnUpload(request):
             bt_exchange = column[13]
             bt_unused1 = column[14]
         elif broker_name == 'Zerodha':
-            # Zerodha - trade_date	tradingsymbol	exchange	segment
-            # trade_type	quantity	price	order_id	trade_id
-            # order_execution_time
+            # Zerodha
+            # 0-4  trade_date, tradingsymbol, exchange,	segment, trade_type
+            # 5-9 quantity,	price,	order_id,	trade_id, order_execution_time
             bt_stock_symbol = column[1]
             # bt_company_name =
             # bt_isin_code =
@@ -179,10 +180,12 @@ def BrokerTxnUpload(request):
             bt_exchange = column[2]
             # bt_unused1 =
         elif broker_name == 'HdfcSec':
-            # Trd Dt,	Trd No.,	Order No.,	Exch (NSE),	Sett No,  Sett Type, Trade Time, Order Time, 	Scrip Name,
-            # Buy/Sell (B|S), 	Qty, 	Mkt	Price, Mkt Value,	Squp/Del,	Brok Amount,	Service Tax, 	Stamp Duty,
-            # Transn Charge,	Serv Tax on Txn Charge, STT,	Sebi Turnover Tax, 	Edu	Cess, High Edu Cess,
-            # Other	charges, Net Amount, Product (Cash) , SIP Flag, 	SIP Ref No
+            # HDFC Securities
+            # 0-6 Trd Dt,	Trd No.,	Order No.,	Exch (NSE),	Sett No,  Sett Type, Trade Time,
+            # 7-12 Order Time, 	Scrip Name, Buy/Sell (B|S), 	Qty, 	Mkt	Price, Mkt Value,
+            # 13-17 Squp/Del,	Brok Amount,	Service Tax, 	Stamp Duty, Transn Charge,
+            # 18-22 Serv Tax on Txn Charge, STT,	Sebi Turnover Tax, 	Edu	Cess, High Edu Cess,
+            # 23-27 Other	charges, Net Amount, Product (Cash) , SIP Flag, 	SIP Ref No
 
             scrip_name = column[8]
             # get the first name from scrip name like 'CAMPUS ACTIVEWEAR LIMITED'

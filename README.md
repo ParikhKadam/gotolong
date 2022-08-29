@@ -193,77 +193,127 @@ Regenerate it using <a href=https://dbdiagram.io/home target=_blank> dbdiagram.i
 
 # Modules Information
 
-## amfi module
+## Global Modules
+
+### amfi module
 
 mapping of ticker and mcap and captype
 
-## isin module
+### bhav module
 
-mapping of ticker and ISIN
-
-## Giving Back Score
-
-Module : bse -> corpact
-
-## 52-week high and low and CMP
+CMP of yesterday.
 
 We are ok with data of yesterday as it is for investment and not for trading.
 
-Modules : bhav, ftwhl, nse
+### isin module
 
-## demat module (icici direct portfolio)
+mapping of ticker and ISIN
 
-demat transaction details
+### corpact module
 
-demat summary details
+Corporate actions - positive
 
-Module name : demat
+Module : bse -> corpact
 
-NOTE: add support for any broker.
+### ftwhl
 
-## screener module
+52-week high and low
 
-financial data of bse 500 for 10 years
+We are ok with data of yesterday as it is for investment and not for trading.
 
-## trendlyne module
+### screener module
 
-for broker average target of healthy stocks
+Financial data of bse 500 for 10 years and some important ratios
 
-## gcweight module
+From screener.in
 
-global weight module
+### trendlyne module
+
+For broker average target of healthy stocks and some important ratios.
+
+from trendlyne
+
+### gcweight module
+
+global cap weight module
 
 assign weight by captype
 
-user weight is not used right now
+NOTE:- user weight is not used right now
 
-Name : global_weight
-
-## fratio module
+### fratio module
 
 Financial Ratio module
 
 You can specify financial ratio filters like debt to equity ratio (der)
 
-## gfundareco module
+### gfundareco module
 
-Global recommendation module
+Global fundametal recommendation module
 
 Uses trendlyne module and fratio module
 
-## phealth module
+### bucc module
 
-identify companies at healthy price
+Broker unique client code (ucc) module
+
+### fofeti module
+
+Fof / ETF / Index fund data
+
+### indices module
+
+NSE 500 data to know the industry name.
+
+## User modules
+
+### brokersum module
+
+broker summary details
+
+### brokertxn module
+
+broker txn details
+
+### brokermf module
+
+broker mf details
+
+### uiweight module
+
+user industry weight information
+
+### phealth module
+
+Identify companies at healthy price
 
 Dependency :
 
-## dividend module
+### dividend module
 
 create dividend amfix by company and month.
 
 Dependency : nach -> dividend
 
-# Additional Softwares
+## Other modules
+
+### dbstat
+
+db rows used
+
+### lastrefd
+
+last refresh date module
+
+### othinv
+
+other investment details
+
+### nworth module
+
+net worth module
+
+# Additional Software
 
 Download PyCharm
 

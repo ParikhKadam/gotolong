@@ -112,10 +112,10 @@ def BrokerSumUpload(request):
 
         if broker_name == "IcicSec":
             # Icidirect Summary
-            # Stock Symbol	Company Name	ISIN Code	Qty	Average Cost Price
-            # Current Market Price	% Change over prev close	Value At Cost
-            # Value At Market Price	Days Gain	Days Gain %	Realized Profit / Loss
-            # Unrealized Profit/Loss	Unrealized Profit/Loss %
+            # 0-4 Stock Symbol,	Company Name,	ISIN Code,	Qty	Average, Cost Price
+            # 5-7 Current Market Price,	% Change over prev close,	Value At Cost,
+            # 8-11 Value At Market Price,	Days Gain,	Days Gain %,	Realized Profit / Loss
+            # 12-13 Unrealized Profit/Loss,	Unrealized Profit/Loss %
             column[0] = column[0].strip()
             column[1] = column[1].strip()
             bs_stock_symbol = column[0]
@@ -143,7 +143,8 @@ def BrokerSumUpload(request):
             bs_unused1 = column[14]
         elif broker_name == "Zerodha":
             # Zerodha Demat Data - excel sheet - first line
-            # Instrument, Qty., Avg. cost, LTP, Cur. val, P&L, Net chg., Day chg.
+            # 0-4 Instrument, Qty., Avg. cost, LTP, Cur. val,
+            # 5-7 P&L, Net chg., Day chg.
             bs_stock_symbol = column[0]
             bs_qty = column[1]
             bs_acp = column[2]
@@ -153,11 +154,11 @@ def BrokerSumUpload(request):
             # net change = column[6]
             bs_days_gain = column[7]
         elif broker_name == "HdfcSec":
-            # Stock Name	ISIN	Sector Name	 Quantity	Average Cost Price	Value At Cost
-            # Current Market Price
-            # Current Market Price % Change,	Valuation at Current Market Price,	Unrealized Profit/Loss,
-            # Unrealized Profit/Loss % Change,	Realized Profit/Loss,	Nearing Long term Quantity (within 30 days)
-            #
+            # 0-4 Stock Name,	ISIN,	Sector Name,	 Quantity,	Average Cost Price
+            # 5-7 Value At Cost, Current Market Price, Current Market Price % Change,
+            # 8-9 Valuation at Current Market Price,	Unrealized Profit/Loss,
+            # 10-11 Unrealized Profit/Loss % Change,	Realized Profit/Loss,
+            # 12 Nearing Long term Quantity (within 30 days)
             # name not ticker
             bs_stock_name = column[0]
             bs_isin_code_id = column[1]
