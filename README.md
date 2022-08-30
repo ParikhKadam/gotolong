@@ -14,10 +14,71 @@ It is still in Beta phase and developers can experiment with it.
 
 Once it can be used by any user with basic knowledge of computer, it will be tagged as v1.0
 
+Table of Contents
+=================
+
+* [GotoLong](#gotolong)
+    * [Sample Deployment](#sample-deployment)
+* [Quick setup on local box](#quick-setup-on-local-box)
+    * [Clone repository](#clone-repository)
+    * [Software  Pre-Req](#software--pre-req)
+    * [Install Python packages](#install-python-packages)
+    * [Configure PATH, PYTHONPATH, DATABASE_URL](#configure-path-pythonpath-database_url)
+        * [Modify ~/.bashrc](#modify-bashrc)
+        * [Modify gotolong_config.sh for DB Versions](#modify-gotolong_configsh-for-db-versions)
+    * [Modify DB configuration](#modify-db-configuration)
+    * [Create DB](#create-db)
+    * [Import Sample Data](#import-sample-data)
+    * [Start using App](#start-using-app)
+* [Heroku Deployment](#heroku-deployment)
+* [Quick Redeployment from github](#quick-redeployment-from-github)
+    * [DB : Refresh on Heroku](#db--refresh-on-heroku)
+    * [App : Refresh on Heroku](#app--refresh-on-heroku)
+* [DB ER Diagram](#db-er-diagram)
+* [Screenshots](#screenshots)
+    * [Home](#home)
+    * [Global Advisor](#global-advisor)
+    * [Global Fof/ETF](#global-fofetf)
+    * [User broker summary](#user-broker-summary)
+    * [User broker transaction](#user-broker-transaction)
+    * [User broker mutual fund](#user-broker-mutual-fund)
+    * [User portfolio health](#user-portfolio-health)
+* [Modules Information](#modules-information)
+    * [Global Modules](#global-modules)
+        * [amfi module](#amfi-module)
+        * [bhav module](#bhav-module)
+        * [isin module](#isin-module)
+        * [corpact module](#corpact-module)
+        * [ftwhl](#ftwhl)
+        * [screener module](#screener-module)
+        * [trendlyne module](#trendlyne-module)
+        * [gcweight module](#gcweight-module)
+        * [fratio module](#fratio-module)
+        * [gfundareco module](#gfundareco-module)
+        * [bucc module](#bucc-module)
+        * [fofeti module](#fofeti-module)
+        * [indices module](#indices-module)
+    * [User modules](#user-modules)
+        * [brokersum module](#brokersum-module)
+        * [brokertxn module](#brokertxn-module)
+        * [brokermf module](#brokermf-module)
+        * [uiweight module](#uiweight-module)
+        * [phealth module](#phealth-module)
+        * [dividend module](#dividend-module)
+    * [Other modules](#other-modules)
+        * [dbstat](#dbstat)
+        * [lastrefd](#lastrefd)
+        * [othinv](#othinv)
+        * [nworth module](#nworth-module)
+* [Additional Software](#additional-software)
+
+<!-- Created by https://github.com/ekalinin/github-markdown-toc -->
+
 ## Sample Deployment
 
 Check Sample deployment on heroku.
-(NOTE: Site is down as heroku doesn't honor india issued credit card due to new RBI regulation. Still exploring an alternative deployment.)
+(NOTE: Site is down as heroku doesn't honor india issued credit card due to new RBI regulation. Still exploring an
+alternative deployment.)
 
 https://gotolong.herokuapp.com/
 
