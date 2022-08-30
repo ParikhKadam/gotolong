@@ -74,6 +74,12 @@ Table of Contents
 
 <!-- Created by https://github.com/ekalinin/github-markdown-toc -->
 
+## Regenerate github Mark Down TOC
+
+Please run gh-md-toc and paste the output above in TOC
+
+$ scripts/gh-md-toc README.md
+
 ## Sample Deployment
 
 Check Sample deployment on heroku.
