@@ -5,7 +5,9 @@
 export PROJECT_ROOT=`pwd`
 export PKG_ROOT=$PROJECT_ROOT
 export PROJ_SCRIPTS_LOC=$PROJECT_ROOT/scripts
-export PATH=${PROJ_SCRIPTS_LOC}:${PROJECT_ROOT}:.:${PATH}:$(dirname `which python`)/Scripts
+# note - modules installed using pip install --user <>
+export USER_SCRIPTS_LOC=/c/Users/SURIKUMA/AppData/Roaming/Python/Python310
+export PATH=${PROJ_SCRIPTS_LOC}:${PROJECT_ROOT}:.:${PATH}:$(dirname `which python`)/Scripts:${USER_SCRIPTS_LOC}/Scripts
 # add excel path
 export PATH=${PATH}:/c/'Program Files (x86)'/'Microsoft Office'/Office16
 # add mysql PATH

@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class AmfiConfig(AppConfig):
-    name = 'UploadDoc'
+class UploadDocConfig(AppConfig):
+    name = 'django_gotolong.uploaddoc'

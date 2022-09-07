@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class HdbstatConfig(AppConfig):
-    name = 'dbstat'
+class DbstatConfig(AppConfig):
+    name = 'django_gotolong.dbstat'

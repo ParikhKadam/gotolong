@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class MfundConfig(AppConfig):
-    name = 'mfund'
+    name = 'django_gotolong.mfund'

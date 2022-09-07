@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class TrendlyneConfig(AppConfig):
-    name = 'trendlyne'
+    name = 'django_gotolong.trendlyne'

@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class BuccConfig(AppConfig):
-    name = 'broker_ucc'
+    name = 'django_gotolong.bucc'

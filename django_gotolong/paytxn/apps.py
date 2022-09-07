@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class PayTxnConfig(AppConfig):
-    name = 'PayTxn'
+    name = 'django_gotolong.paytxn'

@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class DividendConfig(AppConfig):
-    name = 'dividend'
+    name = 'django_gotolong.dividend'

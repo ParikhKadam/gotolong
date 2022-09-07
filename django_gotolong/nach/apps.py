@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class NachConfig(AppConfig):
-    name = 'nach'
+    name = 'django_gotolong.nach'

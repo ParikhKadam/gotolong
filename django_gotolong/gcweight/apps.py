@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class GcweightConfig(AppConfig):
-    name = 'gcweight'
+    name = 'django_gotolong.gcweight'

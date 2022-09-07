@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class BstmtDivConfig(AppConfig):
-    name = 'bstmtdiv'
+    name = 'django_gotolong.bstmtdiv'

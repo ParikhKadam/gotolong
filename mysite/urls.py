@@ -57,8 +57,10 @@ from django_gotolong.trendlyne.views import TrendlyneListView, TrendlyneRecoView
 from django_gotolong.uploaddoc import views
 
 from django_gotolong.jsched.tasks import jsched_task_startup
+from django.contrib.staticfiles.storage import staticfiles_storage
 
 urlpatterns = [
+                  path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('favicon_io/favicon.ico'))),
                   path('home/', TemplateView.as_view(template_name="home.html"), name='home'),
                   path('', TemplateView.as_view(template_name="home.html"), name='index'),
                   path('accounts/', include('django.contrib.auth.urls')),
@@ -96,14 +98,14 @@ urlpatterns = [
                   path('dividend/refresh/', DividendRefreshView.as_view(), name='dividend-refresh'),
                   path('dividend/ticker/', DividendTickerListView.as_view(),
                        name='dividend-ticker-list'),
-                  path('fof/', include('django_gotolong.fof.urls')),
+                  #                  path('fof/', include('django_gotolong.fof.urls')),
+                  path('fofeti/', include('django_gotolong.fofeti.urls')),
                   path('fratio/', include('django_gotolong.fratio.urls')),
                   path('ftwhl/list/', FtwhlListView.as_view(), name='ftwhl-list'),
                   path('ftwhl/fetch/', ftwhl_fetch, name='ftwhl-fetch'),
                   path('ftwhl/upload/', ftwhl_upload, name='ftwhl-upload'),
                   path('gfundareco/list/', GfundarecoListView.as_view(), name='gfundareco-list'),
                   path('gfundareco/refresh/', GfundarecoRefreshView.as_view(), name='gfundareco-refresh'),
-                  path('fofeti/', include('django_gotolong.fofeti.urls')),
                   path('gcweight/list/', GcweightListView.as_view(), name='gcweight-list'),
                   path('indices/list/', IndicesListView.as_view(), name='indices-list'),
                   path('indices/industry/', IndicesIndustryView.as_view(), name='indices-industry-list'),
@@ -121,7 +123,7 @@ urlpatterns = [
                   path('page/quick-links/', TemplateView.as_view(template_name="quick_links.html")),
                   path('page/sitemap/', TemplateView.as_view(template_name="sitemap.html")),
                   path('page/user-data/', TemplateView.as_view(template_name="user_data.html")),
-                  path('payments/', include('django_gotolong.payments.urls')),
+                  path('paytxn/', include('django_gotolong.paytxn.urls')),
                   path('phealth/', include('django_gotolong.phealth.urls')),
                   path('trendlyne/list/', TrendlyneListView.as_view(), name='trendlyne-list'),
                   path('trendlyne/reco/', TrendlyneRecoView.as_view(), name='trendlyne-reco-list'),

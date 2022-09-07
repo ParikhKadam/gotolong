@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class FratioConfig(AppConfig):
-    name = 'fratio'
+    name = 'django_gotolong.fratio'

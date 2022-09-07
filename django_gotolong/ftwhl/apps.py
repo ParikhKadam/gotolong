@@ -1,9 +1,10 @@
 from django.apps import AppConfig
 
-from django_gotolong.ftwhl.views import start
+# from django_gotolong.ftwhl.views import start
 
 class FtwhlConfig(AppConfig):
-    name = 'ftwhl'
-
+    name = 'django_gotolong.ftwhl'
+    '''
     def ready(self):
         start()
+    '''

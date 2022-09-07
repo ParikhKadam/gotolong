@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class PhealthConfig(AppConfig):
-    name = 'phealth'
+    name = 'django_gotolong.phealth'
