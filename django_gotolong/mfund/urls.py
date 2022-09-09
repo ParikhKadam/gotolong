@@ -21,18 +21,13 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
 from .views import MfundListView, \
-    MfundListView_Category, MfundListView_Amount, MfundListView_Subcat, \
-    MfundListView_AMC, MfundListView_AMC_Amount, MfundListView_SubcatAmount, \
-    MfundListView_Reco, MfundRefreshView
+    MfundListView_AMC_Amount, MfundListView_SubcatAmount, \
+    MfundRefreshView, MfundListView_Rebalance
 
 urlpatterns = [
     path('list/', MfundListView.as_view(), name='mfund-list'),
-    path('amc/list/', MfundListView_AMC.as_view(), name='mfund-list-amc'),
     path('amc/amount/list/', MfundListView_AMC_Amount.as_view(), name='mfund-list-amc-amount'),
-    path('category/list/', MfundListView_Category.as_view(), name='mfund-list-category'),
-    path('amount/list/', MfundListView_Amount.as_view(), name='mfund-list-amount'),
-    path('subcat/list/', MfundListView_Subcat.as_view(), name='mfund-list-subcat'),
     path('subcat/amount/list/', MfundListView_SubcatAmount.as_view(), name='mfund-list-subcat-amount'),
-    path('reco/list/', MfundListView_Reco.as_view(), name='mfund-list-reco'),
+    path('rebalance/list/', MfundListView_Rebalance.as_view(), name='mfund-list-rebalance'),
     path('refresh/', MfundRefreshView.as_view(), name='mfund-refresh')
 ]

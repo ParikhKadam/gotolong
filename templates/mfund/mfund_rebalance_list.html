@@ -1,0 +1,105 @@
+{% include "top.html" %}
+{% include "user_mf_top.html" %}
+
+<h1> Mutual Fund - Rebalance </h1>
+
+<br>
+Number of object: {{ object_list|length }}
+<br>
+<br>
+
+Ideal Mix: 4:2:1 (2 Flexi + 2 Large, 2 MidCap and 1 SmallCap) + 3 (Global, Value, Dividend)
+<br>
+Max 1 Fund per AMC
+<br>
+
+<table border="1">
+    <tr>
+        <th>
+            AMC
+        </th>
+        <th>
+            MF Name
+        </th>
+        <th>
+            Flexi Cap
+        </th>
+        <th>
+            Large Cap
+        </th>
+        <th>
+            Large & Mid Cap
+        </th>
+        <th>
+            Mid Cap
+        </th>
+        <th>
+            Small Cap
+        </th>
+        <th>
+            Multi Cap
+        </th>
+        <th>
+            Others
+        </th>
+    </tr>
+
+
+    {% for mf_row in object_list %}
+    <tr>
+
+        <td>
+            {{ mf_row.mf_amc }}
+        </td>
+        <td>
+            {{ mf_row.mf_name }}
+        </td>
+        <td>
+            {% if mf_row.mf_subcat == "Flexi Cap" %}
+            {{ mf_row.mf_nav_value }}
+            {% endif %}
+        </td>
+        <td>
+            {% if mf_row.mf_subcat == "Large Cap Fund" %}
+            {{ mf_row.mf_nav_value }}
+            {% endif %}
+        </td>
+        <td>
+            {% if mf_row.mf_subcat == "Large And Mid Cap Fund" %}
+            {{ mf_row.mf_nav_value }}
+            {% endif %}
+        </td>
+        <td>
+            {% if mf_row.mf_subcat == "Mid Cap Fund" %}
+            {{ mf_row.mf_nav_value }}
+            {% endif %}
+        </td>
+        <td>
+            {% if mf_row.mf_subcat == "Small Cap Fund" %}
+            {{ mf_row.mf_nav_value }}
+            {% endif %}
+        </td>
+        <td>
+            {% if mf_row.mf_subcat == "Multi Cap Fund" %}
+            {{ mf_row.mf_nav_value }}
+            {% endif %}
+        </td>
+        <td>
+            {% if mf_row.mf_subcat == "Value Fund" %}
+            {{ mf_row.mf_nav_value }}
+            {% endif %}
+
+            {% if mf_row.mf_subcat == "Index Fund" %}
+            {{ mf_row.mf_nav_value }}
+            {% endif %}
+
+        </td>
+
+    </tr>
+    {% empty %}
+    <tr>No Mutual Funds yet.</tr>
+    {% endfor %}
+</table>
+
+
+{% include "bottom.html" %}

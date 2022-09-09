@@ -15,35 +15,7 @@ Sum total : {{sum_total}}
 
 <br>
 
-<table id="GoLoDataTable" class="display" cellspacing="0">
-    <thead>
-    <tr>
-        <th>
-            AMC
-        </th>
-        <th>
-            MF Name
-        </th>
-        <th>
-            Segment
-        </th>
-        <th>
-            Cap Type
-        </th>
-        <th>
-            Rating
-        </th>
-        <th>
-            Invested Value
-        </th>
-        <th>
-            Market Value
-        </th>
-        <th>
-            Recommendation
-        </th>
-    </tr>
-    </thead>
+<table>
 
     {% for mf_row in object_list %}
     <tr>
@@ -72,7 +44,18 @@ Sum total : {{sum_total}}
             {{ mf_row.mf_research_reco }}
         </td>
 
+        <td>
+            {{ mf_row.scheme_sum |floatformat:0 }}
+        </td>
+
+        <td>
+            {% if sum_total %}
+            {% widthratio mf_row.scheme_sum sum_total 100.0 %} %
+            {% endif %}
+        </td>
+
     </tr>
+
     {% empty %}
     <tr>No Mutual Funds yet.</tr>
     {% endfor %}

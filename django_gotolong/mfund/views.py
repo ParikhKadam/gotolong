@@ -35,6 +35,7 @@ from django_gotolong.brokermf.models import BrokerMf
 def Mfund_url():
     return "unused-mfund-refresh-url"
 
+
 class MfundListView(ListView):
     model = Mfund
 
@@ -54,35 +55,6 @@ class MfundListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        refresh_url = Mfund_url()
-        context["refresh_url"] = refresh_url
-        return context
-
-
-class MfundListView_Amount(ListView):
-    model = Mfund
-
-    def get_queryset(self):
-        queryset = Mfund.objects.all().filter(mf_user_id=self.request.user.id).order_by('-mf_nav_value')
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        refresh_url = Mfund_url()
-        context["refresh_url"] = refresh_url
-        return context
-
-
-class MfundListView_AMC(ListView):
-    model = Mfund
-
-    def get_queryset(self):
-        queryset = Mfund.objects.all().filter(mf_user_id=self.request.user.id). \
-            order_by('mf_amc', 'mf_category', 'mf_subcat', '-mf_nav_value')
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
         refresh_url = Mfund_url()
         context["refresh_url"] = refresh_url
         return context
@@ -127,49 +99,11 @@ class MfundListView_AMC_Amount(ListView):
 
         return context
 
-
-class MfundListView_Category(ListView):
-    model = Mfund
-
-    def get_queryset(self):
-        queryset = Mfund.objects.all().filter(mf_user_id=self.request.user.id). \
-            order_by('mf_category', 'mf_subcat', '-mf_nav_value')
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        refresh_url = Mfund_url()
-        context["refresh_url"] = refresh_url
-        return context
-
-
-class MfundListView_Subcat(ListView):
-    model = Mfund
-
-    def get_queryset(self):
-        queryset = Mfund.objects.all().filter(mf_user_id=self.request.user.id). \
-            order_by('mf_subcat', '-mf_nav_value')
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        refresh_url = Mfund_url()
-        context["refresh_url"] = refresh_url
-        return context
-
-class MfundListView_Reco(ListView):
-    model = Mfund
-
-    def get_queryset(self):
-        queryset = Mfund.objects.all().filter(mf_user_id=self.request.user.id). \
-            order_by('mf_research_reco', '-mf_rating')
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        refresh_url = Mfund_url()
-        context["refresh_url"] = refresh_url
-        return context
+    def get_template_names(self):
+        app_label = 'mfund'
+        template_name_first = app_label + '/' + 'mfund_aggregate.html'
+        template_names_list = [template_name_first]
+        return template_names_list
 
 
 class MfundListView_SubcatAmount(ListView):
@@ -210,6 +144,33 @@ class MfundListView_SubcatAmount(ListView):
         context['plot_div_1'] = plot_div_1
 
         return context
+
+    def get_template_names(self):
+        app_label = 'mfund'
+        template_name_first = app_label + '/' + 'mfund_aggregate.html'
+        template_names_list = [template_name_first]
+        return template_names_list
+
+
+class MfundListView_Rebalance(ListView):
+    model = Mfund
+
+    def get_queryset(self):
+        queryset = Mfund.objects.all().filter(mf_user_id=self.request.user.id). \
+            order_by('mf_amc', 'mf_category', 'mf_subcat', '-mf_nav_value')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        refresh_url = Mfund_url()
+        context["refresh_url"] = refresh_url
+        return context
+
+    def get_template_names(self):
+        app_label = 'mfund'
+        template_name_first = app_label + '/' + 'mfund_rebalance_list.html'
+        template_names_list = [template_name_first]
+        return template_names_list
 
 
 class MfundRefreshView(View):
