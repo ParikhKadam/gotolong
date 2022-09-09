@@ -152,7 +152,7 @@ class MfundListView_SubcatAmount(ListView):
         return template_names_list
 
 
-class MfundListView_Rebalance(ListView):
+class MfundListView_StyleBox(ListView):
     model = Mfund
 
     def get_queryset(self):
@@ -168,7 +168,7 @@ class MfundListView_Rebalance(ListView):
 
     def get_template_names(self):
         app_label = 'mfund'
-        template_name_first = app_label + '/' + 'mfund_rebalance_list.html'
+        template_name_first = app_label + '/' + 'mfund_stylebox_list.html'
         template_names_list = [template_name_first]
         return template_names_list
 

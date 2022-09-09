@@ -22,12 +22,12 @@ from django.views.generic import TemplateView
 
 from .views import MfundListView, \
     MfundListView_AMC_Amount, MfundListView_SubcatAmount, \
-    MfundRefreshView, MfundListView_Rebalance
+    MfundRefreshView, MfundListView_StyleBox
 
 urlpatterns = [
     path('list/', MfundListView.as_view(), name='mfund-list'),
     path('amc/amount/list/', MfundListView_AMC_Amount.as_view(), name='mfund-list-amc-amount'),
     path('subcat/amount/list/', MfundListView_SubcatAmount.as_view(), name='mfund-list-subcat-amount'),
-    path('rebalance/list/', MfundListView_Rebalance.as_view(), name='mfund-list-rebalance'),
+    path('stylebox/list/', MfundListView_StyleBox.as_view(), name='mfund-list-stylebox'),
     path('refresh/', MfundRefreshView.as_view(), name='mfund-refresh')
 ]
