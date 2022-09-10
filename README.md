@@ -56,7 +56,7 @@ Table of Contents
         * [fratio module](#fratio-module)
         * [gfundareco module](#gfundareco-module)
         * [bucc module](#bucc-module)
-        * [fofeti module](#fofeti-module)
+        * [gmutfun module](#gmutfun-module)
         * [indices module](#indices-module)
     * [User modules](#user-modules)
         * [brokersum module](#brokersum-module)
@@ -324,7 +324,7 @@ Uses trendlyne module and fratio module
 
 Broker unique client code (ucc) module
 
-### fofeti module
+### gmutfun module
 
 Fof / ETF / Index fund data
 

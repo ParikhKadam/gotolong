@@ -45,52 +45,52 @@ Max 1 Fund per AMC
     </tr>
 
 
-    {% for mf_row in object_list %}
+    {% for umf_row in object_list %}
     <tr>
 
         <td>
-            {{ mf_row.mf_amc }}
+            {{ umf_row.umf_amc }}
         </td>
         <td>
-            {{ mf_row.mf_name }}
+            {{ umf_row.umf_name }}
         </td>
         <td>
-            {% if mf_row.mf_subcat == "Flexi Cap" %}
-            {{ mf_row.mf_nav_value }}
+            {% if umf_row.umf_subcat == "Flexi Cap" %}
+            {{ umf_row.umf_nav_value }}
             {% endif %}
         </td>
         <td>
-            {% if mf_row.mf_subcat == "Large Cap Fund" %}
-            {{ mf_row.mf_nav_value }}
+            {% if umf_row.umf_subcat == "Large Cap Fund" %}
+            {{ umf_row.umf_nav_value }}
             {% endif %}
         </td>
         <td>
-            {% if mf_row.mf_subcat == "Large And Mid Cap Fund" %}
-            {{ mf_row.mf_nav_value }}
+            {% if umf_row.umf_subcat == "Large And Mid Cap Fund" %}
+            {{ umf_row.umf_nav_value }}
             {% endif %}
         </td>
         <td>
-            {% if mf_row.mf_subcat == "Mid Cap Fund" %}
-            {{ mf_row.mf_nav_value }}
+            {% if umf_row.umf_subcat == "Mid Cap Fund" %}
+            {{ umf_row.umf_nav_value }}
             {% endif %}
         </td>
         <td>
-            {% if mf_row.mf_subcat == "Small Cap Fund" %}
-            {{ mf_row.mf_nav_value }}
+            {% if umf_row.umf_subcat == "Small Cap Fund" %}
+            {{ umf_row.umf_nav_value }}
             {% endif %}
         </td>
         <td>
-            {% if mf_row.mf_subcat == "Multi Cap Fund" %}
-            {{ mf_row.mf_nav_value }}
+            {% if umf_row.umf_subcat == "Multi Cap Fund" %}
+            {{ umf_row.umf_nav_value }}
             {% endif %}
         </td>
         <td>
-            {% if mf_row.mf_subcat == "Value Fund" %}
-            {{ mf_row.mf_nav_value }}
+            {% if umf_row.umf_subcat == "Value Fund" %}
+            {{ umf_row.umf_nav_value }}
             {% endif %}
 
-            {% if mf_row.mf_subcat == "Index Fund" %}
-            {{ mf_row.mf_nav_value }}
+            {% if umf_row.umf_subcat == "Index Fund" %}
+            {{ umf_row.umf_nav_value }}
             {% endif %}
 
         </td>

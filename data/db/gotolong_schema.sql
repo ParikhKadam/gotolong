@@ -436,17 +436,17 @@ CREATE TABLE `global_cweight` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `global_fofeti`
+-- Table structure for table `global_gmutfun`
 --
 
-DROP TABLE IF EXISTS `global_fofeti`;
+DROP TABLE IF EXISTS `global_gmutfun`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `global_fofeti` (
-  `fofeti_scheme` text DEFAULT NULL,
-  `fofeti_type` text DEFAULT NULL,
-  `fofeti_benchmark` text DEFAULT NULL,
-  `fofeti_aum` float DEFAULT NULL
+CREATE TABLE `global_gmutfun` (
+  `gmutfun_scheme` text DEFAULT NULL,
+  `gmutfun_type` text DEFAULT NULL,
+  `gmutfun_benchmark` text DEFAULT NULL,
+  `gmutfun_aum` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -745,13 +745,13 @@ CREATE TABLE `user_iweight` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `user_mfund`
+-- Table structure for table `user_mufu`
 --
 
-DROP TABLE IF EXISTS `user_mfund`;
+DROP TABLE IF EXISTS `user_mufu`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user_mfund` (
+CREATE TABLE `user_mufu` (
   `mf_id` int(11) DEFAULT NULL,
   `mf_user_id` int(11) DEFAULT NULL,
   `mf_broker` text DEFAULT NULL,

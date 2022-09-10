@@ -17,12 +17,12 @@
 | broker_sum                 |        273 |
 | user_demat_sum             |        271 |
 | global_paytxn              |        192 |
-| global_fofeti              |        185 |
+| global_gmutfun              |        185 |
 | global_nach                |        177 |
 | global_bucc                |        160 |
 | broker_mf                  |        134 |
 | auth_permission            |         68 |
-| user_mfund                 |         43 |
+| user_mufu                 |         43 |
 | user_iweight               |         36 |
 | django_session             |         31 |
 | django_migrations          |         29 |

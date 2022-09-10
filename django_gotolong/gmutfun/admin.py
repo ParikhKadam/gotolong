@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Fofeti
+from .models import Gmutfun
 
 # ...
-admin.site.register(Fofeti)
+admin.site.register(Gmutfun)

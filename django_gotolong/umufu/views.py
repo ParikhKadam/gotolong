@@ -1,6 +1,6 @@
 # Create your views here.
 
-from .models import Mfund
+from .models import Umufu
 
 import plotly.graph_objects as go
 from plotly.offline import plot
@@ -32,12 +32,12 @@ from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update
 from django_gotolong.brokermf.models import BrokerMf
 
 
-def Mfund_url():
-    return "unused-mfund-refresh-url"
+def Umufu_url():
+    return "unused-umufu-refresh-url"
 
 
-class MfundListView(ListView):
-    model = Mfund
+class UmufuListView(ListView):
+    model = Umufu
 
     # if pagination is desired
     # paginate_by = 300
@@ -45,27 +45,27 @@ class MfundListView(ListView):
     # ordering_fields = ['sno', 'nse_symbol']
 
     def get_queryset(self):
-        queryset = Mfund.objects.all().filter(mf_user_id=self.request.user.id)
+        queryset = Umufu.objects.all().filter(umf_user_id=self.request.user.id)
         return queryset
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(MfundListView, self).dispatch(*args, **kwargs)
+        return super(UmufuListView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        refresh_url = Mfund_url()
+        refresh_url = Umufu_url()
         context["refresh_url"] = refresh_url
         return context
 
 
-class MfundListView_AMC_Amount(ListView):
-    model = Mfund
+class UmufuListView_AMC_Amount(ListView):
+    model = Umufu
 
     def get_queryset(self):
-        self.queryset = Mfund.objects.all().filter(mf_user_id=self.request.user.id). \
-            values('mf_amc').annotate(scheme_sum=Sum('mf_nav_value')). \
+        self.queryset = Umufu.objects.all().filter(umf_user_id=self.request.user.id). \
+            values('umf_amc').annotate(scheme_sum=Sum('umf_nav_value')). \
             exclude(scheme_sum=0.0).order_by('-scheme_sum')
         print('hi ', self.queryset)
         return self.queryset
@@ -78,7 +78,7 @@ class MfundListView_AMC_Amount(ListView):
         sum_total = 0
         for q_row in self.queryset:
             sum_total += q_row['scheme_sum']
-            labels_values_dict[q_row['mf_amc']] = q_row['scheme_sum']
+            labels_values_dict[q_row['umf_amc']] = q_row['scheme_sum']
         context['sum_total'] = int(sum_total)
 
         print('labels values dict', labels_values_dict)
@@ -100,18 +100,18 @@ class MfundListView_AMC_Amount(ListView):
         return context
 
     def get_template_names(self):
-        app_label = 'mfund'
-        template_name_first = app_label + '/' + 'mfund_aggregate.html'
+        app_label = 'umufu'
+        template_name_first = app_label + '/' + 'umufu_aggregate.html'
         template_names_list = [template_name_first]
         return template_names_list
 
 
-class MfundListView_SubcatAmount(ListView):
-    model = Mfund
+class UmufuListView_SubcatAmount(ListView):
+    model = Umufu
 
     def get_queryset(self):
-        self.queryset = Mfund.objects.all().filter(mf_user_id=self.request.user.id). \
-            values('mf_subcat').annotate(scheme_sum=Sum('mf_nav_value')). \
+        self.queryset = Umufu.objects.all().filter(umf_user_id=self.request.user.id). \
+            values('umf_subcat').annotate(scheme_sum=Sum('umf_nav_value')). \
             exclude(scheme_sum=0.0).order_by('-scheme_sum')
         return self.queryset
 
@@ -124,7 +124,7 @@ class MfundListView_SubcatAmount(ListView):
         sum_total = 0
         for q_row in self.queryset:
             sum_total += q_row['scheme_sum']
-            labels_values_dict[q_row['mf_subcat']] = q_row['scheme_sum']
+            labels_values_dict[q_row['umf_subcat']] = q_row['scheme_sum']
         context['sum_total'] = int(sum_total)
 
         print('labels values dict', labels_values_dict)
@@ -146,50 +146,50 @@ class MfundListView_SubcatAmount(ListView):
         return context
 
     def get_template_names(self):
-        app_label = 'mfund'
-        template_name_first = app_label + '/' + 'mfund_aggregate.html'
+        app_label = 'umufu'
+        template_name_first = app_label + '/' + 'umufu_aggregate.html'
         template_names_list = [template_name_first]
         return template_names_list
 
 
-class MfundListView_StyleBox(ListView):
-    model = Mfund
+class UmufuListView_StyleBox(ListView):
+    model = Umufu
 
     def get_queryset(self):
-        queryset = Mfund.objects.all().filter(mf_user_id=self.request.user.id). \
-            order_by('mf_amc', 'mf_category', 'mf_subcat', '-mf_nav_value')
+        queryset = Umufu.objects.all().filter(umf_user_id=self.request.user.id). \
+            order_by('umf_amc', 'umf_category', 'umf_subcat', '-umf_nav_value')
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        refresh_url = Mfund_url()
+        refresh_url = Umufu_url()
         context["refresh_url"] = refresh_url
         return context
 
     def get_template_names(self):
-        app_label = 'mfund'
-        template_name_first = app_label + '/' + 'mfund_stylebox_list.html'
+        app_label = 'umufu'
+        template_name_first = app_label + '/' + 'umufu_stylebox_list.html'
         template_names_list = [template_name_first]
         return template_names_list
 
 
-class MfundRefreshView(View):
+class UmufuRefreshView(View):
     debug_level = 1
 
     def get(self, request):
-        self.mfund_refresh(request)
-        return HttpResponseRedirect(reverse("mfund-list"))
+        self.umufu_refresh(request)
+        return HttpResponseRedirect(reverse("umufu-list"))
 
     def __init__(self):
-        super(MfundRefreshView, self).__init__()
+        super(UmufuRefreshView, self).__init__()
 
-    def mfund_refresh(self, request):
+    def umufu_refresh(self, request):
         debug_level = 1
         # declaring template
 
-        # first delete all existing mfund objects
-        Mfund.objects.all().filter(mf_user_id=request.user.id).delete()
-        max_id_instances = Mfund.objects.aggregate(max_id=Max('mf_id'))
+        # first delete all existing umufu objects
+        Umufu.objects.all().filter(umf_user_id=request.user.id).delete()
+        max_id_instances = Umufu.objects.aggregate(max_id=Max('umf_id'))
         max_mf_id = max_id_instances['max_id']
         print('DS: found max id ', max_mf_id)
         if max_mf_id is None:
@@ -204,18 +204,18 @@ class MfundRefreshView(View):
             print(brec.bmf_research_reco)
             # skip 0 units
             if int(float(brec.bmf_units)) != 0:
-                _, created = Mfund.objects.update_or_create(
-                    mf_id=unique_id,
-                    mf_user_id=request.user.id,
-                    mf_broker=brec.bmf_broker,
-                    mf_amc=brec.bmf_amc,
-                    mf_name=brec.bmf_name,
-                    mf_category=brec.bmf_category,
-                    mf_subcat=brec.bmf_subcat,
-                    mf_rating=brec.bmf_rating,
-                    mf_cost_value=brec.bmf_cost_value,
-                    mf_nav_value=brec.bmf_nav_value,
-                    mf_research_reco=brec.bmf_research_reco
+                _, created = Umufu.objects.update_or_create(
+                    umf_id=unique_id,
+                    umf_user_id=request.user.id,
+                    umf_broker=brec.bmf_broker,
+                    umf_amc=brec.bmf_amc,
+                    umf_name=brec.bmf_name,
+                    umf_category=brec.bmf_category,
+                    umf_subcat=brec.bmf_subcat,
+                    umf_rating=brec.bmf_rating,
+                    umf_cost_value=brec.bmf_cost_value,
+                    umf_nav_value=brec.bmf_nav_value,
+                    umf_research_reco=brec.bmf_research_reco
                 )
 
         # breakpoint()
@@ -224,4 +224,4 @@ class MfundRefreshView(View):
         # pdb.set_trace()
 
         # Updated Gfundareco objects
-        lastrefd_update("mfund")
+        lastrefd_update("umufu")

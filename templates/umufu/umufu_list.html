@@ -4,7 +4,7 @@
 <h1> Mutual Fund </h1>
 
 <br>
-<a href="/mfund/refresh/"> Refresh Mfund </a>
+<a href="/umufu/refresh/"> Refresh Umufu </a>
 <br>
 
 <br>
@@ -45,31 +45,31 @@ Sum total : {{sum_total}}
     </tr>
     </thead>
 
-    {% for mf_row in object_list %}
+    {% for umf_row in object_list %}
     <tr>
         <td>
-            {{ mf_row.mf_amc }}
+            {{ umf_row.umf_amc }}
         </td>
         <td>
-            {{ mf_row.mf_name }}
+            {{ umf_row.umf_name }}
         </td>
         <td>
-            {{ mf_row.mf_category }}
+            {{ umf_row.umf_category }}
         </td>
         <td>
-            {{ mf_row.mf_subcat }}
+            {{ umf_row.umf_subcat }}
         </td>
         <td>
-            {{ mf_row.mf_rating }}
+            {{ umf_row.umf_rating }}
         </td>
         <td>
-            {{ mf_row.mf_cost_value }}
+            {{ umf_row.umf_cost_value }}
         </td>
         <td>
-            {{ mf_row.mf_nav_value }}
+            {{ umf_row.umf_nav_value }}
         </td>
         <td>
-            {{ mf_row.mf_research_reco }}
+            {{ umf_row.umf_research_reco }}
         </td>
 
     </tr>

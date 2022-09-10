@@ -20,14 +20,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
-from .views import MfundListView, \
-    MfundListView_AMC_Amount, MfundListView_SubcatAmount, \
-    MfundRefreshView, MfundListView_StyleBox
+from .views import UmufuListView, \
+    UmufuListView_AMC_Amount, UmufuListView_SubcatAmount, \
+    UmufuRefreshView, UmufuListView_StyleBox
 
 urlpatterns = [
-    path('list/', MfundListView.as_view(), name='mfund-list'),
-    path('amc/amount/list/', MfundListView_AMC_Amount.as_view(), name='mfund-list-amc-amount'),
-    path('subcat/amount/list/', MfundListView_SubcatAmount.as_view(), name='mfund-list-subcat-amount'),
-    path('stylebox/list/', MfundListView_StyleBox.as_view(), name='mfund-list-stylebox'),
-    path('refresh/', MfundRefreshView.as_view(), name='mfund-refresh')
+    path('list/', UmufuListView.as_view(), name='umufu-list'),
+    path('amc/amount/list/', UmufuListView_AMC_Amount.as_view(), name='umufu-list-amc-amount'),
+    path('subcat/amount/list/', UmufuListView_SubcatAmount.as_view(), name='umufu-list-subcat-amount'),
+    path('stylebox/list/', UmufuListView_StyleBox.as_view(), name='umufu-list-stylebox'),
+    path('refresh/', UmufuRefreshView.as_view(), name='umufu-refresh')
 ]
