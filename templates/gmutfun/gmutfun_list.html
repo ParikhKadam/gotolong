@@ -5,12 +5,17 @@
 
 <a href="/gmutfun/list/"> List </a> |
 
-<a href="/gmutfun/industry/"> Benchmark Count </a> |
+
+Benchmark Count: <a href="/gmutfun/benchmark/all/"> All </a> |
+<a href="/gmutfun/benchmark/etf/"> ETF </a> |
+<a href="/gmutfun/benchmark/fof/"> FOF </a> |
+<a href="/gmutfun/benchmark/active/"> Active </a>
 <br>
 etf : <a href="/gmutfun/list/etf/gold/"> gold etf </a> |
 <a href="/gmutfun/list/etf/nifty-50/"> nifty 50 etf </a> |
 <a href="/gmutfun/list/etf/next-50/"> nifty next 50 etf </a> |
 <a href="/gmutfun/list/etf/mid-150/"> nifty mid 150 etf </a> |
+<a href="/gmutfun/list/etf/small-250/"> nifty small 250 etf </a> |
 <a href="/gmutfun/list/etf/global/"> global etf </a> |
 <a href="/gmutfun/list/etf/hybrid/"> hybrid etf </a> |
 <a href="/gmutfun/list/etf/non-gold/"> non-gold etf </a> |
@@ -20,6 +25,7 @@ fof :
 <a href="/gmutfun/list/fof/nifty-50/"> nifty 50 fof </a> |
 <a href="/gmutfun/list/fof/next-50/"> nifty next 50 fof </a> |
 <a href="/gmutfun/list/fof/mid-150/"> nifty mid 150 fof </a> |
+<a href="/gmutfun/list/fof/small-250/"> nifty small 250 fof </a> |
 <a href="/gmutfun/list/fof/global/"> global fof </a> |
 <a href="/gmutfun/list/fof/hybrid/"> hybrid fof </a> |
 <a href="/gmutfun/list/fof/non-gold/"> non-gold fof </a> |
@@ -37,8 +43,7 @@ active:
 
 MF Selector :
 <a href="/gmutfun/list/passive-select/"> MF Selector (Passive) </a> |
-<a href="/gmutfun/list/active/select/4321/"> MF Selector (Active:4321) </a> |
-<a href="/gmutfun/list/active/select/5555/"> MF Selector (Active:5555) </a> |
+<a href="/gmutfun/list/active/select/3/4/"> MF Selector (Active) </a> |
 <br>
 
 Download the .xls file from here and convert that to .xlsx before uploading
@@ -94,6 +99,12 @@ Benchmarks Count : {{benchmarks_count}}
             AUM (Cr)
         </th>
         <th>
+            Score grade
+        </th>
+        <th>
+            Score pct
+        </th>
+        <th>
             Count
         </th>
     </tr>
@@ -101,6 +112,44 @@ Benchmarks Count : {{benchmarks_count}}
 
     <tbody>
     {% for gmutfun_row in object_list %}
+    {% if forloop.counter == 1 %}
+    <tr>
+        <td>
+            AAA Benchmark
+        </td>
+        <td>
+            {{ gmutfun_row.gmutfun_type }}
+        </td>
+        <td>
+            {{ gmutfun_row.gmutfun_benchmark }}
+        </td>
+        <td>
+            {{ gmutfun_row.gmutfun_ret_1y_bench }}
+        </td>
+        <td>
+            {{ gmutfun_row.gmutfun_ret_3y_bench }}
+        </td>
+        <td>
+            {{ gmutfun_row.gmutfun_ret_5y_bench }}
+        </td>
+        <td>
+            {{ gmutfun_row.gmutfun_ret_10y_bench }}
+        </td>
+        <td>
+            0
+        </td>
+        <td>
+            4
+        </td>
+        <td>
+            100%
+        </td>
+        <td>
+            {{ gmutfun_row.scheme_count }}
+        </td>
+    </tr>
+    {% endif %}
+
     <tr>
         <td>
             {{ gmutfun_row.gmutfun_scheme }}
@@ -127,12 +176,20 @@ Benchmarks Count : {{benchmarks_count}}
             {{ gmutfun_row.gmutfun_aum }}
         </td>
         <td>
+            {{ gmutfun_row.gmutfun_score_grade }}
+        </td>
+        <td>
+            {{ gmutfun_row.gmutfun_score_pct }}
+        </td>
+        <td>
             {{ gmutfun_row.scheme_count }}
         </td>
     </tr>
     {% empty %}
     <tr>No Mutual Funds yet.</tr>
     {% endfor %}
+
+
     </tbody>
 </table>
 

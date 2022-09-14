@@ -37,8 +37,7 @@ active:
 
 MF Selector :
 <a href="/gmutfun/list/passive-select/"> MF Selector (Passive) </a> |
-<a href="/gmutfun/list/active/select/4321/"> MF Selector (Active:4321) </a> |
-<a href="/gmutfun/list/active/select/5555/"> MF Selector (Active:5555) </a> |
+<a href="/gmutfun/list/active/select/3/4/"> MF Selector (Active) </a> |
 <br>
 
 Download the .xls file from here and convert that to .xlsx before uploading
@@ -94,13 +93,21 @@ Benchmarks Count : {{benchmarks_count}}
             AUM (Cr)
         </th>
         <th>
+            Score (Grade)
+        </th>
+        <th>
+            Score (Pct)
+        </th>
+        <th>
             Count
         </th>
+
     </tr>
     </thead>
 
     <tbody>
-    {% for gmutfun_row in mf_flexi_list|slice:":4" %}
+    {% for gmutfun_row in mf_flexi_list %}
+    {% if forloop.counter <= mf_flexi_count %}
     <tr>
         <td>
             {{ gmutfun_row.gmutfun_scheme }}
@@ -127,14 +134,22 @@ Benchmarks Count : {{benchmarks_count}}
             {{ gmutfun_row.gmutfun_aum }}
         </td>
         <td>
+            {{ gmutfun_row.gmutfun_score_grade }}
+        </td>
+        <td>
+            {{ gmutfun_row.gmutfun_score_pct }}
+        </td>
+        <td>
             {{ gmutfun_row.scheme_count }}
         </td>
     </tr>
+    {% endif %}
     {% empty %}
     <tr>No Mutual Funds yet.</tr>
     {% endfor %}
 
-    {% for gmutfun_row in mf_large_list|slice:":3" %}
+    {% for gmutfun_row in mf_large_list %}
+    {% if forloop.counter <= mf_large_count %}
     <tr>
         <td>
             {{ gmutfun_row.gmutfun_scheme }}
@@ -161,15 +176,23 @@ Benchmarks Count : {{benchmarks_count}}
             {{ gmutfun_row.gmutfun_aum }}
         </td>
         <td>
+            {{ gmutfun_row.gmutfun_score_grade }}
+        </td>
+        <td>
+            {{ gmutfun_row.gmutfun_score_pct }}
+        </td>
+        <td>
             {{ gmutfun_row.scheme_count }}
         </td>
     </tr>
+    {% endif %}
     {% empty %}
     <tr>No Mutual Funds yet.</tr>
     {% endfor %}
 
 
-    {% for gmutfun_row in mf_mid_list|slice:":2" %}
+    {% for gmutfun_row in mf_mid_list %}
+    {% if forloop.counter <= mf_mid_count %}
     <tr>
         <td>
             {{ gmutfun_row.gmutfun_scheme }}
@@ -196,14 +219,22 @@ Benchmarks Count : {{benchmarks_count}}
             {{ gmutfun_row.gmutfun_aum }}
         </td>
         <td>
+            {{ gmutfun_row.gmutfun_score_grade }}
+        </td>
+        <td>
+            {{ gmutfun_row.gmutfun_score_pct }}
+        </td>
+        <td>
             {{ gmutfun_row.scheme_count }}
         </td>
     </tr>
+    {% endif %}
     {% empty %}
     <tr>No Mutual Funds yet.</tr>
     {% endfor %}
 
-    {% for gmutfun_row in mf_small_list|slice:":1" %}
+    {% for gmutfun_row in mf_small_list %}
+    {% if forloop.counter <= mf_small_count %}
     <tr>
         <td>
             {{ gmutfun_row.gmutfun_scheme }}
@@ -230,9 +261,16 @@ Benchmarks Count : {{benchmarks_count}}
             {{ gmutfun_row.gmutfun_aum }}
         </td>
         <td>
+            {{ gmutfun_row.gmutfun_score_grade }}
+        </td>
+        <td>
+            {{ gmutfun_row.gmutfun_score_pct }}
+        </td>
+        <td>
             {{ gmutfun_row.scheme_count }}
         </td>
     </tr>
+    {% endif %}
     {% empty %}
     <tr>No Mutual Funds yet.</tr>
     {% endfor %}

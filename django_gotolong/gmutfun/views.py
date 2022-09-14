@@ -9,9 +9,10 @@ from django.db.models import (Count, Q)
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 import urllib3
+import math
+
 import csv
 import io
-
 import re
 
 import openpyxl
@@ -26,42 +27,6 @@ class GmutfunListView(ListView):
     model = Gmutfun
 
     queryset = Gmutfun.objects.all()
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        refresh_url = Gmutfun_url()
-        context["refresh_url"] = refresh_url
-        return context
-
-
-class GmutfunListView_AUM(ListView):
-    model = Gmutfun
-
-    queryset = Gmutfun.objects.all().order_by('-gmutfun_aum')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        refresh_url = Gmutfun_url()
-        context["refresh_url"] = refresh_url
-        return context
-
-
-class GmutfunListView_Type(ListView):
-    model = Gmutfun
-
-    queryset = Gmutfun.objects.all().order_by('gmutfun_type', '-gmutfun_aum')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        refresh_url = Gmutfun_url()
-        context["refresh_url"] = refresh_url
-        return context
-
-
-class GmutfunListView_Benchmark(ListView):
-    model = Gmutfun
-
-    queryset = Gmutfun.objects.all().order_by('gmutfun_benchmark', '-gmutfun_aum')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -175,6 +140,18 @@ class GmutfunListView_Mid_ETF(ListView):
         return context
 
 
+class GmutfunListView_Small_ETF(ListView):
+    model = Gmutfun
+
+    queryset = Gmutfun.objects.all().filter(gmutfun_type='ETF'). \
+        filter(gmutfun_benchmark__contains='Smallcap 250').order_by('-gmutfun_aum')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        refresh_url = Gmutfun_url()
+        context["refresh_url"] = refresh_url
+        return context
+
 class GmutfunListView_Global_ETF(ListView):
     model = Gmutfun
 
@@ -262,6 +239,18 @@ class GmutfunListView_Mid_FOF(ListView):
         return context
 
 
+class GmutfunListView_Small_FOF(ListView):
+    model = Gmutfun
+
+    queryset = Gmutfun.objects.all().filter(Q(gmutfun_type='Index') | Q(gmutfun_type='FoF')). \
+        filter(gmutfun_benchmark__contains='Smallcap 250').order_by('-gmutfun_aum')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        refresh_url = Gmutfun_url()
+        context["refresh_url"] = refresh_url
+        return context
+
 class GmutfunListView_Global_FOF(ListView):
     model = Gmutfun
 
@@ -311,7 +300,7 @@ class GmutfunListView_NonGold_FOF(ListView):
         return context
 
 
-class GmutfunListView_Active_Select_4321(ListView):
+class GmutfunListView_Active_Select(ListView):
     model = Gmutfun
 
     # too many variants of 'NIFTY 50'
@@ -326,99 +315,60 @@ class GmutfunListView_Active_Select_4321(ListView):
         refresh_url = Gmutfun_url()
         context["refresh_url"] = refresh_url
 
-        qs_flexi = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
-            filter(Q(gmutfun_scheme__contains='Flexi')). \
-            filter(Q(gmutfun_benchmark__contains='500 Total Return Index')). \
-            exclude(gmutfun_benchmark__contains=','). \
-            filter(gmutfun_aum__gte=1000). \
-            order_by('-gmutfun_aum')
-
-        qs_large = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
-            filter(Q(gmutfun_benchmark__contains='100 Total Return Index')). \
-            exclude(gmutfun_benchmark__contains=','). \
-            filter(gmutfun_aum__gte=1000). \
-            order_by('-gmutfun_aum')
-
-        qs_mid = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
-            filter(Q(gmutfun_benchmark__contains='Midcap 150 Total Return Index') |
-                   Q(gmutfun_benchmark__contains='150 MidCap Total Return Index')). \
-            exclude(gmutfun_benchmark__contains=','). \
-            filter(gmutfun_aum__gte=500). \
-            order_by('-gmutfun_aum')
-
-        qs_small = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
-            filter(Q(gmutfun_benchmark__contains='Smallcap 250 Total Return Index') |
-                   Q(gmutfun_benchmark__contains='250 SmallCap Total Return Index')). \
-            exclude(gmutfun_benchmark__contains=','). \
-            filter(gmutfun_aum__gte=500). \
-            order_by('-gmutfun_aum')
-
-        context["mf_flexi_list"] = qs_flexi
-        context["mf_large_list"] = qs_large
-        context["mf_mid_list"] = qs_mid
-        context["mf_small_list"] = qs_small
-
-        return context
-
-    def get_template_names(self):
-        app_label = 'gmutfun'
-        template_name_first = app_label + '/' + 'gmutfun_multi_4321_list.html'
-        template_names_list = [template_name_first]
-        return template_names_list
-
-
-class GmutfunListView_Active_Select_5555(ListView):
-    model = Gmutfun
-
-    # too many variants of 'NIFTY 50'
-    # excluded hybrid funds by using , in it
-
-    # queryset = qs_flexi | qs_large | qs_mid | qs_small
-
-    # queryset = q_gold | q_nifty | q_next | q_mid
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        refresh_url = Gmutfun_url()
-        context["refresh_url"] = refresh_url
+        score_grade = self.kwargs['score_grade']
 
         qs_flexi = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
             filter(Q(gmutfun_scheme__contains='Flexi')). \
             filter(Q(gmutfun_benchmark__contains='500 Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
-            order_by('-gmutfun_aum')
+            filter(gmutfun_score_grade__gte=score_grade). \
+            order_by('-gmutfun_score_pct', '-gmutfun_aum')
 
         qs_large = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
             filter(Q(gmutfun_benchmark__contains='100 Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
-            order_by('-gmutfun_aum')
+            filter(gmutfun_score_grade__gte=score_grade). \
+            order_by('-gmutfun_score_pct', '-gmutfun_aum')
 
         qs_mid = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
             filter(Q(gmutfun_benchmark__contains='Midcap 150 Total Return Index') |
                    Q(gmutfun_benchmark__contains='150 MidCap Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
-            filter(gmutfun_aum__gte=500). \
-            order_by('-gmutfun_aum')
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_score_grade__gte=score_grade). \
+            order_by('-gmutfun_score_pct', '-gmutfun_aum')
 
         qs_small = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
             filter(Q(gmutfun_benchmark__contains='Smallcap 250 Total Return Index') |
                    Q(gmutfun_benchmark__contains='250 SmallCap Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
-            filter(gmutfun_aum__gte=500). \
-            order_by('-gmutfun_aum')
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_score_grade__gte=score_grade). \
+            order_by('-gmutfun_score_pct', '-gmutfun_aum')
 
         context["mf_flexi_list"] = qs_flexi
         context["mf_large_list"] = qs_large
         context["mf_mid_list"] = qs_mid
         context["mf_small_list"] = qs_small
 
+        # using a fixed for all captype instead of different values by captype
+        mf_captype_count = self.kwargs['mf_captype_count']
+        # self.kwargs['flexi']
+        # self.kwargs['large']
+        # self.kwargs['mid']
+        # self.kwargs['small']
+        context["mf_flexi_count"] = mf_captype_count
+        context["mf_large_count"] = mf_captype_count
+        context["mf_mid_count"] = mf_captype_count
+        context["mf_small_count"] = mf_captype_count
+
         return context
 
     def get_template_names(self):
         app_label = 'gmutfun'
-        template_name_first = app_label + '/' + 'gmutfun_multi_5555_list.html'
+        template_name_first = app_label + '/' + 'gmutfun_multi_list.html'
         template_names_list = [template_name_first]
         return template_names_list
 
@@ -533,7 +483,39 @@ class GmutfunListView_Active_Dividend(ListView):
         return context
 
 
-class GmutfunIndustryView(ListView):
+class GmutfunListView_Benchmark_FOF(ListView):
+    model = Gmutfun
+
+    queryset = Gmutfun.objects.all().filter(Q(gmutfun_type='Index') | Q(gmutfun_type='FoF')). \
+        values('gmutfun_benchmark').annotate(scheme_count=Count('gmutfun_benchmark')). \
+        order_by('-scheme_count')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # get count of Industries
+        benchmarks_count = len(Gmutfun.objects.all().values('gmutfun_benchmark'). \
+                               annotate(benchmarks_count=Count('gmutfun_benchmark', distinct=True)))
+        context['benchmarks_count'] = benchmarks_count
+        return context
+
+
+class GmutfunListView_Benchmark_ETF(ListView):
+    model = Gmutfun
+
+    queryset = Gmutfun.objects.all().filter(Q(gmutfun_type='ETF')).values('gmutfun_benchmark').annotate(
+        scheme_count=Count('gmutfun_benchmark')). \
+        order_by('-scheme_count')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # get count of Industries
+        benchmarks_count = len(Gmutfun.objects.all().values('gmutfun_benchmark'). \
+                               annotate(benchmarks_count=Count('gmutfun_benchmark', distinct=True)))
+        context['benchmarks_count'] = benchmarks_count
+        return context
+
+
+class GmutfunListView_Benchmark_All(ListView):
     model = Gmutfun
 
     queryset = Gmutfun.objects.all().values('gmutfun_benchmark').annotate(scheme_count=Count('gmutfun_benchmark')). \
@@ -543,6 +525,22 @@ class GmutfunIndustryView(ListView):
         context = super().get_context_data(**kwargs)
         # get count of Industries
         benchmarks_count = len(Gmutfun.objects.all().values('gmutfun_benchmark'). \
+                               annotate(benchmarks_count=Count('gmutfun_benchmark', distinct=True)))
+        context['benchmarks_count'] = benchmarks_count
+        return context
+
+
+class GmutfunListView_Benchmark_Active(ListView):
+    model = Gmutfun
+
+    queryset = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')).values('gmutfun_benchmark').annotate(
+        scheme_count=Count('gmutfun_benchmark')). \
+        order_by('-scheme_count')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # get count of Industries
+        benchmarks_count = len(Gmutfun.objects.all().filter(Q(gmutfun_type='Active')).values('gmutfun_benchmark'). \
                                annotate(benchmarks_count=Count('gmutfun_benchmark', distinct=True)))
         context['benchmarks_count'] = benchmarks_count
         return context
@@ -689,7 +687,10 @@ def Gmutfun_upload(request):
 
         skip_records = 0
         for column in csv.reader(io_string, delimiter=',', quotechar='"'):
+
             gmutfun_scheme = column[0].strip()
+            gmutfun_benchmark = column[1].strip()
+
             if re.search('Index', gmutfun_scheme):
                 gmutfun_type = 'Index'
             elif re.search('ETF', gmutfun_scheme):
@@ -710,12 +711,19 @@ def Gmutfun_upload(request):
                 gmutfun_type = 'Active'
             elif re.search('Dividend', gmutfun_scheme):
                 gmutfun_type = 'Active'
-            elif re.search('FoF', gmutfun_scheme):
+            elif re.search('FoF', gmutfun_scheme, re.IGNORECASE):
                 gmutfun_type = 'FoF'
             else:
-                gmutfun_type = 'Unk'
-
-            gmutfun_benchmark = column[1].strip()
+                if re.search('Large Midcap', gmutfun_benchmark):
+                    gmutfun_type = 'Active'
+                elif re.search('Large', gmutfun_benchmark):
+                    gmutfun_type = 'Active'
+                elif re.search('Midcap', gmutfun_benchmark):
+                    gmutfun_type = 'Active'
+                elif re.search('Multi', gmutfun_benchmark):
+                    gmutfun_type = 'Active'
+                else:
+                    gmutfun_type = 'Unk'
 
             gmutfun_ret_1y_reg = column[2].strip()
             gmutfun_ret_1y_bench = column[3].strip()
@@ -730,40 +738,73 @@ def Gmutfun_upload(request):
             gmutfun_ret_10y_bench = column[9].strip()
 
             if gmutfun_ret_1y_reg == '':
-                gmutfun_ret_1y_reg = 0.0
+                gmutfun_ret_1y_reg = '0'
             if gmutfun_ret_1y_bench == '':
-                gmutfun_ret_1y_bench = 0.0
+                gmutfun_ret_1y_bench = '0'
 
             if gmutfun_ret_3y_reg == '':
-                gmutfun_ret_3y_reg = 0.0
+                gmutfun_ret_3y_reg = '0'
             if gmutfun_ret_3y_bench == '':
-                gmutfun_ret_3y_bench = 0.0
+                gmutfun_ret_3y_bench = '0'
 
             if gmutfun_ret_5y_reg == '':
-                gmutfun_ret_5y_reg = 0.0
+                gmutfun_ret_5y_reg = '0'
             if gmutfun_ret_5y_bench == '':
-                gmutfun_ret_5y_bench = 0.0
+                gmutfun_ret_5y_bench = '0'
 
             if gmutfun_ret_10y_reg == '':
-                gmutfun_ret_10y_reg = 0.0
+                gmutfun_ret_10y_reg = '0'
             if gmutfun_ret_10y_bench == '':
-                gmutfun_ret_10y_bench = 0.0
+                gmutfun_ret_10y_bench = '0'
 
             gmutfun_aum = column[10].strip()
+
+            gmutfun_ret_1y_reg = round(float(gmutfun_ret_1y_reg), 2)
+            gmutfun_ret_3y_reg = round(float(gmutfun_ret_3y_reg), 2)
+            gmutfun_ret_5y_reg = round(float(gmutfun_ret_5y_reg), 2)
+            gmutfun_ret_10y_reg = round(float(gmutfun_ret_10y_reg), 2)
+
+            gmutfun_ret_1y_bench = round(float(gmutfun_ret_1y_bench), 2)
+            gmutfun_ret_3y_bench = round(float(gmutfun_ret_3y_bench), 2)
+            gmutfun_ret_5y_bench = round(float(gmutfun_ret_5y_bench), 2)
+            gmutfun_ret_10y_bench = round(float(gmutfun_ret_10y_bench), 2)
+
+            gmutfun_score_grade = 0
+
+            # exclude 0.0 data
+            if int(gmutfun_ret_1y_reg) != 0 and math.ceil(gmutfun_ret_1y_reg) >= math.floor(gmutfun_ret_1y_bench):
+                gmutfun_score_grade += 1
+            if int(gmutfun_ret_3y_reg) != 0 and math.ceil(gmutfun_ret_3y_reg) >= math.floor(gmutfun_ret_3y_bench):
+                gmutfun_score_grade += 1
+                print('score ', gmutfun_scheme, gmutfun_ret_3y_reg, gmutfun_ret_3y_bench)
+            if int(gmutfun_ret_5y_reg) != 0 and math.ceil(gmutfun_ret_5y_reg) >= math.floor(gmutfun_ret_5y_bench):
+                gmutfun_score_grade += 1
+                print('score ', gmutfun_scheme, gmutfun_ret_5y_reg, gmutfun_ret_5y_bench)
+            if int(gmutfun_ret_10y_reg) != 0 and math.ceil(gmutfun_ret_10y_reg) >= math.floor(gmutfun_ret_10y_bench):
+                gmutfun_score_grade += 1
+                print('score ', gmutfun_scheme, gmutfun_ret_10y_reg, gmutfun_ret_10y_bench)
+
+            gmutfun_score_pct = 0
+            gmutfun_score_pct += (gmutfun_ret_1y_reg - gmutfun_ret_1y_bench)
+            gmutfun_score_pct += (gmutfun_ret_3y_reg - gmutfun_ret_3y_bench)
+            gmutfun_score_pct += (gmutfun_ret_5y_reg - gmutfun_ret_5y_bench)
+            gmutfun_score_pct += (gmutfun_ret_10y_reg - gmutfun_ret_10y_bench)
 
             _, created = Gmutfun.objects.update_or_create(
                 gmutfun_scheme=gmutfun_scheme,
                 gmutfun_type=gmutfun_type,
                 gmutfun_benchmark=gmutfun_benchmark,
-                gmutfun_ret_1y_reg=round(float(gmutfun_ret_1y_reg), 2),
-                gmutfun_ret_1y_bench=round(float(gmutfun_ret_1y_bench), 2),
-                gmutfun_ret_3y_reg=round(float(gmutfun_ret_3y_reg), 2),
-                gmutfun_ret_3y_bench=round(float(gmutfun_ret_3y_bench), 2),
-                gmutfun_ret_5y_reg=round(float(gmutfun_ret_5y_reg), 2),
-                gmutfun_ret_5y_bench=round(float(gmutfun_ret_5y_bench), 2),
-                gmutfun_ret_10y_reg=round(float(gmutfun_ret_10y_reg), 2),
-                gmutfun_ret_10y_bench=round(float(gmutfun_ret_10y_bench), 2),
-                gmutfun_aum=gmutfun_aum
+                gmutfun_ret_1y_reg=gmutfun_ret_1y_reg,
+                gmutfun_ret_1y_bench=gmutfun_ret_1y_bench,
+                gmutfun_ret_3y_reg=gmutfun_ret_3y_reg,
+                gmutfun_ret_3y_bench=gmutfun_ret_3y_bench,
+                gmutfun_ret_5y_reg=gmutfun_ret_5y_reg,
+                gmutfun_ret_5y_bench=gmutfun_ret_5y_bench,
+                gmutfun_ret_10y_reg=gmutfun_ret_10y_reg,
+                gmutfun_ret_10y_bench=gmutfun_ret_10y_bench,
+                gmutfun_aum=gmutfun_aum,
+                gmutfun_score_grade=gmutfun_score_grade,
+                gmutfun_score_pct=gmutfun_score_pct
             )
 
     lastrefd_update("gmutfun")

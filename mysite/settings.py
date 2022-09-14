@@ -67,13 +67,14 @@ INSTALLED_APPS = [
     'django_gotolong.indices',
     #    'django_gotolong.jsched',
     'django_gotolong.lastrefd',
-    'django_gotolong.umufu',
+    'django_gotolong.mfia',
     'django_gotolong.nach',
     'django_gotolong.othinv',
     'django_gotolong.paytxn',
     'django_gotolong.phealth',
     'django_gotolong.screener',
     'django_gotolong.trendlyne',
+    'django_gotolong.umufu',
     'django_gotolong.uploaddoc',
     'django_gotolong.uiweight'
 ]

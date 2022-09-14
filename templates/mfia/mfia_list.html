@@ -1,0 +1,102 @@
+{% include "top.html" %}
+{% include "user_mf_top.html" %}
+
+<h2>MFIA (Mutual Fund Investment Advisor) List </h2>
+
+{% if debug %}
+{{object_list}}
+{% endif %}
+
+<br/>
+
+Number of object: {{ object_list|length }}
+
+<table id="GoLoDataTable" class="display" cellspacing="0">
+    <thead>
+    <tr>
+        <th>
+            Flex
+        </th>
+        <th>
+            Large
+        </th>
+        <th>
+            Mid
+        </th>
+        <th>
+            Small
+        </th>
+    </thead>
+    <tbody>
+    {% for mfia_row in mfia_flex_list %}
+    <tr>
+        <td>
+            {{ mfia_row }}
+        </td>
+        <td>
+            {{ large }}
+        </td>
+        <td>
+            {{ mid }}
+        </td>
+        <td>
+            {{ small }}
+        </td>
+    </tr>
+    {% endfor %}
+
+    {% for mfia_row in mfia_large_list %}
+    <tr>
+        <td>
+            {{ flex }}
+        </td>
+        <td>
+            {{ mfia_row }}
+        </td>
+        <td>
+            {{ mid }}
+        </td>
+        <td>
+            {{ small }}
+        </td>
+    </tr>
+    {% endfor %}
+
+    {% for mfia_row in mfia_mid_list %}
+    <tr>
+        <td>
+            {{ flex }}
+        </td>
+        <td>
+            {{ large }}
+        </td>
+        <td>
+            {{ mfia_row }}
+        </td>
+        <td>
+            {{ small }}
+        </td>
+    </tr>
+    {% endfor %}
+
+    {% for mfia_row in mfia_small_list %}
+    <tr>
+        <td>
+            {{ flex }}
+        </td>
+        <td>
+            {{ large }}
+        </td>
+        <td>
+            {{ mid }}
+        </td>
+        <td>
+            {{ mfia_row }}
+        </td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+
+{% include "bottom.html" %}
