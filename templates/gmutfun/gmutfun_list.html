@@ -3,9 +3,8 @@
 
 <h1> Global Mutual Funds </h1>
 
-<a href="/gmutfun/list/"> List </a> |
-
-
+MF: <a href="/gmutfun/list/"> List </a> |
+<br/>
 Benchmark Count: <a href="/gmutfun/benchmark/all/"> All </a> |
 <a href="/gmutfun/benchmark/etf/"> ETF </a> |
 <a href="/gmutfun/benchmark/fof/"> FOF </a> |
@@ -43,7 +42,8 @@ active:
 
 MF Selector :
 <a href="/gmutfun/list/passive-select/"> MF Selector (Passive) </a> |
-<a href="/gmutfun/list/active/select/3/4/"> MF Selector (Active) </a> |
+<a href="/gmutfun/list/active-select/3/4/"> MF Selector (Active) </a> |
+<a href="/gmutfun/list/active-aum/4/"> MF Selector AUM (Active) </a> |
 <br>
 
 Download the .xls file from here and convert that to .xlsx before uploading
@@ -79,6 +79,9 @@ Benchmarks Count : {{benchmarks_count}}
         </th>
         <th>
             Type
+        </th>
+        <th>
+            Subtype
         </th>
         <th>
             Benchmark
@@ -121,6 +124,9 @@ Benchmarks Count : {{benchmarks_count}}
             {{ gmutfun_row.gmutfun_type }}
         </td>
         <td>
+            {{ gmutfun_row.gmutfun_subtype }}
+        </td>
+        <td>
             {{ gmutfun_row.gmutfun_benchmark }}
         </td>
         <td>
@@ -156,6 +162,9 @@ Benchmarks Count : {{benchmarks_count}}
         </td>
         <td>
             {{ gmutfun_row.gmutfun_type }}
+        </td>
+        <td>
+            {{ gmutfun_row.gmutfun_subtype }}
         </td>
         <td>
             {{ gmutfun_row.gmutfun_benchmark }}

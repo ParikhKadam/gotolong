@@ -20,8 +20,9 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
-from django_gotolong.mfia.views import MfiaListView
+from django_gotolong.mfia.views import MfiaListView_Lead, MfiaListView_AUM
 
 urlpatterns = [
-    path('list/<int:min_score_grade>/<int:max_captype_mf>/', MfiaListView.as_view(), name='mfia-list'),
+    path('list/lead/<int:min_score_grade>/<int:max_captype_mf>/', MfiaListView_Lead.as_view(), name='mfia-list-lead'),
+    path('list/aum/<int:max_captype_mf>/', MfiaListView_AUM.as_view(), name='mfia-list-aum'),
 ]

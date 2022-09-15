@@ -34,14 +34,13 @@ from django_gotolong.gmutfun.views import \
     GmutfunListView_Small_ETF, GmutfunListView_Small_FOF
 
 from django_gotolong.gmutfun.views import GmutfunListView_Benchmark_All, \
-    GmutfunListView_Benchmark_ETF, GmutfunListView_Benchmark_FOF, \
-    GmutfunListView_Benchmark_Active
+    GmutfunListView_Benchmark_ETF, GmutfunListView_Benchmark_FOF
 
 from django_gotolong.gmutfun.views import GmutfunListView_Active_Flexi, \
     GmutfunListView_Active_Large, GmutfunListView_Active_Mid, GmutfunListView_Active_Small, \
     GmutfunListView_Active_Multi, GmutfunListView_Active_LargeMid, \
     GmutfunListView_Active_Value, GmutfunListView_Active_Dividend, \
-    GmutfunListView_Active_Select
+    GmutfunListView_Active_Select, GmutfunListView_Active_AUM
 
 urlpatterns = [
     path('list/', GmutfunListView.as_view(), name='gmutfun-list'),
@@ -70,12 +69,13 @@ urlpatterns = [
     path('list/active/large-mid/', GmutfunListView_Active_LargeMid.as_view(), name='gmutfun-list-active-largemid'),
     path('list/active/value/', GmutfunListView_Active_Value.as_view(), name='gmutfun-list-active-value'),
     path('list/active/dividend/', GmutfunListView_Active_Dividend.as_view(), name='gmutfun-list-active-dividend'),
-    path('list/active/select/<int:score_grade>/<int:mf_captype_count>/',
+    path('list/active-select/<int:score_grade>/<int:mf_captype_count>/',
          GmutfunListView_Active_Select.as_view(), name='gmutfun-list-active-select'),
+    path('list/active-aum/<int:mf_captype_count>/',
+         GmutfunListView_Active_AUM.as_view(), name='gmutfun-list-active-aum'),
     path('benchmark/all/', GmutfunListView_Benchmark_All.as_view(), name='gmutfun-benchmark-all-list'),
     path('benchmark/etf/', GmutfunListView_Benchmark_ETF.as_view(), name='gmutfun-benchmark-etf-list'),
     path('benchmark/fof/', GmutfunListView_Benchmark_FOF.as_view(), name='gmutfun-benchmark-fof-list'),
-    path('benchmark/active/', GmutfunListView_Benchmark_Active.as_view(), name='gmutfun-benchmark-active-list'),
     path('fetch/', Gmutfun_fetch, name='gmutfun-fetch'),
     path('upload/', Gmutfun_upload, name='gmutfun-upload'),
 ]

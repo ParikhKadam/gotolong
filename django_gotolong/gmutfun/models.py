@@ -6,6 +6,7 @@ class Gmutfun(models.Model):
     # index company name
     gmutfun_scheme = models.TextField(primary_key=True)
     gmutfun_type = models.TextField(blank=True, null=True)
+    gmutfun_subtype = models.TextField(blank=True, null=True)
     # index industry name
     gmutfun_benchmark = models.TextField(blank=True, null=True)
 

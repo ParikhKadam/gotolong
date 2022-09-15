@@ -373,6 +373,80 @@ class GmutfunListView_Active_Select(ListView):
         return template_names_list
 
 
+class GmutfunListView_Active_AUM(ListView):
+    model = Gmutfun
+
+    # too many variants of 'NIFTY 50'
+    # excluded hybrid funds by using , in it
+
+    # queryset = qs_flexi | qs_large | qs_mid | qs_small
+
+    # queryset = q_gold | q_nifty | q_next | q_mid
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        refresh_url = Gmutfun_url()
+        context["refresh_url"] = refresh_url
+
+        # cover all - grades
+        score_grade = 0
+
+        qs_flexi = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_scheme__contains='Flexi')). \
+            filter(Q(gmutfun_benchmark__contains='500 Total Return Index')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_score_grade__gte=score_grade). \
+            order_by('-gmutfun_aum')
+
+        qs_large = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_benchmark__contains='100 Total Return Index')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_score_grade__gte=score_grade). \
+            order_by('-gmutfun_aum')
+
+        qs_mid = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_benchmark__contains='Midcap 150 Total Return Index') |
+                   Q(gmutfun_benchmark__contains='150 MidCap Total Return Index')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_score_grade__gte=score_grade). \
+            order_by('-gmutfun_aum')
+
+        qs_small = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_benchmark__contains='Smallcap 250 Total Return Index') |
+                   Q(gmutfun_benchmark__contains='250 SmallCap Total Return Index')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_score_grade__gte=score_grade). \
+            order_by('-gmutfun_aum')
+
+        context["mf_flexi_list"] = qs_flexi
+        context["mf_large_list"] = qs_large
+        context["mf_mid_list"] = qs_mid
+        context["mf_small_list"] = qs_small
+
+        # using a fixed for all captype instead of different values by captype
+        mf_captype_count = self.kwargs['mf_captype_count']
+        # self.kwargs['flexi']
+        # self.kwargs['large']
+        # self.kwargs['mid']
+        # self.kwargs['small']
+        context["mf_flexi_count"] = mf_captype_count
+        context["mf_large_count"] = mf_captype_count
+        context["mf_mid_count"] = mf_captype_count
+        context["mf_small_count"] = mf_captype_count
+
+        return context
+
+    def get_template_names(self):
+        app_label = 'gmutfun'
+        template_name_first = app_label + '/' + 'gmutfun_multi_list.html'
+        template_names_list = [template_name_first]
+        return template_names_list
+
+
 class GmutfunListView_Active_Flexi(ListView):
     model = Gmutfun
 
@@ -528,23 +602,6 @@ class GmutfunListView_Benchmark_All(ListView):
                                annotate(benchmarks_count=Count('gmutfun_benchmark', distinct=True)))
         context['benchmarks_count'] = benchmarks_count
         return context
-
-
-class GmutfunListView_Benchmark_Active(ListView):
-    model = Gmutfun
-
-    queryset = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')).values('gmutfun_benchmark').annotate(
-        scheme_count=Count('gmutfun_benchmark')). \
-        order_by('-scheme_count')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        # get count of Industries
-        benchmarks_count = len(Gmutfun.objects.all().filter(Q(gmutfun_type='Active')).values('gmutfun_benchmark'). \
-                               annotate(benchmarks_count=Count('gmutfun_benchmark', distinct=True)))
-        context['benchmarks_count'] = benchmarks_count
-        return context
-
 
 def Gmutfun_url():
     url = 'https://archives.nseindia.com/content/umufu/ind_nifty500list.csv'
@@ -725,6 +782,17 @@ def Gmutfun_upload(request):
                 else:
                     gmutfun_type = 'Unk'
 
+            gmutfun_subtype = ''
+            if gmutfun_type == 'Active':
+                if re.search('500', gmutfun_benchmark):
+                    gmutfun_subtype = 'F-500'
+                elif re.search('100', gmutfun_benchmark):
+                    gmutfun_subtype = 'L-100'
+                elif re.search('150', gmutfun_benchmark):
+                    gmutfun_subtype = 'M-150'
+                elif re.search('250', gmutfun_benchmark):
+                    gmutfun_subtype = 'S-250'
+
             gmutfun_ret_1y_reg = column[2].strip()
             gmutfun_ret_1y_bench = column[3].strip()
 
@@ -793,6 +861,7 @@ def Gmutfun_upload(request):
             _, created = Gmutfun.objects.update_or_create(
                 gmutfun_scheme=gmutfun_scheme,
                 gmutfun_type=gmutfun_type,
+                gmutfun_subtype=gmutfun_subtype,
                 gmutfun_benchmark=gmutfun_benchmark,
                 gmutfun_ret_1y_reg=gmutfun_ret_1y_reg,
                 gmutfun_ret_1y_bench=gmutfun_ret_1y_bench,
