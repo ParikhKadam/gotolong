@@ -240,7 +240,7 @@ Regenerate it using <a href=https://dbdiagram.io/home target=_blank> dbdiagram.i
 
 ## MF - Global ETF - Passive
 
-<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-fof-etf-Screenshot.png" >
+<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-global-mf-passive-etf.png" >
 
 ## MF - Global FOF - Passive
 
