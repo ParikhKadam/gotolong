@@ -234,13 +234,17 @@ Regenerate it using <a href=https://dbdiagram.io/home target=_blank> dbdiagram.i
 
 <img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-home-Screenshot.png" >
 
-## Global Advisor
+## Stocks - Global Advisor
 
 <img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-advisor-Screenshot.png" >
 
-## Global Fof/ETF
+## MF - Global ETF - Passive
 
 <img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-fof-etf-Screenshot.png" >
+
+## MF - Global FOF - Passive
+
+<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-global-mf-passive-fof.png" >
 
 ## User broker summary
 
@@ -254,9 +258,13 @@ Regenerate it using <a href=https://dbdiagram.io/home target=_blank> dbdiagram.i
 
 <img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-user-broker-mf-Screenshot.png" >
 
-## User portfolio health
+## User Stocks - portfolio health
 
 <img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-user-phealth-Screenshot.png" >
+
+## Use MF Active Investment Advisor
+
+<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-user-mf-active-ia.png" >
 
 # Modules Information
 

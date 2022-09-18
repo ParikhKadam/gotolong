@@ -118,22 +118,49 @@ class GmutfunListView_Passive_Select_FOF_Capbox(ListView):
         global_list = []
         reit_list = []
 
+        # select at max 10
+        max_count = 10
+
+        cur_idx = 0
         for q1 in qs_nifty:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
             nifty_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
 
+        cur_idx = 0
         for q1 in qs_next:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
             next_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
 
+        cur_idx = 0
         for q1 in qs_mid:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
             mid_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
 
+        cur_idx = 0
         for q1 in qs_gold:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
             gold_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
 
+        cur_idx = 0
         for q1 in qs_global:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
             global_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
 
+        cur_idx = 0
         for q1 in qs_reit:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
             reit_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
 
         context["all_list"] = list(
