@@ -2,7 +2,7 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Umufu
+from .models import Umufub
 
 # ...
-admin.site.register(Umufu)
+admin.site.register(Umufub)

@@ -1,7 +1,7 @@
 {% include "top.html" %}
 {% include "user_mf_top.html" %}
 
-<h1> Mutual Fund - StyleBox </h1>
+<h1> User MF Broker - StyleBox </h1>
 
 <br>
 Number of object: {{ object_list|length }}
@@ -40,52 +40,52 @@ Number of object: {{ object_list|length }}
     </tr>
 
 
-    {% for umf_row in object_list %}
+    {% for umfb_row in object_list %}
     <tr>
 
         <td>
-            {{ umf_row.umf_amc }}
+            {{ umfb_row.umfb_amc }}
         </td>
         <td>
-            {{ umf_row.umf_name }}
+            {{ umfb_row.umfb_name }}
         </td>
         <td>
-            {% if umf_row.umf_subcat == "Flexi Cap" %}
-            {{ umf_row.umf_nav_value }}
+            {% if umfb_row.umfb_subcat == "Flexi Cap" %}
+            {{ umfb_row.umfb_nav_value }}
             {% endif %}
         </td>
         <td>
-            {% if umf_row.umf_subcat == "Large Cap Fund" %}
-            {{ umf_row.umf_nav_value }}
+            {% if umfb_row.umfb_subcat == "Large Cap Fund" %}
+            {{ umfb_row.umfb_nav_value }}
             {% endif %}
         </td>
         <td>
-            {% if umf_row.umf_subcat == "Large And Mid Cap Fund" %}
-            {{ umf_row.umf_nav_value }}
+            {% if umfb_row.umfb_subcat == "Large And Mid Cap Fund" %}
+            {{ umfb_row.umfb_nav_value }}
             {% endif %}
         </td>
         <td>
-            {% if umf_row.umf_subcat == "Mid Cap Fund" %}
-            {{ umf_row.umf_nav_value }}
+            {% if umfb_row.umfb_subcat == "Mid Cap Fund" %}
+            {{ umfb_row.umfb_nav_value }}
             {% endif %}
         </td>
         <td>
-            {% if umf_row.umf_subcat == "Small Cap Fund" %}
-            {{ umf_row.umf_nav_value }}
+            {% if umfb_row.umfb_subcat == "Small Cap Fund" %}
+            {{ umfb_row.umfb_nav_value }}
             {% endif %}
         </td>
         <td>
-            {% if umf_row.umf_subcat == "Multi Cap Fund" %}
-            {{ umf_row.umf_nav_value }}
+            {% if umfb_row.umfb_subcat == "Multi Cap Fund" %}
+            {{ umfb_row.umfb_nav_value }}
             {% endif %}
         </td>
         <td>
-            {% if umf_row.umf_subcat == "Value Fund" %}
-            {{ umf_row.umf_nav_value }}
+            {% if umfb_row.umfb_subcat == "Value Fund" %}
+            {{ umfb_row.umfb_nav_value }}
             {% endif %}
 
-            {% if umf_row.umf_subcat == "Index Fund" %}
-            {{ umf_row.umf_nav_value }}
+            {% if umfb_row.umfb_subcat == "Index Fund" %}
+            {{ umfb_row.umfb_nav_value }}
             {% endif %}
 
         </td>

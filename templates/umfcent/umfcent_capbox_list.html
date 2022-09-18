@@ -1,0 +1,79 @@
+{% include "top.html" %}
+{% include "user_mf_top.html" %}
+
+<h1> User MF Central - CapBox </h1>
+
+<br>
+Number of object: {{ object_list|length }}
+Number of object 2: {{ all_list|length }}
+<br>
+<br>
+
+<table class="display" cellspacing="0">
+    <tr>
+        <th>
+            Flexi Cap (F-500)
+        </th>
+        <th>
+            Large Cap (L-100)
+        </th>
+        <th>
+            Mid Cap (M-150)
+        </th>
+        <th>
+            Small Cap (S-250)
+        </th>
+    </tr>
+
+    <tr>
+        <td>
+            {{ flexi_value }}
+        </td>
+        <td>
+            {{ large_value }}
+        </td>
+        <td>
+            {{ mid_value }}
+        </td>
+        <td>
+            {{ small_value }}
+        </td>
+    </tr>
+
+    <tr>
+        <td>
+            {{ flexi_value_pct }} %
+        </td>
+        <td>
+            {{ large_value_pct }} %
+        </td>
+        <td>
+            {{ mid_value_pct }} %
+        </td>
+        <td>
+            {{ small_value_pct }} %
+        </td>
+    </tr>
+
+    {% for flexi_name, large_name, mid_name, small_name in all_list %}
+    <tr>
+        <td>
+            {{ flexi_name }}
+        </td>
+        <td>
+            {{ large_name }}
+        </td>
+        <td>
+            {{ mid_name }}
+        </td>
+        <td>
+            {{ small_name }}
+        </td>
+    </tr>
+    {% empty %}
+    <tr>No Mutual Funds yet.</tr>
+    {% endfor %}
+</table>
+
+
+{% include "bottom.html" %}

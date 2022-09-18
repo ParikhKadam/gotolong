@@ -1,10 +1,10 @@
 {% include "top.html" %}
 {% include "user_mf_top.html" %}
 
-<h1> Mutual Fund </h1>
+<h1> User MF Broker </h1>
 
 <br>
-<a href="/umufu/refresh/"> Refresh Umufu </a>
+<a href="/umufub/refresh/"> Refresh Umufub </a>
 <br>
 
 <br>
@@ -45,31 +45,31 @@ Sum total : {{sum_total}}
     </tr>
     </thead>
 
-    {% for umf_row in object_list %}
+    {% for umfb_row in object_list %}
     <tr>
         <td>
-            {{ umf_row.umf_amc }}
+            {{ umfb_row.umfb_amc }}
         </td>
         <td>
-            {{ umf_row.umf_name }}
+            {{ umfb_row.umfb_name }}
         </td>
         <td>
-            {{ umf_row.umf_category }}
+            {{ umfb_row.umfb_category }}
         </td>
         <td>
-            {{ umf_row.umf_subcat }}
+            {{ umfb_row.umfb_subcat }}
         </td>
         <td>
-            {{ umf_row.umf_rating }}
+            {{ umfb_row.umfb_rating }}
         </td>
         <td>
-            {{ umf_row.umf_cost_value }}
+            {{ umfb_row.umfb_cost_value }}
         </td>
         <td>
-            {{ umf_row.umf_nav_value }}
+            {{ umfb_row.umfb_nav_value }}
         </td>
         <td>
-            {{ umf_row.umf_research_reco }}
+            {{ umfb_row.umfb_research_reco }}
         </td>
 
     </tr>

@@ -1,0 +1,100 @@
+{% include "top.html" %}
+{% include "user_mf_top.html" %}
+
+<h1> User MF Central - StyleBox </h1>
+
+<br>
+Number of object: {{ object_list|length }}
+<br>
+<br>
+
+<table class="display" cellspacing="0" border="0">
+    <tr>
+        <th>
+            AMC
+        </th>
+        <th>
+            MF Name
+        </th>
+        <th>
+            Flexi Cap
+        </th>
+        <th>
+            Large Cap
+        </th>
+        <th>
+            Large & Mid Cap
+        </th>
+        <th>
+            Mid Cap
+        </th>
+        <th>
+            Small Cap
+        </th>
+        <th>
+            Multi Cap
+        </th>
+        <th>
+            Others
+        </th>
+    </tr>
+
+
+    {% for umfcent_row in object_list %}
+    <tr>
+
+        <td>
+            {{ umfcent_row.umfcent_amc }}
+        </td>
+        <td>
+            {{ umfcent_row.umfcent_name }}
+        </td>
+        <td>
+            {% if umfcent_row.umfcent_subcat == "F-500" %}
+            {{ umfcent_row.umfcent_value }}
+            {% endif %}
+        </td>
+        <td>
+            {% if umfcent_row.umfcent_subcat == "L-100" %}
+            {{ umfcent_row.umfcent_value }}
+            {% endif %}
+        </td>
+        <td>
+            {% if umfcent_row.umfcent_subcat == "LM-250" %}
+            {{ umfcent_row.umfcent_value }}
+            {% endif %}
+        </td>
+        <td>
+            {% if umfcent_row.umfcent_subcat == "M-150" %}
+            {{ umfcent_row.umfcent_value }}
+            {% endif %}
+        </td>
+        <td>
+            {% if umfcent_row.umfcent_subcat == "S-250" %}
+            {{ umfcent_row.umfcent_value }}
+            {% endif %}
+        </td>
+        <td>
+            {% if umfcent_row.umfcent_subcat == "U-Multi" %}
+            {{ umfcent_row.umfcent_value }}
+            {% endif %}
+        </td>
+        <td>
+            {% if umfcent_row.umfcent_subcat == "U-Value" %}
+            {{ umfcent_row.umfcent_value }}
+            {% endif %}
+
+            {% if umfcent_row.umfcent_subcat == "U-Index" %}
+            {{ umfcent_row.umfcent_value }}
+            {% endif %}
+
+        </td>
+
+    </tr>
+    {% empty %}
+    <tr>No Mutual Funds yet.</tr>
+    {% endfor %}
+</table>
+
+
+{% include "bottom.html" %}

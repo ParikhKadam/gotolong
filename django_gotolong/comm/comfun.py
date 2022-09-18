@@ -1,5 +1,7 @@
 import openpyxl
 import pandas as pd
+import re
+import PyPDF2
 
 
 def comm_func_ticker_match(ticker, amfi_rank_dict, dematsum_list):
@@ -92,11 +94,48 @@ def comm_func_upload(request, template, columns_list, list_url_name, ignore_top_
 
         data_set = df.to_csv(header=True, index=False)
 
+    elif req_file.name.endswith('.pdf'):
+
+        print(req_file)
+
+        # create file object variable
+        # opening method will be rb
+        # pdf_file_obj = open(req_file, 'rb')
+
+        pdf_file_obj = req_file.open()
+
+        # create reader variable that will read the pdffileobj
+        pdf_reader = PyPDF2.PdfFileReader(pdf_file_obj)
+
+        # This will store the number of pages of this pdf file
+
+        x = pdf_reader.numPages
+        print('num pages', x)
+
+        data_set = []
+        for page_num in range(x):
+            if debug_level > 1:
+                print('------page ----begin---', page_num)
+            # create a variable that will select the selected number of pages
+            page_obj = pdf_reader.getPage(page_num)
+
+            # (x+1) because python indentation starts with 0.
+            # create text variable which will store all text datafrom pdf file
+            # text = pageobj.extractText()
+            text = page_obj.extract_text()
+
+            for line in text.split('\n'):
+                data_set.append(line)
+
+            if debug_level > 1:
+                print('------page ----end---', page_num)
+
     if req_file.name.endswith('.csv'):
         data_set = req_file.read().decode('UTF-8')
 
-    if not (req_file.name.endswith('.csv') or req_file.name.endswith('.xls') or req_file.name.endswith('.xlsx')):
-        messages.error(request, req_file.name + ' : THIS IS NOT A XLS/XLSX/CSV FILE.')
+    if not (req_file.name.endswith('.csv') or req_file.name.endswith('.xls') \
+            or req_file.name.endswith('.xlsx') or req_file.name.endswith('.pdf')):
+        messages.error(request, req_file.name + ' : THIS IS NOT A XLS/XLSX/CSV/PDF FILE.')
         return HttpResponseRedirect(reverse(list_url_name))
 
     return data_set

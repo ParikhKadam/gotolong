@@ -23,7 +23,8 @@ from django.views.generic import TemplateView
 from django_gotolong.gmutfun.views import GmutfunListView, \
     Gmutfun_upload, Gmutfun_fetch
 from django_gotolong.gmutfun.views import \
-    GmutfunListView_Passive_Select, \
+    GmutfunListView_Passive_Select_ETF, GmutfunListView_Passive_Select_ETF_Capbox, \
+    GmutfunListView_Passive_Select_FOF, GmutfunListView_Passive_Select_FOF_Capbox, \
     GmutfunListView_NonGold_FOF, GmutfunListView_NonGold_ETF, \
     GmutfunListView_Gold_ETF, GmutfunListView_Gold_FOF, \
     GmutfunListView_Global_ETF, GmutfunListView_Global_FOF, \
@@ -44,7 +45,14 @@ from django_gotolong.gmutfun.views import GmutfunListView_Active_Flexi, \
 
 urlpatterns = [
     path('list/', GmutfunListView.as_view(), name='gmutfun-list'),
-    path('list/passive-select/', GmutfunListView_Passive_Select.as_view(), name='gmutfun-list-passive-select'),
+    path('list/passive-select/etf/', GmutfunListView_Passive_Select_ETF.as_view(),
+         name='gmutfun-list-passive-select-etf'),
+    path('list/passive-select/etf/capbox/', GmutfunListView_Passive_Select_ETF_Capbox.as_view(),
+         name='gmutfun-list-passive-select-etf-capbox'),
+    path('list/passive-select/fof/', GmutfunListView_Passive_Select_FOF.as_view(),
+         name='gmutfun-list-passive-select-fof'),
+    path('list/passive-select/fof/capbox/', GmutfunListView_Passive_Select_FOF_Capbox.as_view(),
+         name='gmutfun-list-passive-select-fof-capbox'),
     path('list/etf/gold/', GmutfunListView_Gold_ETF.as_view(), name='gmutfun-list-etf-gold'),
     path('list/etf/nifty-50/', GmutfunListView_Nifty_ETF.as_view(), name='gmutfun-list-etf-nifty'),
     path('list/etf/next-50/', GmutfunListView_Next_ETF.as_view(), name='gmutfun-list-etf-next'),

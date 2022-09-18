@@ -20,14 +20,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
-from .views import UmufuListView, \
-    UmufuListView_AMC_Amount, UmufuListView_SubcatAmount, \
-    UmufuRefreshView, UmufuListView_StyleBox
+from .views import UmfcentListView, \
+    UmfcentListView_AMC_Amount, UmfcentListView_SubcatAmount, \
+    UmfcentListView_StyleBox, UmfcentListView_CapBox, Umfcent_upload
 
 urlpatterns = [
-    path('list/', UmufuListView.as_view(), name='umufu-list'),
-    path('amc/amount/list/', UmufuListView_AMC_Amount.as_view(), name='umufu-list-amc-amount'),
-    path('subcat/amount/list/', UmufuListView_SubcatAmount.as_view(), name='umufu-list-subcat-amount'),
-    path('stylebox/list/', UmufuListView_StyleBox.as_view(), name='umufu-list-stylebox'),
-    path('refresh/', UmufuRefreshView.as_view(), name='umufu-refresh')
+    path('list/', UmfcentListView.as_view(), name='umfcent-list'),
+    path('amc/amount/list/', UmfcentListView_AMC_Amount.as_view(), name='umfcent-list-amc-amount'),
+    path('subcat/amount/list/', UmfcentListView_SubcatAmount.as_view(), name='umfcent-list-subcat-amount'),
+    path('stylebox/list/', UmfcentListView_StyleBox.as_view(), name='umfcent-list-stylebox'),
+    path('capbox/list/', UmfcentListView_CapBox.as_view(), name='umfcent-list-capbox'),
+    path('upload/', Umfcent_upload, name='umfcent-upload'),
 ]

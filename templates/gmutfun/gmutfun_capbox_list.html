@@ -1,0 +1,63 @@
+{% include "top.html" %}
+{% include "global_top.html" %}
+
+<h1> Global Mutual Funds - CapBox </h1>
+
+{% include "gmutfun/gmutfun_top.html" %}
+
+<br>
+Number of object: {{ object_list|length }}
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>
+            Nifty 50
+        </th>
+        <th>
+            Next 50
+        </th>
+        <th>
+            Mid 150
+        </th>
+        <th>
+            Gold
+        </th>
+        <th>
+            Global
+        </th>
+        <th>
+            REIT
+        </th>
+    </tr>
+    </thead>
+
+    <tbody>
+    {% for nifty_name, next_name, mid_name, gold_name, global_name, reit_name in all_list %}
+    <tr>
+        <td>
+            {{ nifty_name }}
+        </td>
+        <td>
+            {{ next_name }}
+        </td>
+        <td>
+            {{ mid_name }}
+        </td>
+        <td>
+            {{ gold_name }}
+        </td>
+        <td>
+            {{ global_name }}
+        </td>
+        <td>
+            {{ reit_name }}
+        </td>
+    </tr>
+    {% empty %}
+    <tr>No Mutual Funds yet.</tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% include "bottom.html" %}

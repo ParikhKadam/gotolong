@@ -181,7 +181,7 @@ class FofIndustryView(ListView):
 
 
 def Fof_url():
-    url = 'https://archives.nseindia.com/content/umufu/ind_nifty500list.csv'
+    url = 'https://archives.nseindia.com/content/umufub/ind_nifty500list.csv'
 
     return url
 
@@ -208,7 +208,7 @@ def Fof_upload(request):
 
     debug_level = 1
     # declaring template
-    template = "fof/umufu_list.html"
+    template = "fof/umufub_list.html"
     data = Fof.objects.all()
 
     # GET request returns the value of the data with the specified key.

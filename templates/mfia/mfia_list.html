@@ -11,7 +11,7 @@
 
 Number of object: {{ object_list|length }}
 
-<table id="GoLoDataTable" class="display" cellspacing="0">
+<table cellspacing="0" border="1">
     <thead>
     <tr>
         <th>
@@ -28,74 +28,22 @@ Number of object: {{ object_list|length }}
         </th>
     </thead>
     <tbody>
-    {% for mfia_row in mfia_flex_list %}
+    {% for flex_name, large_name, mid_name, small_name in all_list %}
     <tr>
         <td>
-            {{ mfia_row }}
+            {{ flex_name }}
         </td>
         <td>
-            {{ large }}
+            {{ large_name }}
         </td>
         <td>
-            {{ mid }}
+            {{ mid_name }}
         </td>
         <td>
-            {{ small }}
+            {{ small_name }}
         </td>
     </tr>
     {% endfor %}
-
-    {% for mfia_row in mfia_large_list %}
-    <tr>
-        <td>
-            {{ flex }}
-        </td>
-        <td>
-            {{ mfia_row }}
-        </td>
-        <td>
-            {{ mid }}
-        </td>
-        <td>
-            {{ small }}
-        </td>
-    </tr>
-    {% endfor %}
-
-    {% for mfia_row in mfia_mid_list %}
-    <tr>
-        <td>
-            {{ flex }}
-        </td>
-        <td>
-            {{ large }}
-        </td>
-        <td>
-            {{ mfia_row }}
-        </td>
-        <td>
-            {{ small }}
-        </td>
-    </tr>
-    {% endfor %}
-
-    {% for mfia_row in mfia_small_list %}
-    <tr>
-        <td>
-            {{ flex }}
-        </td>
-        <td>
-            {{ large }}
-        </td>
-        <td>
-            {{ mid }}
-        </td>
-        <td>
-            {{ mfia_row }}
-        </td>
-    </tr>
-    {% endfor %}
-
     </tbody>
 </table>
 

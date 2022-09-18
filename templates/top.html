@@ -188,8 +188,48 @@ $(document).ready(function() {
 
 <div class="navbar1">
     <a href="/page/home">Home</a>
+
     <div class="dropdown1">
-        <button class="dropbtn1"> Global Data
+        <button class="dropbtn1"> MF - Global Data
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown1-content">
+            <b> MFD Input - AMFI MF </b> :
+            <a href="/gmutfun/list/"> Global Mutual Fund </a>
+            <a href="/gmutfun/list/passive-select/"> MF Selector - Passive </a>
+            <a href="/gmutfun/list/active-select/3/4/"> MF Selector - Active </a>
+        </div>
+    </div>
+
+    <div class="dropdown1">
+        <button class="dropbtn1"> MF - User Data
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="dropdown1-content">
+
+            <b> Portfolio - MF </b> :
+            <a href="/mfia/list/lead/3/6/"> MF IA </a>
+
+            <b> User MF Central </b> :
+            <a href="/umfcent/list/"> UMF Central list </a>
+            <a href="/umfcent/amc/amount/list/"> UMF Central amc (amount / pct) </a>
+            <a href="/umfcent/subcat/amount/list/"> UMF Central captype (amount / pct) </a>
+            <a href="/umfcent/stylebox/list/"> UMF Central Style box </a>
+
+            <b> User MF Broker </b> :
+            <a href="/umufub/list/"> UMF Broker list </a>
+            <a href="/umufub/amc/amount/list/"> UMF Broker amc (amount / pct) </a>
+            <a href="/umufub/subcat/amount/list/"> UMF Broker captype (amount / pct) </a>
+            <a href="/umufub/stylebox/list/"> UMF Broker Style box </a>
+
+            <b> MF Broker - IciciDirect / Zerodha </b>
+            <a href="/brokermf/list/"> Broker MF </a>
+
+        </div>
+    </div>
+
+    <div class="dropdown1">
+        <button class="dropbtn1"> Equity - Global Data
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown1-content">
@@ -208,30 +248,17 @@ $(document).ready(function() {
             <b> Global Output </b>
             <a href="/gfundareco/list/"> Fundamental Reco </a>
             <a href="/advisor/list/all-none/"> Global Advisor </a>
-            <b> AMFI MF </b> :
-            <a href="/gmutfun/list/"> Global Mutual Fund </a>
-            <a href="/gmutfun/list/passive-select/"> MF Selector - Passive </a>
-            <a href="/gmutfun/list/active-select/3/4/"> MF Selector - Active </a>
         </div>
     </div>
 
     <div class="dropdown1">
-        <button class="dropbtn1"> User Data
+        <button class="dropbtn1"> Equity - User Data
             <i class="fa fa-caret-down"></i>
         </button>
         <div class="dropdown1-content">
 
             <b> Net Worth </b> :
             <a href="/othinv/list/"> Other Investment </a>
-
-            <b> Portfolio - MF </b> :
-            <a href="/mfia/list/lead/3/6/"> MF IA </a>
-
-            <b> MF Central - User </b> :
-            <a href="/umufu/list/"> MF list </a>
-            <a href="/umufu/amc/amount/list/"> MF amc (amount / pct) </a>
-            <a href="/umufu/subcat/amount/list/"> MF captype (amount / pct) </a>
-            <a href="/umufu/stylebox/list/"> MF Style box </a>
 
             <b> Portfolio - Stocks </b> :
             <a href="/phealth/list/all/"> User Portfolio Health </a>
@@ -245,7 +272,6 @@ $(document).ready(function() {
             <b> Broker </b>
 
             <b> IciciDirect / Zerodha </b> :
-            <a href="/brokermf/list/"> Broker MF </a>
             <a href="/brokersum/list/"> Broker Sum </a>
             <a href="/brokertxn/list/"> Broker Txn </a>
 
@@ -286,12 +312,9 @@ $(document).ready(function() {
         <div class="dropdown1-content">
             <a href="/page/about/"> About Us </a>
             <a href="/page/contact/"> Contact Us </a>
-            <a href="/page/annual-report-self/"> Annual Report Self </a>
 
         </div>
     </div>
-
-    <a href="/payments/pay/">Payment</a>
 
 </div>
 

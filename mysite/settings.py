@@ -74,7 +74,8 @@ INSTALLED_APPS = [
     'django_gotolong.phealth',
     'django_gotolong.screener',
     'django_gotolong.trendlyne',
-    'django_gotolong.umufu',
+    'django_gotolong.umufub',
+    'django_gotolong.umfcent',
     'django_gotolong.uploaddoc',
     'django_gotolong.uiweight'
 ]

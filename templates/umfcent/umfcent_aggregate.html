@@ -1,0 +1,66 @@
+{% include "top.html" %}
+{% include "user_mf_top.html" %}
+
+<h1> User MF Central - Aggregate </h1>
+
+<br>
+Number of object: {{ object_list|length }}
+<br>
+
+Sum total : {{sum_total}}
+
+<br>
+
+<table class="display" cellspacing="0">
+
+    {% for umfcent_row in object_list %}
+    <tr>
+        <td>
+            {{ umfcent_row.umfcent_amc }}
+        </td>
+        <td>
+            {{ umfcent_row.umfcent_name }}
+        </td>
+        <td>
+            {{ umfcent_row.umfcent_category }}
+        </td>
+        <td>
+            {{ umfcent_row.umfcent_subcat }}
+        </td>
+        <td>
+            {{ umfcent_row.umfcent_rating }}
+        </td>
+        <td>
+            {{ umfcent_row.umfcent_cost_value }}
+        </td>
+        <td>
+            {{ umfcent_row.umfcent_value }}
+        </td>
+        <td>
+            {{ umfcent_row.umfcent_research_reco }}
+        </td>
+
+        <td>
+            {{ umfcent_row.scheme_sum |floatformat:0 }}
+        </td>
+
+        <td>
+            {% if sum_total %}
+            {% widthratio umfcent_row.scheme_sum sum_total 100.0 %} %
+            {% endif %}
+        </td>
+
+    </tr>
+
+    {% empty %}
+    <tr>No Mutual Funds yet.</tr>
+    {% endfor %}
+</table>
+
+{% autoescape off %}
+{{ plot_div_1 }}
+<br/>
+{{ plot_div_2 }}
+{% endautoescape %}
+
+{% include "bottom.html" %}

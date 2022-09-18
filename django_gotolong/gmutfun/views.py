@@ -22,6 +22,8 @@ import numpy as np
 
 from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update
 
+from itertools import zip_longest
+
 
 class GmutfunListView(ListView):
     model = Gmutfun
@@ -35,13 +37,232 @@ class GmutfunListView(ListView):
         return context
 
 
-class GmutfunListView_Passive_Select(ListView):
+class GmutfunListView_Passive_Select_FOF_Capbox(ListView):
+    model = Gmutfun
+
+    # too many variants of 'NIFTY 50'
+    # excluded hybrid funds by using , in it
+
+    # queryset = q_gold | q_nifty | q_next | q_mid
+
+    def get_queryset(self):
+
+        self.queryset = Gmutfun.objects.all(). \
+            filter(Q(gmutfun_type='Index') | Q(gmutfun_type='FoF')). \
+            filter(Q(gmutfun_benchmark__contains='Domestic Price of Gold') | \
+                   Q(gmutfun_benchmark__contains='NIFTY 50 Total Return Index') | \
+                   Q(gmutfun_benchmark__contains='Next 50') |
+                   Q(gmutfun_benchmark__contains='Midcap 150')). \
+            exclude(gmutfun_benchmark__contains=',').order_by('gmutfun_benchmark', '-gmutfun_aum'). \
+            filter(gmutfun_aum__gte=100)
+
+        return self.queryset
+
+    # @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(GmutfunListView_Passive_Select_FOF_Capbox, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        refresh_url = Gmutfun_url()
+        context["refresh_url"] = refresh_url
+
+        qs_nifty = Gmutfun.objects.all(). \
+            filter(Q(gmutfun_type='Index') | Q(gmutfun_type='FoF')). \
+            filter(Q(gmutfun_benchmark__contains='NIFTY 50 Total Return Index')). \
+            exclude(gmutfun_benchmark__contains=',').order_by('-gmutfun_aum'). \
+            filter(gmutfun_aum__gte=100)
+
+        qs_next = Gmutfun.objects.all(). \
+            filter(Q(gmutfun_type='Index') | Q(gmutfun_type='FoF')). \
+            filter(Q(gmutfun_benchmark__contains='Next 50')). \
+            exclude(gmutfun_benchmark__contains=',').order_by('-gmutfun_aum'). \
+            filter(gmutfun_aum__gte=100)
+
+        qs_mid = Gmutfun.objects.all(). \
+            filter(Q(gmutfun_type='Index') | Q(gmutfun_type='FoF')). \
+            filter(Q(gmutfun_benchmark__contains='Midcap 150')). \
+            exclude(gmutfun_benchmark__contains=',').order_by('-gmutfun_aum'). \
+            filter(gmutfun_aum__gte=100)
+
+        qs_gold = Gmutfun.objects.all(). \
+            filter(Q(gmutfun_type='Index') | Q(gmutfun_type='FoF')). \
+            filter(Q(gmutfun_benchmark__contains='Domestic Price of Gold')). \
+            exclude(gmutfun_benchmark__contains=',').order_by('-gmutfun_aum'). \
+            filter(gmutfun_aum__gte=100)
+
+        qs_global = Gmutfun.objects.all(). \
+            filter(Q(gmutfun_type='Index') | Q(gmutfun_type='FoF')). \
+            exclude(gmutfun_benchmark__contains='Gold '). \
+            exclude(gmutfun_benchmark__contains='NIFTY'). \
+            exclude(gmutfun_benchmark__contains='Nifty'). \
+            exclude(gmutfun_benchmark__contains='S&P BSE'). \
+            exclude(gmutfun_benchmark__contains='Hybrid'). \
+            exclude(gmutfun_benchmark__contains='Gilt'). \
+            exclude(gmutfun_benchmark__contains='of Gold'). \
+            exclude(gmutfun_benchmark__contains='Bond'). \
+            exclude(gmutfun_benchmark__contains='REIT'). \
+            exclude(gmutfun_benchmark__contains=',').order_by('-gmutfun_aum'). \
+            filter(gmutfun_aum__gte=100)
+
+        qs_reit = Gmutfun.objects.all(). \
+            filter(Q(gmutfun_type='Index') | Q(gmutfun_type='FoF')). \
+            filter(Q(gmutfun_benchmark__contains='REIT')). \
+            exclude(gmutfun_benchmark__contains=',').order_by('-gmutfun_aum'). \
+            filter(gmutfun_aum__gte=100)
+
+        nifty_list = []
+        next_list = []
+        mid_list = []
+        gold_list = []
+        global_list = []
+        reit_list = []
+
+        for q1 in qs_nifty:
+            nifty_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        for q1 in qs_next:
+            next_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        for q1 in qs_mid:
+            mid_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        for q1 in qs_gold:
+            gold_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        for q1 in qs_global:
+            global_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        for q1 in qs_reit:
+            reit_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        context["all_list"] = list(
+            zip_longest(nifty_list, next_list, mid_list, gold_list, global_list, reit_list, fillvalue='-'))
+
+        return context
+
+    def get_template_names(self):
+        app_label = 'gmutfun'
+        template_name_first = app_label + '/' + 'gmutfun_capbox_list.html'
+        template_names_list = [template_name_first]
+        return template_names_list
+
+
+class GmutfunListView_Passive_Select_ETF_Capbox(ListView):
+    model = Gmutfun
+
+    # too many variants of 'NIFTY 50'
+    # excluded hybrid funds by using , in it
+
+    # queryset = q_gold | q_nifty | q_next | q_mid
+
+    def get_queryset(self):
+
+        self.queryset = Gmutfun.objects.all(). \
+            filter(Q(gmutfun_type='ETF')). \
+            filter(Q(gmutfun_benchmark__contains='Domestic Price of Gold') | \
+                   Q(gmutfun_benchmark__contains='NIFTY 50 Total Return Index') | \
+                   Q(gmutfun_benchmark__contains='Next 50') |
+                   Q(gmutfun_benchmark__contains='Midcap 150')). \
+            exclude(gmutfun_benchmark__contains=',').order_by('gmutfun_benchmark', '-gmutfun_aum'). \
+            filter(gmutfun_aum__gte=100)
+
+        return self.queryset
+
+    # @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(GmutfunListView_Passive_Select_ETF_Capbox, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        refresh_url = Gmutfun_url()
+        context["refresh_url"] = refresh_url
+
+        qs_nifty = Gmutfun.objects.all(). \
+            filter(Q(gmutfun_type='ETF')). \
+            filter(Q(gmutfun_benchmark__contains='NIFTY 50 Total Return Index')). \
+            exclude(gmutfun_benchmark__contains=',').order_by('-gmutfun_aum'). \
+            filter(gmutfun_aum__gte=100)
+
+        qs_next = Gmutfun.objects.all(). \
+            filter(Q(gmutfun_type='ETF')). \
+            filter(Q(gmutfun_benchmark__contains='Next 50')). \
+            exclude(gmutfun_benchmark__contains=',').order_by('-gmutfun_aum'). \
+            filter(gmutfun_aum__gte=100)
+
+        qs_mid = Gmutfun.objects.all(). \
+            filter(Q(gmutfun_type='ETF')). \
+            filter(Q(gmutfun_benchmark__contains='Midcap 150')). \
+            exclude(gmutfun_benchmark__contains=',').order_by('-gmutfun_aum'). \
+            filter(gmutfun_aum__gte=100)
+
+        qs_gold = Gmutfun.objects.all(). \
+            filter(Q(gmutfun_type='ETF')). \
+            filter(Q(gmutfun_benchmark__contains='Domestic Price of Gold')). \
+            exclude(gmutfun_benchmark__contains=',').order_by('-gmutfun_aum'). \
+            filter(gmutfun_aum__gte=100)
+
+        qs_global = Gmutfun.objects.all(). \
+            filter(Q(gmutfun_type='ETF')). \
+            exclude(gmutfun_benchmark__contains='Gold'). \
+            exclude(gmutfun_benchmark__contains='NIFTY'). \
+            exclude(gmutfun_benchmark__contains='Nifty'). \
+            exclude(gmutfun_benchmark__contains='S&P BSE'). \
+            exclude(gmutfun_benchmark__contains='REIT'). \
+            exclude(gmutfun_benchmark__contains=',').order_by('-gmutfun_aum'). \
+            filter(gmutfun_aum__gte=100)
+
+        qs_reit = Gmutfun.objects.all(). \
+            filter(Q(gmutfun_type='ETF')). \
+            filter(Q(gmutfun_benchmark__contains='REIT')). \
+            exclude(gmutfun_benchmark__contains=',').order_by('-gmutfun_aum'). \
+            filter(gmutfun_aum__gte=100)
+
+        nifty_list = []
+        next_list = []
+        mid_list = []
+        gold_list = []
+        global_list = []
+        reit_list = []
+
+        for q1 in qs_nifty:
+            nifty_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        for q1 in qs_next:
+            next_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        for q1 in qs_mid:
+            mid_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        for q1 in qs_gold:
+            gold_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        for q1 in qs_global:
+            global_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        for q1 in qs_reit:
+            reit_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        all_list = list(zip_longest(nifty_list, next_list, mid_list, gold_list, global_list, reit_list, fillvalue='-'))
+
+        context["all_list"] = all_list
+
+        return context
+
+    def get_template_names(self):
+        app_label = 'gmutfun'
+        template_name_first = app_label + '/' + 'gmutfun_capbox_list.html'
+        template_names_list = [template_name_first]
+        return template_names_list
+
+
+class GmutfunListView_Passive_Select_ETF(ListView):
     model = Gmutfun
 
     # too many variants of 'NIFTY 50'
     # excluded hybrid funds by using , in it
     queryset = Gmutfun.objects.all(). \
-        filter(Q(gmutfun_type='ETF') | Q(gmutfun_type='Index') | Q(gmutfun_type='FoF')). \
+        filter(Q(gmutfun_type='ETF')). \
         filter(Q(gmutfun_benchmark__contains='Domestic Price of Gold') | \
                Q(gmutfun_benchmark__contains='NIFTY 50 Total Return Index') | \
                Q(gmutfun_benchmark__contains='Next 50') |
@@ -57,6 +278,28 @@ class GmutfunListView_Passive_Select(ListView):
         context["refresh_url"] = refresh_url
         return context
 
+
+class GmutfunListView_Passive_Select_FOF(ListView):
+    model = Gmutfun
+
+    # too many variants of 'NIFTY 50'
+    # excluded hybrid funds by using , in it
+    queryset = Gmutfun.objects.all(). \
+        filter(Q(gmutfun_type='Index') | Q(gmutfun_type='FoF')). \
+        filter(Q(gmutfun_benchmark__contains='Domestic Price of Gold') | \
+               Q(gmutfun_benchmark__contains='NIFTY 50 Total Return Index') | \
+               Q(gmutfun_benchmark__contains='Next 50') |
+               Q(gmutfun_benchmark__contains='Midcap 150')). \
+        exclude(gmutfun_benchmark__contains=',').order_by('gmutfun_benchmark', '-gmutfun_aum'). \
+        filter(gmutfun_aum__gte=100)
+
+    # queryset = q_gold | q_nifty | q_next | q_mid
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        refresh_url = Gmutfun_url()
+        context["refresh_url"] = refresh_url
+        return context
 
 class GmutfunListView_Nifty_FOF(ListView):
     model = Gmutfun
@@ -254,12 +497,17 @@ class GmutfunListView_Small_FOF(ListView):
 class GmutfunListView_Global_FOF(ListView):
     model = Gmutfun
 
-    # Used Gold with space to include Golden Dragon
+    # Used Gold with space to include Golden Dragon Index
     queryset = Gmutfun.objects.all().filter(Q(gmutfun_type='Index') | Q(gmutfun_type='FoF')). \
         exclude(gmutfun_benchmark__contains='Gold '). \
         exclude(gmutfun_benchmark__contains='NIFTY'). \
         exclude(gmutfun_benchmark__contains='Nifty'). \
-        exclude(gmutfun_benchmark__contains='S&P BSE').order_by('-gmutfun_aum')
+        exclude(gmutfun_benchmark__contains='S&P BSE'). \
+        exclude(gmutfun_benchmark__contains='Hybrid'). \
+        exclude(gmutfun_benchmark__contains='Gilt'). \
+        exclude(gmutfun_benchmark__contains='of Gold'). \
+        exclude(gmutfun_benchmark__contains='Bond'). \
+        order_by('-gmutfun_aum')
 
     # filter(Q(gmutfun_benchmark__contains='MSCI') | Q(gmutfun_benchmark__contains='Russell')
     #       | Q(gmutfun_benchmark__contains='NASDAQ') | Q(gmutfun_benchmark__contains='Nasdaq')
@@ -604,7 +852,7 @@ class GmutfunListView_Benchmark_All(ListView):
         return context
 
 def Gmutfun_url():
-    url = 'https://archives.nseindia.com/content/umufu/ind_nifty500list.csv'
+    url = 'https://archives.nseindia.com/content/umufub/ind_nifty500list.csv'
 
     return url
 

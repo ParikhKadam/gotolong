@@ -3,7 +3,9 @@
 from django.views.generic.list import ListView
 
 from django_gotolong.gmutfun.models import Gmutfun
-from django_gotolong.umufu.models import Umufu
+from django_gotolong.umufub.models import Umufub
+
+from django_gotolong.umfcent.models import Umfcent
 
 from django.db.models import (OuterRef, Subquery, ExpressionWrapper)
 from django.db.models import (F, IntegerField, Count, Q)
@@ -15,13 +17,16 @@ from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
 import re
+from itertools import zip_longest
 
 
 class MfiaListView_Lead(ListView):
 
     def get_queryset(self):
 
-        self.queryset = Umufu.objects.all().filter(umf_user_id=self.request.user.id)
+        # self.queryset = Umufub.objects.all().filter(umfb_user_id=self.request.user.id)
+        self.queryset = Umfcent.objects.all().filter(umfcent_user_id=self.request.user.id)
+
         return self.queryset
 
     # @method_decorator(login_required)
@@ -77,8 +82,15 @@ class MfiaListView_Lead(ListView):
             for q2 in self.queryset:
                 # print(q2)
                 # print(g_name, ':', u_name)
-                u_name = q2.umf_name.lower()
+                if False:
+                    # umf broker path
+                    u_name = q2.umfb_name.lower()
+
+                else:
+                    # umf central path
+                    u_name = q2.umfcent_name.lower()
                 u_name = u_name.split("fund")[0]
+
                 # print(g_name, ':', u_name)
 
                 # remove hyphen from mid-cap
@@ -126,6 +138,8 @@ class MfiaListView_Lead(ListView):
         context["mfia_mid_list"] = mid_list
         context["mfia_small_list"] = small_list
 
+        context["all_list"] = list(zip_longest(flex_list, large_list, mid_list, small_list, fillvalue='-'))
+
         return context
 
     def get_template_names(self):
@@ -139,7 +153,8 @@ class MfiaListView_AUM(ListView):
 
     def get_queryset(self):
 
-        self.queryset = Umufu.objects.all().filter(umf_user_id=self.request.user.id)
+        # self.queryset = Umufub.objects.all().filter(umfb_user_id=self.request.user.id)
+        self.queryset = Umfcent.objects.all().filter(umfcent_user_id=self.request.user.id)
         return self.queryset
 
     # @method_decorator(login_required)
@@ -196,7 +211,13 @@ class MfiaListView_AUM(ListView):
             for q2 in self.queryset:
                 # print(q2)
                 # print(g_name, ':', u_name)
-                u_name = q2.umf_name.lower()
+                if False:
+                    # umf broker path
+                    u_name = q2.umfb_name.lower()
+
+                else:
+                    # umf central path
+                    u_name = q2.umfcent_name.lower()
                 u_name = u_name.split("fund")[0]
                 # print(g_name, ':', u_name)
 
@@ -244,6 +265,8 @@ class MfiaListView_AUM(ListView):
         context["mfia_large_list"] = large_list
         context["mfia_mid_list"] = mid_list
         context["mfia_small_list"] = small_list
+
+        context["all_list"] = list(zip_longest(flex_list, large_list, mid_list, small_list, fillvalue='-'))
 
         return context
 

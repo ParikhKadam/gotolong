@@ -21,6 +21,7 @@ pyexcel-xls
 python-dateutil
 requests
 smartapi-python
+tabula-py
 xlrd
 urllib3
 websocket-client

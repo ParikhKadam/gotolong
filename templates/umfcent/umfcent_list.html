@@ -1,0 +1,82 @@
+{% include "top.html" %}
+{% include "user_mf_top.html" %}
+
+<h1> User MF Central - List </h1>
+
+<br>
+<form action="/umfcent/upload/" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <label for="file1"> Upload a file</label>
+    <input type="file" id="file1" name="file">
+    <small>Only accepts CSV/XLS/XLSX/PDF files</small>
+    <button type="submit">Upload</button>
+</form>
+<br>
+
+<br>
+Number of object: {{ object_list|length }}
+<br>
+
+Sum total : {{sum_total}}
+
+<br>
+
+<table id="GoLoDataTable" class="display" cellspacing="0">
+    <thead>
+    <tr>
+        <th>
+            AMC
+        </th>
+        <th>
+            MF Name
+        </th>
+        <th>
+            Fund Type
+        </th>
+        <th>
+            Cap Type
+        </th>
+        <th>
+            Market Value
+        </th>
+        <th>
+            Last Txn Date
+        </th>
+    </tr>
+    </thead>
+
+    {% for umfcent_row in object_list %}
+    <tr>
+        <td>
+            {{ umfcent_row.umfcent_amc }}
+        </td>
+        <td>
+            {{ umfcent_row.umfcent_name }}
+        </td>
+        <td>
+            {{ umfcent_row.umfcent_category }}
+        </td>
+        <td>
+            {{ umfcent_row.umfcent_subcat }}
+        </td>
+        <td>
+            {{ umfcent_row.umfcent_value }}
+        </td>
+        <td>
+            {{ umfcent_row.umfcent_txn_date }}
+        </td>
+
+    </tr>
+    {% empty %}
+    <tr>No Mutual Funds yet.</tr>
+    {% endfor %}
+</table>
+
+{% autoescape off %}
+{{ plot_div_1 }}
+<br/>
+{{ plot_div_2 }}
+{% endautoescape %}
+
+{% include "bottom.html" %}

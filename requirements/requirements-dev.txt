@@ -35,6 +35,7 @@ requests
 six
 smartapi-python
 sqlparse
+tabula-py
 xlrd
 urllib3
 websocket-client

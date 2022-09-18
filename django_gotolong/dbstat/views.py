@@ -18,7 +18,7 @@ from django_gotolong.lastrefd.models import Lastrefd
 # from django_gotolong.screener.models import Screener
 from django_gotolong.trendlyne.models import Trendlyne
 from django_gotolong.gmutfun.models import Gmutfun
-from django_gotolong.umufu.models import Umufu
+from django_gotolong.umufub.models import Umufub
 
 from django_gotolong.brokersum.models import BrokerSum
 from django_gotolong.brokertxn.models import BrokerTxn
@@ -50,7 +50,7 @@ class DbstatListView(ListView):
     db_stat['gmutfun'] = Gmutfun.objects.count()
     db_stat['indices'] = Indices.objects.count()
     db_stat['lastrefd'] = Lastrefd.objects.count()
-    db_stat['umufu'] = Umufu.objects.count()
+    db_stat['umufub'] = Umufub.objects.count()
     # db_stat['screener'] = Screener.objects.count()
     db_stat['trendlyne'] = Trendlyne.objects.count()
 
