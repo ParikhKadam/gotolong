@@ -156,3 +156,6 @@ db-files/
 dist/
 docs/
 temp-plot.html
+
+# skip udepcas
+*.pdf

@@ -112,15 +112,14 @@ def comm_func_upload(request, template, columns_list, list_url_name, ignore_top_
 
         pdf_file_obj = ''
         if pan_card_number != '':
-            pdf_reader = 'pikepdf'
+            pdf_reader_name = 'pikepdf'
             # decrypt using password
             new_pdf = Pdf.new()
             # NOTE: How will it work in production?
             # Can we make it work without saving the file.
             # It works only if the file has been removed by us
 
-            decrypted_file_path = 'udepcas_output_' + pan_card_number + '-rand-' + \
-                                  str(random.randrange(1000)) + '.pdf'
+            decrypted_file_path = 'udepcas_output_' + pan_card_number + '.pdf'
             with Pdf.open(req_file, password=pan_card_number) as pdf:
                 # remove before saving
                 if os.path.exists(decrypted_file_path):
@@ -130,13 +129,13 @@ def comm_func_upload(request, template, columns_list, list_url_name, ignore_top_
                 # pdf.pages[0].Contents.page_contents_coalesce()
                 # pdf_file_obj = io.BytesIO(pdf.pages[0].Contents.get_stream_buffer())
         else:
-            pdf_reader = 'PyPDF2'
+            pdf_reader_name = 'PyPDF2'
             # create file object variable
             # opening method will be rb
 
             pdf_file_obj = req_file.open()
 
-        print('used pdf reader', pdf_reader)
+        print('used pdf reader name', pdf_reader_name)
 
         # create reader variable that will read the pdffileobj
         pdf_reader = PyPDF2.PdfFileReader(pdf_file_obj)
@@ -166,12 +165,21 @@ def comm_func_upload(request, template, columns_list, list_url_name, ignore_top_
         # must close the file before renaming
         pdf_file_obj.close()
 
-        if pdf_reader == 'pikepdf':
+        if pdf_reader_name == "pikepdf":
+
             # remove before leaving
             if os.path.exists(decrypted_file_path):
-                os.remove(decrypted_file_path)
+                print('Trying to remove file', decrypted_file_path)
+                try:
+                    os.remove(decrypted_file_path)
+                    print('Removed file', decrypted_file_path)
+                except OSError:
+                    print('Failed to remove file', decrypted_file_path)
+
             else:
                 print(decrypted_file_path + ' not exist')
+        else:
+            print('used different pdf_reader_name', pdf_reader_name)
 
     if req_file.name.endswith('.csv'):
         data_set = req_file.read().decode('UTF-8')
