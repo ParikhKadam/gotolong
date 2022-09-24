@@ -1,7 +1,14 @@
 import openpyxl
 import pandas as pd
 import re
+
+import io
+import random
+
+import os
 import PyPDF2
+
+from pikepdf import Pdf
 
 
 def comm_func_ticker_match(ticker, amfi_rank_dict, dematsum_list):
@@ -94,21 +101,47 @@ def comm_func_upload(request, template, columns_list, list_url_name, ignore_top_
 
         data_set = df.to_csv(header=True, index=False)
 
-    elif req_file.name.endswith('.pdf'):
+    elif req_file.name.endswith('.pdf') or req_file.name.endswith('.PDF'):
 
         print(req_file)
 
-        # create file object variable
-        # opening method will be rb
-        # pdf_file_obj = open(req_file, 'rb')
+        if 'password' in request.POST:
+            pan_card_number = request.POST.get('password')
+        else:
+            pan_card_number = ''
 
-        pdf_file_obj = req_file.open()
+        pdf_file_obj = ''
+        if pan_card_number != '':
+            pdf_reader = 'pikepdf'
+            # decrypt using password
+            new_pdf = Pdf.new()
+            # NOTE: How will it work in production?
+            # Can we make it work without saving the file.
+            # It works only if the file has been removed by us
+
+            decrypted_file_path = 'udepcas_output_' + pan_card_number + '-rand-' + \
+                                  str(random.randrange(1000)) + '.pdf'
+            with Pdf.open(req_file, password=pan_card_number) as pdf:
+                # remove before saving
+                if os.path.exists(decrypted_file_path):
+                    os.remove(decrypted_file_path)
+                pdf.save(decrypted_file_path)
+                pdf_file_obj = open(decrypted_file_path, 'rb')
+                # pdf.pages[0].Contents.page_contents_coalesce()
+                # pdf_file_obj = io.BytesIO(pdf.pages[0].Contents.get_stream_buffer())
+        else:
+            pdf_reader = 'PyPDF2'
+            # create file object variable
+            # opening method will be rb
+
+            pdf_file_obj = req_file.open()
+
+        print('used pdf reader', pdf_reader)
 
         # create reader variable that will read the pdffileobj
         pdf_reader = PyPDF2.PdfFileReader(pdf_file_obj)
 
         # This will store the number of pages of this pdf file
-
         x = pdf_reader.numPages
         print('num pages', x)
 
@@ -130,11 +163,21 @@ def comm_func_upload(request, template, columns_list, list_url_name, ignore_top_
             if debug_level > 1:
                 print('------page ----end---', page_num)
 
+        # must close the file before renaming
+        pdf_file_obj.close()
+
+        if pdf_reader == 'pikepdf':
+            # remove before leaving
+            if os.path.exists(decrypted_file_path):
+                os.remove(decrypted_file_path)
+            else:
+                print(decrypted_file_path + ' not exist')
+
     if req_file.name.endswith('.csv'):
         data_set = req_file.read().decode('UTF-8')
 
     if not (req_file.name.endswith('.csv') or req_file.name.endswith('.xls') \
-            or req_file.name.endswith('.xlsx') or req_file.name.endswith('.pdf')):
+            or req_file.name.endswith('.xlsx') or req_file.name.endswith('.pdf') or req_file.name.endswith('.PDF')):
         messages.error(request, req_file.name + ' : THIS IS NOT A XLS/XLSX/CSV/PDF FILE.')
         return HttpResponseRedirect(reverse(list_url_name))
 

@@ -21,8 +21,8 @@ class Gmutfun(models.Model):
 
     gmutfun_aum = models.FloatField(blank=True, null=True)
 
-    gmutfun_score_grade = models.IntegerField(blank=True, null=True)
-    gmutfun_score_pct = models.FloatField(blank=True, null=True)
+    gmutfun_alpha_grade = models.IntegerField(blank=True, null=True)
+    gmutfun_alpha_pct = models.FloatField(blank=True, null=True)
 
     class Meta:
         db_table = 'global_mutfun'

@@ -55,7 +55,7 @@ class AdvisorListView_AllButNone(ListView):
         gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
-            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
+            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_mktvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
             annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
@@ -131,7 +131,7 @@ class AdvisorListView_All(ListView):
         gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
-            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
+            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_mktvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
             annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
@@ -206,7 +206,7 @@ class AdvisorListView_Insuf(ListView):
         gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
-            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
+            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_mktvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
             annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
@@ -275,7 +275,7 @@ class AdvisorListView_Strong(ListView):
     gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
     queryset = Amfi.objects.all(). \
         annotate(
-        cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
+        cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_mktvalue')[:1]) / 1000,
                                   output_field=IntegerField())). \
         annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
         annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
@@ -340,7 +340,7 @@ class AdvisorListView_Weak(ListView):
     gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
     queryset = Amfi.objects.all(). \
         annotate(
-        cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
+        cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_mktvalue')[:1]) / 1000,
                                   output_field=IntegerField())). \
         annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
         annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
@@ -405,7 +405,7 @@ class AdvisorListView_Moderate(ListView):
     gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
     queryset = Amfi.objects.all(). \
         annotate(
-        cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
+        cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_mktvalue')[:1]) / 1000,
                                   output_field=IntegerField())). \
         annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
         annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \

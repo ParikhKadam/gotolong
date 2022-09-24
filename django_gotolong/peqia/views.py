@@ -34,12 +34,12 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 
 
-class PhealthListView_AllButNone(ListView):
+class PeqiaListView_AllButNone(ListView):
     # crete task
     # jsched_task_bg(schedule=timezone.now())
     # jsched_task_daily()
 
-    # model = Phealth
+    # model = Peqia
     # if pagination is desired
     # paginate_by = 300
     # filter_backends = [filters.OrderingFilter,]
@@ -57,7 +57,7 @@ class PhealthListView_AllButNone(ListView):
         gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
-            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
+            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_mktvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
             annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
@@ -92,7 +92,7 @@ class PhealthListView_AllButNone(ListView):
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(PhealthListView_AllButNone, self).dispatch(*args, **kwargs)
+        return super(PeqiaListView_AllButNone, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -105,18 +105,18 @@ class PhealthListView_AllButNone(ListView):
         return context
 
     def get_template_names(self):
-        app_label = 'phealth'
-        template_name_first = app_label + '/' + 'phealth_list.html'
+        app_label = 'peqia'
+        template_name_first = app_label + '/' + 'peqia_list.html'
         template_names_list = [template_name_first]
         return template_names_list
 
 
-class PhealthListView_All(ListView):
+class PeqiaListView_All(ListView):
     # crete task
     # jsched_task_bg(schedule=timezone.now())
     # jsched_task_daily()
 
-    # model = Phealth
+    # model = Peqia
     # if pagination is desired
     # paginate_by = 300
     # filter_backends = [filters.OrderingFilter,]
@@ -134,7 +134,7 @@ class PhealthListView_All(ListView):
         gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
-            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
+            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_mktvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
             annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
@@ -167,7 +167,7 @@ class PhealthListView_All(ListView):
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(PhealthListView_All, self).dispatch(*args, **kwargs)
+        return super(PeqiaListView_All, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -180,19 +180,19 @@ class PhealthListView_All(ListView):
         return context
 
     def get_template_names(self):
-        app_label = 'phealth'
-        template_name_first = app_label + '/' + 'phealth_list.html'
+        app_label = 'peqia'
+        template_name_first = app_label + '/' + 'peqia_list.html'
         template_names_list = [template_name_first]
         return template_names_list
 
 
 # Insufficient data
-class PhealthListView_Insuf(ListView):
+class PeqiaListView_Insuf(ListView):
     # crete task
     # jsched_task_bg(schedule=timezone.now())
     # jsched_task_daily()
 
-    # model = Phealth
+    # model = Peqia
     # if pagination is desired
     # paginate_by = 300
     # filter_backends = [filters.OrderingFilter,]
@@ -210,7 +210,7 @@ class PhealthListView_Insuf(ListView):
         gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
-            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
+            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_mktvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
             annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
@@ -244,7 +244,7 @@ class PhealthListView_Insuf(ListView):
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(PhealthListView_Insuf, self).dispatch(*args, **kwargs)
+        return super(PeqiaListView_Insuf, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -257,14 +257,14 @@ class PhealthListView_Insuf(ListView):
         return context
 
     def get_template_names(self):
-        app_label = 'phealth'
-        template_name_first = app_label + '/' + 'phealth_list.html'
+        app_label = 'peqia'
+        template_name_first = app_label + '/' + 'peqia_list.html'
         template_names_list = [template_name_first]
         return template_names_list
 
 
-class PhealthListView_Buy(ListView):
-    # model = Phealth
+class PeqiaListView_Buy(ListView):
+    # model = Peqia
     # if pagination is desired
     # paginate_by = 300
     # filter_backends = [filters.OrderingFilter,]
@@ -282,7 +282,7 @@ class PhealthListView_Buy(ListView):
         gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
-            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
+            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_mktvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
             annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
@@ -314,6 +314,10 @@ class PhealthListView_Buy(ListView):
             order_by('low_margin')
         return queryset
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(PeqiaListView_Buy, self).dispatch(*args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         funda_reco_list = (
@@ -325,14 +329,14 @@ class PhealthListView_Buy(ListView):
         return context
 
     def get_template_names(self):
-        app_label = 'phealth'
-        template_name_first = app_label + '/' + 'phealth_list.html'
+        app_label = 'peqia'
+        template_name_first = app_label + '/' + 'peqia_list.html'
         template_names_list = [template_name_first]
         return template_names_list
 
 
-class PhealthListView_Sell(ListView):
-    # model = Phealth
+class PeqiaListView_Sell(ListView):
+    # model = Peqia
     # if pagination is desired
     # paginate_by = 300
     # filter_backends = [filters.OrderingFilter,]
@@ -350,7 +354,7 @@ class PhealthListView_Sell(ListView):
         gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
-            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
+            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_mktvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
             annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
@@ -382,6 +386,10 @@ class PhealthListView_Sell(ListView):
             order_by('safety_margin')
         return queryset
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(PeqiaListView_Sell, self).dispatch(*args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         funda_reco_list = (
@@ -393,13 +401,14 @@ class PhealthListView_Sell(ListView):
         return context
 
     def get_template_names(self):
-        app_label = 'phealth'
-        template_name_first = app_label + '/' + 'phealth_list.html'
+        app_label = 'peqia'
+        template_name_first = app_label + '/' + 'peqia_list.html'
         template_names_list = [template_name_first]
         return template_names_list
 
-class PhealthListView_Hold(ListView):
-    # model = Phealth
+
+class PeqiaListView_Hold(ListView):
+    # model = Peqia
     # if pagination is desired
     # paginate_by = 300
     # filter_backends = [filters.OrderingFilter,]
@@ -417,7 +426,7 @@ class PhealthListView_Hold(ListView):
         gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
-            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
+            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_mktvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
             annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
@@ -449,6 +458,10 @@ class PhealthListView_Hold(ListView):
             order_by('-safety_margin')
         return queryset
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(PeqiaListView_Hold, self).dispatch(*args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         funda_reco_list = (
@@ -460,14 +473,14 @@ class PhealthListView_Hold(ListView):
         return context
 
     def get_template_names(self):
-        app_label = 'phealth'
-        template_name_first = app_label + '/' + 'phealth_list.html'
+        app_label = 'peqia'
+        template_name_first = app_label + '/' + 'peqia_list.html'
         template_names_list = [template_name_first]
         return template_names_list
 
 
-class PhealthListView_Mixed(ListView):
-    # model = Phealth
+class PeqiaListView_Mixed(ListView):
+    # model = Peqia
     # if pagination is desired
     # paginate_by = 300
     # filter_backends = [filters.OrderingFilter,]
@@ -485,7 +498,7 @@ class PhealthListView_Mixed(ListView):
         gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
-            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
+            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_mktvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
             annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
@@ -519,6 +532,10 @@ class PhealthListView_Mixed(ListView):
             order_by('-safety_margin')
         return queryset
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(PeqiaListView_Mixed, self).dispatch(*args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         funda_reco_list = (
@@ -530,8 +547,7 @@ class PhealthListView_Mixed(ListView):
         return context
 
     def get_template_names(self):
-        app_label = 'phealth'
-        template_name_first = app_label + '/' + 'phealth_list.html'
+        app_label = 'peqia'
+        template_name_first = app_label + '/' + 'peqia_list.html'
         template_names_list = [template_name_first]
         return template_names_list
-

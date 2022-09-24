@@ -25,6 +25,9 @@ from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update
 
 from django_gotolong.comm import comfun
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 
 class BrokerTxnListView(ListView):
     model = BrokerTxn
@@ -36,6 +39,10 @@ class BrokerTxnListView(ListView):
 
     def get_queryset(self):
         return BrokerTxn.objects.all().filter(bt_user_id=self.request.user.id)
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(BrokerTxnListView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -65,7 +72,6 @@ def txn_date_iso(self, txn_date):
         logging.error('IndexError ', txn_date, row_list)
 
     return txn_date_iso
-
 
 # one parameter named request
 def BrokerTxnUpload(request):

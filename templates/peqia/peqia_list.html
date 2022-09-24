@@ -1,22 +1,22 @@
 {% include "top.html" %}
 {% include "user_equity_top.html" %}
 
-<h2>Phealth List </h2>
+<h2>Peqia List </h2>
 
 {% if debug %}
 {{object_list}}
 {% endif %}
 
 
-<a href="/phealth/list/all-none/"> All - None</a> |
-<a href="/phealth/list/buy/"> Buy (Strong Upside) </a> |
-<a href="/phealth/list/hold/"> Hold (Moderate Neutral) </a> |
-<a href="/phealth/list/sell/"> Sell (Weak Downside) </a> |
-<a href="/phealth/list/mixed/"> Mixed (Other Combo) </a> |
+<a href="/peqia/list/all-none/"> All - None</a> |
+<a href="/peqia/list/buy/"> Buy (Strong Upside) </a> |
+<a href="/peqia/list/hold/"> Hold (Moderate Neutral) </a> |
+<a href="/peqia/list/sell/"> Sell (Weak Downside) </a> |
+<a href="/peqia/list/mixed/"> Mixed (Other Combo) </a> |
 <br/>
-<a href="/phealth/list/insuf/"> Insufficient </a> |
-<a href="/phealth/list/all/"> All including Insuf </a> |
-<a href="/phealth/list/rebalance/"> Rebalance </a> |
+<a href="/peqia/list/insuf/"> Insufficient </a> |
+<a href="/peqia/list/all/"> All including Insuf </a> |
+<a href="/peqia/list/rebalance/"> Rebalance </a> |
 
 <br/>
 
@@ -81,69 +81,69 @@ Number of object: {{ object_list|length }}
         </th>
     </thead>
     <tbody>
-    {% for phealth_row in object_list %}
+    {% for peqia_row in object_list %}
     <tr>
         <td>
-            {{ phealth_row.nse_symbol }}
+            {{ peqia_row.nse_symbol }}
         </td>
         <td>
-            {{ phealth_row.comp_name }}
+            {{ peqia_row.comp_name }}
         </td>
         <td>
-            {{ phealth_row.bhav_price }}
+            {{ peqia_row.bhav_price }}
         </td>
         <td>
-            {{ phealth_row.bat }}
+            {{ peqia_row.bat }}
         </td>
         <td>
-            {{ phealth_row.ftwhl_low }}
+            {{ peqia_row.ftwhl_low }}
         </td>
         <td>
-            {{ phealth_row.valuation_reco }}
+            {{ peqia_row.valuation_reco }}
         </td>
         <td>
-            {{ phealth_row.safety_margin }}
+            {{ peqia_row.safety_margin }}
         </td>
         <td>
-            {{ phealth_row.low_margin }}
+            {{ peqia_row.low_margin }}
         </td>
         <td>
-            {{ phealth_row.ca_total }}
+            {{ peqia_row.ca_total }}
         </td>
         <td>
-            {{ phealth_row.dt_date }}
+            {{ peqia_row.dt_date }}
         </td>
         <td>
-            {{ phealth_row.dt_date|timesince }}
-        </td>
-
-        <td>
-            {{ phealth_row.industry }}
+            {{ peqia_row.dt_date|timesince }}
         </td>
 
         <td>
-            {{ phealth_row.cap_type }}
+            {{ peqia_row.industry }}
         </td>
 
         <td>
-            {{ phealth_row.plan_oku}}
+            {{ peqia_row.cap_type }}
+        </td>
+
+        <td>
+            {{ peqia_row.plan_oku}}
         </td>
         <td>
-            {{ phealth_row.cur_oku }}
+            {{ peqia_row.cur_oku }}
         </td>
         <td>
-            {{ phealth_row.tbd_oku }}
+            {{ peqia_row.tbd_oku }}
         </td>
         <td>
-            {{ phealth_row.funda_reco_type }}
+            {{ peqia_row.funda_reco_type }}
         </td>
         <td>
-            {{ phealth_row.funda_reco_cause }}
+            {{ peqia_row.funda_reco_cause }}
         </td>
 
     </tr>
     {% empty %}
-    <tr>No phealth yet.</tr>
+    <tr>No peqia yet.</tr>
     {% endfor %}
     </tbody>
 </table>

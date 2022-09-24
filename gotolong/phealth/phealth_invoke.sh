@@ -7,7 +7,7 @@ else
     DEBUG_LEVEL=0
 fi
 
-MODULE_NAME=phealth
+MODULE_NAME=peqia
 
 CONFIG_GLOBAL_DATA_LOC=`python -m gotolong.config.config_ini global_data`
 CONFIG_GLOBAL_REPORTS_LOC=`python -m gotolong.config.config_ini global_reports`

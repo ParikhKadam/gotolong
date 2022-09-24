@@ -27,6 +27,9 @@ from django.db.models.functions import (Round)
 
 import fuzzymatcher
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 
 class DividendListView(ListView):
     model = Dividend
@@ -38,6 +41,10 @@ class DividendListView(ListView):
 
     def get_queryset(self):
         return Dividend.objects.all().filter(divi_user_id=self.request.user.id)
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(DividendListView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -55,6 +62,10 @@ class DividendTickerListView(ListView):
     def get_queryset(self):
         return Dividend.objects.all().filter(divi_user_id=self.request.user.id). \
             values('divi_ticker').annotate(Total=Round(Sum('divi_amount'))).order_by('-Total')
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(DividendTickerListView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

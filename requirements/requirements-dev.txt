@@ -23,10 +23,12 @@ numpy
 openpyxl
 py5paisa
 pandas
+pikepdf
 plotly
 prettytable
 psycopg2
 pycryptodome
+PyPDF2
 python-dateutil
 pytz
 pyexcel

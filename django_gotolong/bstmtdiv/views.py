@@ -25,15 +25,21 @@ from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 
 class BstmtDivYearArchiveView(YearArchiveView):
-
     date_field = "bsdiv_date"
     make_object_list = True
     allow_future = True
 
     def get_queryset(self):
         return BstmtDiv.objects.all().filter(bsdiv_user_id=self.request.user.id)
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(BstmtDivYearArchiveView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -59,6 +65,10 @@ class BstmtDivMonthArchiveView(MonthArchiveView):
     def get_queryset(self):
         return BstmtDiv.objects.all().filter(bsdiv_user_id=self.request.user.id)
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(BstmtDivMonthArchiveView, self).dispatch(*args, **kwargs)
+
 
 class BstmtDivListView(ListView):
     model = BstmtDiv
@@ -70,6 +80,10 @@ class BstmtDivListView(ListView):
         self.year_list = BstmtDiv.objects.filter(bsdiv_user_id=self.request.user.id).dates('bsdiv_date', 'year')
         self.month_list = BstmtDiv.objects.filter(bsdiv_user_id=self.request.user.id).dates('bsdiv_date', 'month')
         return BstmtDiv.objects.all().filter(bsdiv_user_id=self.request.user.id)
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(BstmtDivListView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -106,6 +120,10 @@ class BstmtDivAmountView(ListView):
         self.year_list = BstmtDiv.objects.filter(bsdiv_user_id=self.request.user.id).dates('bsdiv_date', 'year')
         return BstmtDiv.objects.all().filter(bsdiv_user_id=self.request.user.id)
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(BstmtDivAmountView, self).dispatch(*args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["year_list"] = self.year_list
@@ -127,6 +145,10 @@ class BstmtDivFrequencyView(ListView):
     def get_queryset(self):
         self.year_list = BstmtDiv.objects.filter(bsdiv_user_id=self.request.user.id).dates('bsdiv_date', 'year')
         return BstmtDiv.objects.all().filter(bsdiv_user_id=self.request.user.id)
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(BstmtDivFrequencyView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

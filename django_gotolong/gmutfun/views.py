@@ -597,31 +597,31 @@ class GmutfunListView_Active_Select(ListView):
             filter(Q(gmutfun_benchmark__contains='500 Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
-            filter(gmutfun_score_grade__gte=score_grade). \
-            order_by('-gmutfun_score_pct', '-gmutfun_aum')
+            filter(gmutfun_alpha_grade__gte=score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
 
         qs_large = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
             filter(Q(gmutfun_benchmark__contains='100 Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
-            filter(gmutfun_score_grade__gte=score_grade). \
-            order_by('-gmutfun_score_pct', '-gmutfun_aum')
+            filter(gmutfun_alpha_grade__gte=score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
 
         qs_mid = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
             filter(Q(gmutfun_benchmark__contains='Midcap 150 Total Return Index') |
                    Q(gmutfun_benchmark__contains='150 MidCap Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
-            filter(gmutfun_score_grade__gte=score_grade). \
-            order_by('-gmutfun_score_pct', '-gmutfun_aum')
+            filter(gmutfun_alpha_grade__gte=score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
 
         qs_small = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
             filter(Q(gmutfun_benchmark__contains='Smallcap 250 Total Return Index') |
                    Q(gmutfun_benchmark__contains='250 SmallCap Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
-            filter(gmutfun_score_grade__gte=score_grade). \
-            order_by('-gmutfun_score_pct', '-gmutfun_aum')
+            filter(gmutfun_alpha_grade__gte=score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
 
         context["mf_flexi_list"] = qs_flexi
         context["mf_large_list"] = qs_large
@@ -671,14 +671,14 @@ class GmutfunListView_Active_AUM(ListView):
             filter(Q(gmutfun_benchmark__contains='500 Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
-            filter(gmutfun_score_grade__gte=score_grade). \
+            filter(gmutfun_alpha_grade__gte=score_grade). \
             order_by('-gmutfun_aum')
 
         qs_large = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
             filter(Q(gmutfun_benchmark__contains='100 Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
-            filter(gmutfun_score_grade__gte=score_grade). \
+            filter(gmutfun_alpha_grade__gte=score_grade). \
             order_by('-gmutfun_aum')
 
         qs_mid = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
@@ -686,7 +686,7 @@ class GmutfunListView_Active_AUM(ListView):
                    Q(gmutfun_benchmark__contains='150 MidCap Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
-            filter(gmutfun_score_grade__gte=score_grade). \
+            filter(gmutfun_alpha_grade__gte=score_grade). \
             order_by('-gmutfun_aum')
 
         qs_small = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
@@ -694,7 +694,7 @@ class GmutfunListView_Active_AUM(ListView):
                    Q(gmutfun_benchmark__contains='250 SmallCap Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
-            filter(gmutfun_score_grade__gte=score_grade). \
+            filter(gmutfun_alpha_grade__gte=score_grade). \
             order_by('-gmutfun_aum')
 
         context["mf_flexi_list"] = qs_flexi
@@ -1112,26 +1112,26 @@ def Gmutfun_upload(request):
             gmutfun_ret_5y_bench = round(float(gmutfun_ret_5y_bench), 2)
             gmutfun_ret_10y_bench = round(float(gmutfun_ret_10y_bench), 2)
 
-            gmutfun_score_grade = 0
+            gmutfun_alpha_grade = 0
 
             # exclude 0.0 data
             if int(gmutfun_ret_1y_reg) != 0 and math.ceil(gmutfun_ret_1y_reg) >= math.floor(gmutfun_ret_1y_bench):
-                gmutfun_score_grade += 1
+                gmutfun_alpha_grade += 1
             if int(gmutfun_ret_3y_reg) != 0 and math.ceil(gmutfun_ret_3y_reg) >= math.floor(gmutfun_ret_3y_bench):
-                gmutfun_score_grade += 1
+                gmutfun_alpha_grade += 1
                 print('score ', gmutfun_scheme, gmutfun_ret_3y_reg, gmutfun_ret_3y_bench)
             if int(gmutfun_ret_5y_reg) != 0 and math.ceil(gmutfun_ret_5y_reg) >= math.floor(gmutfun_ret_5y_bench):
-                gmutfun_score_grade += 1
+                gmutfun_alpha_grade += 1
                 print('score ', gmutfun_scheme, gmutfun_ret_5y_reg, gmutfun_ret_5y_bench)
             if int(gmutfun_ret_10y_reg) != 0 and math.ceil(gmutfun_ret_10y_reg) >= math.floor(gmutfun_ret_10y_bench):
-                gmutfun_score_grade += 1
+                gmutfun_alpha_grade += 1
                 print('score ', gmutfun_scheme, gmutfun_ret_10y_reg, gmutfun_ret_10y_bench)
 
-            gmutfun_score_pct = 0
-            gmutfun_score_pct += (gmutfun_ret_1y_reg - gmutfun_ret_1y_bench)
-            gmutfun_score_pct += (gmutfun_ret_3y_reg - gmutfun_ret_3y_bench)
-            gmutfun_score_pct += (gmutfun_ret_5y_reg - gmutfun_ret_5y_bench)
-            gmutfun_score_pct += (gmutfun_ret_10y_reg - gmutfun_ret_10y_bench)
+            gmutfun_alpha_pct = 0
+            gmutfun_alpha_pct += (gmutfun_ret_1y_reg - gmutfun_ret_1y_bench)
+            gmutfun_alpha_pct += (gmutfun_ret_3y_reg - gmutfun_ret_3y_bench)
+            gmutfun_alpha_pct += (gmutfun_ret_5y_reg - gmutfun_ret_5y_bench)
+            gmutfun_alpha_pct += (gmutfun_ret_10y_reg - gmutfun_ret_10y_bench)
 
             _, created = Gmutfun.objects.update_or_create(
                 gmutfun_scheme=gmutfun_scheme,
@@ -1147,8 +1147,8 @@ def Gmutfun_upload(request):
                 gmutfun_ret_10y_reg=gmutfun_ret_10y_reg,
                 gmutfun_ret_10y_bench=gmutfun_ret_10y_bench,
                 gmutfun_aum=gmutfun_aum,
-                gmutfun_score_grade=gmutfun_score_grade,
-                gmutfun_score_pct=gmutfun_score_pct
+                gmutfun_alpha_grade=gmutfun_alpha_grade,
+                gmutfun_alpha_pct=gmutfun_alpha_pct
             )
 
     lastrefd_update("gmutfun")

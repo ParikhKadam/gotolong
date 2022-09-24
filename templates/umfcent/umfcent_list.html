@@ -4,13 +4,14 @@
 <h1> User MF Central - List </h1>
 
 <br>
+Upload Consolidated Account Statement - Detailed - for last 1 year (not Summary)
 <form action="/umfcent/upload/" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
 
     <label for="file1"> Upload a file</label>
     <input type="file" id="file1" name="file">
     <small>Only accepts CSV/XLS/XLSX/PDF files</small>
-    <button type="submit">Upload</button>
+    <button type="submit">Click here to Upload</button>
 </form>
 <br>
 

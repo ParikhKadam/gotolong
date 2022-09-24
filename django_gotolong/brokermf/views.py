@@ -6,6 +6,9 @@ from django.views.generic.list import ListView
 
 from django.db.models import IntegerField, F, ExpressionWrapper, fields, Max, Min, Sum, Count
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 import urllib3
@@ -33,6 +36,10 @@ class BrokerMfListView(ListView):
     def get_queryset(self):
         queryset = BrokerMf.objects.all().filter(bmf_user_id=self.request.user.id)
         return queryset
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(BrokerMfListView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

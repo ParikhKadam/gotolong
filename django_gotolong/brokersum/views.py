@@ -23,6 +23,10 @@ from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update
 
 from django_gotolong.comm import comfun
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
+
 class BrokerSumListView(ListView):
     model = BrokerSum
 
@@ -31,6 +35,10 @@ class BrokerSumListView(ListView):
 
     def get_queryset(self):
         return BrokerSum.objects.all().filter(bs_user_id=self.request.user.id)
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(BrokerSumListView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

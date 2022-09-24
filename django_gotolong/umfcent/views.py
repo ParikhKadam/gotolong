@@ -75,6 +75,10 @@ class UmfcentListView_AMC_Amount(ListView):
         print('hi ', self.queryset)
         return self.queryset
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(UmfcentListView_AMC_Amount, self).dispatch(*args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         labels = []
@@ -119,6 +123,10 @@ class UmfcentListView_SubcatAmount(ListView):
             values('umfcent_subcat').annotate(scheme_sum=Sum('umfcent_value')). \
             exclude(scheme_sum=0.0).order_by('-scheme_sum')
         return self.queryset
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(UmfcentListView_SubcatAmount, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -165,6 +173,10 @@ class UmfcentListView_StyleBox(ListView):
             order_by('umfcent_amc', 'umfcent_category', 'umfcent_subcat', '-umfcent_value')
         return queryset
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(UmfcentListView_StyleBox, self).dispatch(*args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         refresh_url = Umfcent_url()
@@ -185,6 +197,10 @@ class UmfcentListView_CapBox(ListView):
         self.queryset = Umfcent.objects.all().filter(umfcent_user_id=self.request.user.id). \
             order_by('umfcent_amc', 'umfcent_category', 'umfcent_subcat', '-umfcent_value')
         return self.queryset
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(UmfcentListView_CapBox, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

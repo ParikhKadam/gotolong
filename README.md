@@ -63,7 +63,7 @@ Table of Contents
         * [brokertxn module](#brokertxn-module)
         * [brokermf module](#brokermf-module)
         * [uiweight module](#uiweight-module)
-        * [phealth module](#phealth-module)
+        * [peqia module](#peqia-module)
         * [dividend module](#dividend-module)
     * [Other modules](#other-modules)
         * [dbstat](#dbstat)
@@ -260,7 +260,7 @@ Regenerate it using <a href=https://dbdiagram.io/home target=_blank> dbdiagram.i
 
 ## User Stocks - portfolio health
 
-<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-user-phealth-Screenshot.png" >
+<img src="https://github.com/gotolong/gotolong/blob/master/media/screenshots/gotolong-user-peqia-Screenshot.png" >
 
 ## Use MF Active Investment Advisor
 
@@ -358,7 +358,7 @@ broker mf details
 
 user industry weight information
 
-### phealth module
+### peqia module
 
 Identify companies at healthy price
 

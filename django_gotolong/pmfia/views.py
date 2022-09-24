@@ -20,7 +20,7 @@ import re
 from itertools import zip_longest
 
 
-class MfiaListView_Lead(ListView):
+class PmfiaListView_Lead(ListView):
 
     def get_queryset(self):
 
@@ -29,9 +29,9 @@ class MfiaListView_Lead(ListView):
 
         return self.queryset
 
-    # @method_decorator(login_required)
+    @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(MfiaListView_Lead, self).dispatch(*args, **kwargs)
+        return super(PmfiaListView_Lead, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -43,31 +43,31 @@ class MfiaListView_Lead(ListView):
             filter(Q(gmutfun_benchmark__contains='500 Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
-            filter(gmutfun_score_grade__gte=min_score_grade). \
-            order_by('-gmutfun_score_pct', '-gmutfun_aum')
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
 
         qs_large = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
             filter(Q(gmutfun_benchmark__contains='100 Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
-            filter(gmutfun_score_grade__gte=min_score_grade). \
-            order_by('-gmutfun_score_pct', '-gmutfun_aum')
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
 
         qs_mid = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
             filter(Q(gmutfun_benchmark__contains='Midcap 150 Total Return Index') |
                    Q(gmutfun_benchmark__contains='150 MidCap Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
-            filter(gmutfun_score_grade__gte=min_score_grade). \
-            order_by('-gmutfun_score_pct', '-gmutfun_aum')
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
 
         qs_small = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
             filter(Q(gmutfun_benchmark__contains='Smallcap 250 Total Return Index') |
                    Q(gmutfun_benchmark__contains='250 SmallCap Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
-            filter(gmutfun_score_grade__gte=min_score_grade). \
-            order_by('-gmutfun_score_pct', '-gmutfun_aum')
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
 
         flex_list = []
         large_list = []
@@ -133,23 +133,23 @@ class MfiaListView_Lead(ListView):
                 if len(small_list) < max_captype_mf:
                     small_list.append(g_name)
 
-        context["mfia_flex_list"] = flex_list
-        context["mfia_large_list"] = large_list
-        context["mfia_mid_list"] = mid_list
-        context["mfia_small_list"] = small_list
+        context["pmfia_flex_list"] = flex_list
+        context["pmfia_large_list"] = large_list
+        context["pmfia_mid_list"] = mid_list
+        context["pmfia_small_list"] = small_list
 
         context["all_list"] = list(zip_longest(flex_list, large_list, mid_list, small_list, fillvalue='-'))
 
         return context
 
     def get_template_names(self):
-        app_label = 'mfia'
-        template_name_first = app_label + '/' + 'mfia_list.html'
+        app_label = 'pmfia'
+        template_name_first = app_label + '/' + 'pmfia_list.html'
         template_names_list = [template_name_first]
         return template_names_list
 
 
-class MfiaListView_AUM(ListView):
+class PmfiaListView_AUM(ListView):
 
     def get_queryset(self):
 
@@ -157,9 +157,9 @@ class MfiaListView_AUM(ListView):
         self.queryset = Umfcent.objects.all().filter(umfcent_user_id=self.request.user.id)
         return self.queryset
 
-    # @method_decorator(login_required)
+    @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(MfiaListView_AUM, self).dispatch(*args, **kwargs)
+        return super(PmfiaListView_AUM, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -172,31 +172,31 @@ class MfiaListView_AUM(ListView):
             filter(Q(gmutfun_benchmark__contains='500 Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
-            filter(gmutfun_score_grade__gte=min_score_grade). \
-            order_by('-gmutfun_aum', '-gmutfun_score_pct')
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_aum', '-gmutfun_alpha_pct')
 
         qs_large = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
             filter(Q(gmutfun_benchmark__contains='100 Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
-            filter(gmutfun_score_grade__gte=min_score_grade). \
-            order_by('-gmutfun_aum', '-gmutfun_score_pct')
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_aum', '-gmutfun_alpha_pct')
 
         qs_mid = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
             filter(Q(gmutfun_benchmark__contains='Midcap 150 Total Return Index') |
                    Q(gmutfun_benchmark__contains='150 MidCap Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
-            filter(gmutfun_score_grade__gte=min_score_grade). \
-            order_by('-gmutfun_aum', '-gmutfun_score_pct')
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_aum', '-gmutfun_alpha_pct')
 
         qs_small = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
             filter(Q(gmutfun_benchmark__contains='Smallcap 250 Total Return Index') |
                    Q(gmutfun_benchmark__contains='250 SmallCap Total Return Index')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
-            filter(gmutfun_score_grade__gte=min_score_grade). \
-            order_by('-gmutfun_aum', '-gmutfun_score_pct')
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_aum', '-gmutfun_alpha_pct')
 
         flex_list = []
         large_list = []
@@ -261,17 +261,17 @@ class MfiaListView_AUM(ListView):
                 if len(small_list) < max_captype_mf:
                     small_list.append(g_name)
 
-        context["mfia_flex_list"] = flex_list
-        context["mfia_large_list"] = large_list
-        context["mfia_mid_list"] = mid_list
-        context["mfia_small_list"] = small_list
+        context["pmfia_flex_list"] = flex_list
+        context["pmfia_large_list"] = large_list
+        context["pmfia_mid_list"] = mid_list
+        context["pmfia_small_list"] = small_list
 
         context["all_list"] = list(zip_longest(flex_list, large_list, mid_list, small_list, fillvalue='-'))
 
         return context
 
     def get_template_names(self):
-        app_label = 'mfia'
-        template_name_first = app_label + '/' + 'mfia_list.html'
+        app_label = 'pmfia'
+        template_name_first = app_label + '/' + 'pmfia_list.html'
         template_names_list = [template_name_first]
         return template_names_list

@@ -58,7 +58,7 @@ gotolong-home/data/output-global-reports/screener-reports/screener-reports-reco-
 gotolong-home/data/output-global-reports/screener-reports/screener-reports-reco-ticker-without-cause-gotolong.csv
 gotolong-home/data/output-global-reports/trendlyne-reports/trendlyne-reports.csv
 gotolong-home/data/output-user-reports/demat-sum-stat-reports/demat-pos-neg-stat-reports.csv
-gotolong-home/data/output-user-reports/phealth-reports/phealth-reports.csv
+gotolong-home/data/output-user-reports/peqia-reports/peqia-reports.csv
 gotolong-home/data/output-user-reports/tbd-reports/tbd-reports-phase-buy-1-coverage.csv
 gotolong-home/data/output-user-reports/tbd-reports/tbd-reports-phase-buy-2-planned-nocond.csv
 gotolong-home/data/output-user-reports/tbd-reports/tbd-reports-phase-buy-3-planned-cond.csv
@@ -194,13 +194,13 @@ gotolong/django/nach/views.py
 gotolong/django/nach/migrations/0001_initial.py
 gotolong/django/nach/migrations/0002_auto_20200710_1928.py
 gotolong/django/nach/migrations/__init__.py
-gotolong/django/phealth/__init__.py
-gotolong/django/phealth/admin.py
-gotolong/django/phealth/apps.py
-gotolong/django/phealth/models.py
-gotolong/django/phealth/tests.py
-gotolong/django/phealth/views.py
-gotolong/django/phealth/migrations/__init__.py
+gotolong/django/peqia/__init__.py
+gotolong/django/peqia/admin.py
+gotolong/django/peqia/apps.py
+gotolong/django/peqia/models.py
+gotolong/django/peqia/tests.py
+gotolong/django/peqia/views.py
+gotolong/django/peqia/migrations/__init__.py
 gotolong/django/screener/__init__.py
 gotolong/django/screener/admin.py
 gotolong/django/screener/apps.py
@@ -250,8 +250,8 @@ gotolong/nach/nach.py
 gotolong/nach/nach_invoke.py
 gotolong/nse/__init__.py
 gotolong/nse/nse_holiday.py
-gotolong/phealth/__init__.py
-gotolong/phealth/phealth.py
+gotolong/peqia/__init__.py
+gotolong/peqia/peqia.py
 gotolong/plan/__init__.py
 gotolong/plan/plan.py
 gotolong/plan/plan_invoke.py
@@ -287,4 +287,4 @@ scripts/gotolong_db_stats.sh
 scripts/gotolong_download_move.sh
 scripts/gcweight-invoke
 scripts/isin-invoke
-scripts/phealth-invoke
+scripts/peqia-invoke

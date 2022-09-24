@@ -1,0 +1,98 @@
+{% include "top.html" %}
+{% include "user_mf_top.html" %}
+
+<h1> User Depository CAS - List </h1>
+
+<br>
+<form action="/udepcas/upload/" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <label for="file1"> Upload a file </label>
+    <input type="file" id="file1" name="file">
+
+    Password (PAN card #) to unlock file: <input type="password" id="password1" name="password">
+
+    <small>Only accepts CSV/XLS/XLSX/PDF files</small>
+
+    <button type="submit">Upload</button>
+</form>
+<br>
+
+<br>
+Number of object: {{ object_list|length }}
+<br>
+
+Sum total : {{sum_total}}
+
+<br>
+
+<table id="GoLoDataTable" class="display" cellspacing="0">
+    <thead>
+    <tr>
+        <th>
+            Asset class
+        </th>
+        <th>
+            ISIN
+        </th>
+        <th>
+            Ticker
+        </th>
+        <th>
+            Name
+        </th>
+        <th>
+            Qty
+        </th>
+        <th>
+            Cost Value
+        </th>
+        <th>
+            Market Value
+        </th>
+        <th>
+            Last Txn Date
+        </th>
+    </tr>
+    </thead>
+
+    {% for udepcas_row in object_list %}
+    <tr>
+        <td>
+            {{ udepcas_row.udepcas_asset_class }}
+        </td>
+        <td>
+            {{ udepcas_row.udepcas_isin }}
+        </td>
+        <td>
+            {{ udepcas_row.udepcas_symbol }}
+        </td>
+        <td>
+            {{ udepcas_row.udepcas_name }}
+        </td>
+        <td>
+            {{ udepcas_row.udepcas_qty }}
+        </td>
+        <td>
+            {{ udepcas_row.udepcas_cost }}
+        </td>
+        <td>
+            {{ udepcas_row.udepcas_value }}
+        </td>
+        <td>
+            {{ udepcas_row.udepcas_txn_date }}
+        </td>
+
+    </tr>
+    {% empty %}
+    <tr>No Udep CAS yet.</tr>
+    {% endfor %}
+</table>
+
+{% autoescape off %}
+{{ plot_div_1 }}
+<br/>
+{{ plot_div_2 }}
+{% endautoescape %}
+
+{% include "bottom.html" %}

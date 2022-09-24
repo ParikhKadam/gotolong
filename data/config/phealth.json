@@ -1,5 +1,5 @@
 {
-  "module": "phealth",
+  "module": "peqia",
   "logging-level": "INFO",
   "truncate-table": "No",
   "save-to-db": "Yes",
@@ -7,11 +7,11 @@
   "output-files": [
     {
       "dir-cfg-key": "PROFILE_REPORTS",
-      "file": "phealth-reports/phealth-reports.csv"
+      "file": "peqia-reports/peqia-reports.csv"
     },
     {
       "dir-cfg-key": "PROFILE_REPORTS",
-      "file": "phealth-reports/phealth-reports.txt"
+      "file": "peqia-reports/peqia-reports.txt"
     }
   ]
 }

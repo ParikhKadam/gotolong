@@ -18,7 +18,7 @@ from django.utils.decorators import method_decorator
 class NworthListView_All(ListView):
     # crete task
     # jsched_task_bg(schedule=timezone.now())
-    # model = Phealth
+    # model = Peqia
     # if pagination is desired
     # paginate_by = 300
     # filter_backends = [filters.OrderingFilter,]
@@ -35,7 +35,7 @@ class NworthListView_All(ListView):
         gcweight_qs = Gcweight.objects.filter(gcw_cap_type=OuterRef("cap_type"))
         queryset = Amfi.objects.all(). \
             annotate(
-            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_costvalue')[:1]) / 1000,
+            cur_oku=ExpressionWrapper(Subquery(dematsum_qs.values('ds_mktvalue')[:1]) / 1000,
                                       output_field=IntegerField())). \
             annotate(plan_oku=Subquery(gcweight_qs.values('gcw_cap_weight')[:1])). \
             annotate(tbd_oku=ExpressionWrapper(F('plan_oku') - F('cur_oku'), output_field=IntegerField())). \
@@ -61,7 +61,7 @@ class NworthListView_All(ListView):
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(PhealthListView_All, self).dispatch(*args, **kwargs)
+        return super(PeqiaListView_All, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

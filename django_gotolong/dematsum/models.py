@@ -17,6 +17,7 @@ class DematSum(models.Model):
     ds_broker = models.TextField(blank=True, null=True)
     ds_ticker = models.TextField(primary_key=True)
     # isin_code = models.TextField(blank=True, null=True)
+    ds_name = models.TextField(blank=True, null=True)
     ds_isin = models.TextField(blank=True, null=True)
     ds_qty = models.IntegerField(blank=True, null=True)
     ds_acp = models.FloatField(blank=True, null=True)

@@ -25,15 +25,15 @@ from gotolong.trendlyne.trendlyne import *
 
 
 # gfundareco - includes fratio and trendlyne
-class Phealth(Screener, Gfundareco, Demat, Gcweight, Bhav, Ftwhl, Corpact):
+class Peqia(Screener, Gfundareco, Demat, Gcweight, Bhav, Ftwhl, Corpact):
 
     def __init__(self):
-        super(Phealth, self).__init__()
+        super(Peqia, self).__init__()
         # years of investing. started in 2017
         # self.plan_multiply = self.INVEST_YEARS
-        self.phealth_values = {}
+        self.peqia_values = {}
         self.debug_level = 0
-        logging.debug('init : phealth')
+        logging.debug('init : peqia')
 
     def set_log_level(self, log_level):
         log_level_number = getattr(logging, log_level.upper(), None)
@@ -42,7 +42,7 @@ class Phealth(Screener, Gfundareco, Demat, Gcweight, Bhav, Ftwhl, Corpact):
     def set_debug_level(self, debug_level):
         self.debug_level = debug_level
 
-    def phealth_dump_report(self, out_filename, out_filename_2):
+    def peqia_dump_report(self, out_filename, out_filename_2):
 
         bat_missing_list = []
 
@@ -219,25 +219,25 @@ def main():
     if debug_level > 1:
         print('args :', len(sys.argv))
 
-    phealth = Phealth()
+    peqia = Peqia()
 
-    phealth.set_log_level(log_level)
+    peqia.set_log_level(log_level)
 
-    phealth.set_debug_level(debug_level)
+    peqia.set_debug_level(debug_level)
 
-    phealth.amfi_load_data_from_db()
-    phealth.isin_load_data_from_db()
-    phealth.demat_txn_load_data_from_db()
-    phealth.demat_sum_load_data_from_db()
-    phealth.screener_load_db()
-    phealth.trendlyne_load_data_from_db()
-    phealth.gfunda_reco_load_data_from_db()
-    phealth.gcweight_load_data_from_db()
-    phealth.bhav_load_data_from_db()
-    phealth.ftwhl_load_data_from_db()
-    phealth.corpact_load_data_from_db()
+    peqia.amfi_load_data_from_db()
+    peqia.isin_load_data_from_db()
+    peqia.demat_txn_load_data_from_db()
+    peqia.demat_sum_load_data_from_db()
+    peqia.screener_load_db()
+    peqia.trendlyne_load_data_from_db()
+    peqia.gfunda_reco_load_data_from_db()
+    peqia.gcweight_load_data_from_db()
+    peqia.bhav_load_data_from_db()
+    peqia.ftwhl_load_data_from_db()
+    peqia.corpact_load_data_from_db()
 
-    phealth.phealth_dump_report(out_filename_phase[0], out_filename_phase[1])
+    peqia.peqia_dump_report(out_filename_phase[0], out_filename_phase[1])
 
 
 if __name__ == "__main__":

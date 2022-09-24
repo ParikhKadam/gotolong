@@ -7,6 +7,8 @@
 from django.views.generic.list import ListView
 
 from django_gotolong.lastrefd.models import Lastrefd
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 class LastrefdListView(ListView):
@@ -16,6 +18,10 @@ class LastrefdListView(ListView):
     # filter_backends = [filters.OrderingLastrefd,]
     # ordering_fields = ['sno', 'nse_symbol']
     queryset = Lastrefd.objects.all()
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(LastrefdListView, self).dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -6,7 +6,7 @@ TARGET_LIST=$1
 
 if test "${TARGET_LIST}" = "daily" ; then
 
-    for TARGET in bhav ftwhl demat phealth
+    for TARGET in bhav ftwhl demat peqia
     do
       gotolong_${TARGET}_invoke
       #${TARGET}_invoke.sh
@@ -15,7 +15,7 @@ if test "${TARGET_LIST}" = "daily" ; then
     if test -n "${GOTOLONG_EXCEL}"
     then
         CONFIG_PROFILE_REPORTS_LOC=`python -m gotolong.config.config_ini profile_reports`
-        PHEALTH_OUT_FILE=${CONFIG_PROFILE_REPORTS_LOC}/phealth-reports/phealth-reports.csv
+        PHEALTH_OUT_FILE=${CONFIG_PROFILE_REPORTS_LOC}/peqia-reports/peqia-reports.csv
         excel ${PHEALTH_OUT_FILE} &
     fi
 else
@@ -62,7 +62,7 @@ else
       # ${TARGET}_invoke.sh
     done
 
-    for TARGET in phealth
+    for TARGET in peqia
     do
       gotolong_${TARGET}_invoke
     done

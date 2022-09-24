@@ -40,7 +40,7 @@ setup(
              'scripts/gotolong_gcweight_invoke',
              'scripts/gotolong_isin_invoke',
              'scripts/gotolong_nach_invoke',
-             'scripts/gotolong_phealth_invoke',
+             'scripts/gotolong_peqia_invoke',
              'scripts/gotolong_screener_invoke',
              'scripts/gotolong_trendlyne_invoke'
              ],
