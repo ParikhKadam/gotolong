@@ -20,6 +20,7 @@ import openpyxl
 import pandas as pd
 import numpy as np
 
+from django_gotolong.comm import comfun
 from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update
 
 from itertools import zip_longest
@@ -35,6 +36,332 @@ class GmutfunListView(ListView):
         refresh_url = Gmutfun_url()
         context["refresh_url"] = refresh_url
         return context
+
+
+class GmutfunListView_Active_AUM_CapBox(ListView):
+    model = Gmutfun
+
+    def get_queryset(self):
+
+        self.queryset = Gmutfun.objects.all(). \
+            filter(Q(gmutfun_type='Active')). \
+            exclude(gmutfun_benchmark__contains=',').order_by('-gmutfun_aum', 'gmutfun_benchmark'). \
+            filter(gmutfun_aum__gte=100)
+
+        return self.queryset
+
+    # @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(GmutfunListView_Active_AUM_CapBox, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        refresh_url = Gmutfun_url()
+        context["refresh_url"] = refresh_url
+
+        min_score_grade = 0
+
+        qs_flexi = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_scheme__contains='Flexi')). \
+            filter(Q(gmutfun_benchmark__contains='500 Total Return Index')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_aum', '-gmutfun_alpha_pct')
+
+        qs_large = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_benchmark__contains='100 Total Return Index')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_aum', '-gmutfun_alpha_pct')
+
+        qs_lami = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_subtype='LM-250')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_aum', '-gmutfun_alpha_pct')
+
+        qs_mid = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_benchmark__contains='Midcap 150 Total Return Index') |
+                   Q(gmutfun_benchmark__contains='150 MidCap Total Return Index')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_aum', '-gmutfun_alpha_pct')
+
+        qs_small = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_benchmark__contains='Smallcap 250 Total Return Index') |
+                   Q(gmutfun_benchmark__contains='250 SmallCap Total Return Index')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_aum', '-gmutfun_alpha_pct')
+
+        qs_multi = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_subtype='U-Multi')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_aum', '-gmutfun_alpha_pct')
+
+        qs_value = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_subtype='U-Value')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_aum', '-gmutfun_alpha_pct')
+
+        qs_divi = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_subtype='U-Dividend')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_aum', '-gmutfun_alpha_pct')
+
+        flex_list = []
+        large_list = []
+        lami_list = []
+        mid_list = []
+        small_list = []
+        multi_list = []
+        value_list = []
+        divi_list = []
+
+        # select at max 10
+        max_count = 10
+
+        cur_idx = 0
+        for q1 in qs_flexi:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
+            flex_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        cur_idx = 0
+        for q1 in qs_large:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
+            large_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        cur_idx = 0
+        for q1 in qs_lami:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
+            lami_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        cur_idx = 0
+        for q1 in qs_mid:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
+            mid_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        cur_idx = 0
+        for q1 in qs_small:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
+            small_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        cur_idx = 0
+        for q1 in qs_multi:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
+            multi_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        cur_idx = 0
+        for q1 in qs_value:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
+            value_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        cur_idx = 0
+        for q1 in qs_divi:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
+            divi_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        context["all_list"] = list(
+            zip_longest(flex_list, large_list, lami_list, mid_list, small_list,
+                        multi_list, value_list, divi_list, fillvalue='-'))
+
+        return context
+
+    def get_template_names(self):
+        app_label = 'gmutfun'
+        template_name_first = app_label + '/' + 'gmutfun_capbox_active_list.html'
+        template_names_list = [template_name_first]
+        return template_names_list
+
+
+class GmutfunListView_Active_Select_CapBox(ListView):
+    model = Gmutfun
+
+    def get_queryset(self):
+
+        self.queryset = Gmutfun.objects.all(). \
+            filter(Q(gmutfun_type='Active')). \
+            exclude(gmutfun_benchmark__contains=',').order_by('-gmutfun_aum'). \
+            filter(gmutfun_aum__gte=100)
+
+        return self.queryset
+
+    # @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(GmutfunListView_Active_Select_CapBox, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        refresh_url = Gmutfun_url()
+        context["refresh_url"] = refresh_url
+
+        min_score_grade = self.kwargs['score_grade']
+
+        qs_flexi = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_scheme__contains='Flexi')). \
+            filter(Q(gmutfun_benchmark__contains='500 Total Return Index')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
+
+        qs_large = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_benchmark__contains='100 Total Return Index')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
+
+        qs_lami = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_subtype='LM-250')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
+
+        qs_mid = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_benchmark__contains='Midcap 150 Total Return Index') |
+                   Q(gmutfun_benchmark__contains='150 MidCap Total Return Index')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
+
+        qs_small = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_benchmark__contains='Smallcap 250 Total Return Index') |
+                   Q(gmutfun_benchmark__contains='250 SmallCap Total Return Index')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
+
+        qs_multi = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_subtype='U-Multi')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
+
+        qs_value = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_subtype='U-Value')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
+
+        qs_divi = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_subtype='U-Dividend')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
+
+        flex_list = []
+        large_list = []
+        lami_list = []
+        mid_list = []
+        small_list = []
+        multi_list = []
+        value_list = []
+        divi_list = []
+
+        # select at max 10
+        max_count = 10
+
+        cur_idx = 0
+        for q1 in qs_flexi:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
+            flex_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        cur_idx = 0
+        for q1 in qs_large:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
+            large_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        cur_idx = 0
+        for q1 in qs_lami:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
+            lami_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        cur_idx = 0
+        for q1 in qs_mid:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
+            mid_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        cur_idx = 0
+        for q1 in qs_small:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
+            small_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        cur_idx = 0
+        for q1 in qs_multi:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
+            multi_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        cur_idx = 0
+        for q1 in qs_value:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
+            value_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        cur_idx = 0
+        for q1 in qs_divi:
+            cur_idx += 1
+            if cur_idx > max_count:
+                break
+            divi_list.append(q1.gmutfun_scheme + ' - ' + str(int(q1.gmutfun_aum)))
+
+        context["all_list"] = list(
+            zip_longest(flex_list, large_list, lami_list, mid_list, small_list,
+                        multi_list, value_list, divi_list, fillvalue='-'))
+
+        return context
+
+    def get_template_names(self):
+        app_label = 'gmutfun'
+        template_name_first = app_label + '/' + 'gmutfun_capbox_active_list.html'
+        template_names_list = [template_name_first]
+        return template_names_list
 
 
 class GmutfunListView_Passive_Select_FOF_Capbox(ListView):
@@ -1059,14 +1386,7 @@ def Gmutfun_upload(request):
 
             gmutfun_subtype = ''
             if gmutfun_type == 'Active':
-                if re.search('500', gmutfun_benchmark):
-                    gmutfun_subtype = 'F-500'
-                elif re.search('100', gmutfun_benchmark):
-                    gmutfun_subtype = 'L-100'
-                elif re.search('150', gmutfun_benchmark):
-                    gmutfun_subtype = 'M-150'
-                elif re.search('250', gmutfun_benchmark):
-                    gmutfun_subtype = 'S-250'
+                gmutfun_subtype = comfun.comm_mf_subcat(gmutfun_scheme, gmutfun_benchmark)
 
             gmutfun_ret_1y_reg = column[2].strip()
             gmutfun_ret_1y_bench = column[3].strip()

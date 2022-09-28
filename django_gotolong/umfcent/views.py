@@ -379,29 +379,7 @@ def Umfcent_upload(request):
                 # Kotak Flexicap Fund - Growth (Regular Plan) (Erstwhile Kotak Standard Multicap Fund - Gr)
 
                 real_fund_name = fund_name.split('-')[0]
-                if re.search(r'Flexi', real_fund_name, re.IGNORECASE):
-                    fund_subcat = 'F-500'
-                elif re.search(r'Large', real_fund_name, re.IGNORECASE) \
-                        or re.search(r'Blue.*chip', fund_name, re.IGNORECASE) \
-                        or re.search(r'Frontline', fund_name, re.IGNORECASE):
-                    if re.search(r'Mid', real_fund_name, re.IGNORECASE):
-                        fund_subcat = 'LM-250'
-                    else:
-                        fund_subcat = 'L-100'
-                elif re.search(r'Mid', real_fund_name, re.IGNORECASE):
-                    fund_subcat = 'M-150'
-                elif re.search(r'Small', real_fund_name, re.IGNORECASE):
-                    fund_subcat = 'S-250'
-                elif re.search(r'Multi', real_fund_name, re.IGNORECASE):
-                    fund_subcat = 'U-Multi'
-                elif re.search(r'Value', real_fund_name, re.IGNORECASE):
-                    fund_subcat = 'U-Value'
-                elif re.search(r'Dividend', real_fund_name, re.IGNORECASE):
-                    fund_subcat = 'U-Diviend'
-                elif re.search(r'Index', real_fund_name, re.IGNORECASE):
-                    fund_subcat = 'U-Index'
-                else:
-                    fund_subcat = 'U-Unknown'
+                fund_subcat = comfun.comm_mf_subcat(real_fund_name, '-unk-benchmark-')
 
                 _, created = Umfcent.objects.update_or_create(
                     umfcent_id=unique_id,

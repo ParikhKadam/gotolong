@@ -1,17 +1,14 @@
 {% include "top.html" %}
-{% include "user_mf_top.html" %}
+{% include "global_top.html" %}
 
-<h2>MFIA (Mutual Fund - Active - Investment Advisor) List </h2>
+<h1> Global Mutual Funds - CapBox </h1>
 
-{% if debug %}
-{{object_list}}
-{% endif %}
+{% include "gmutfun/gmutfun_top.html" %}
 
-<br/>
-
+<br>
 Number of object: {{ object_list|length }}
 
-<table cellspacing="0" border="1">
+<table class="display" cellspacing="0" border="1">
     <thead>
     <tr>
         <th>
@@ -36,9 +33,11 @@ Number of object: {{ object_list|length }}
             Value
         </th>
         <th>
-            Dividend
+            Divi
         </th>
+    </tr>
     </thead>
+
     <tbody>
     {% for flex_name, large_name, lami_name, mid_name, small_name, multi_name, value_name, divi_name in all_list %}
     <tr>
@@ -67,6 +66,8 @@ Number of object: {{ object_list|length }}
             {{ divi_name }}
         </td>
     </tr>
+    {% empty %}
+    <tr>No Mutual Funds yet.</tr>
     {% endfor %}
     </tbody>
 </table>

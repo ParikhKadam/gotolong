@@ -19,6 +19,47 @@ def comm_func_ticker_match(ticker, amfi_rank_dict, dematsum_list):
         return False
 
 
+def comm_mf_subcat(fund_name, benchmark_name):
+    if re.search(r'Flexi', fund_name, re.IGNORECASE):
+        fund_subcat = 'F-500'
+    elif re.search(r'Large', fund_name, re.IGNORECASE) \
+            or re.search(r'Blue.*chip', fund_name, re.IGNORECASE) \
+            or re.search(r'Frontline', fund_name, re.IGNORECASE):
+        if re.search(r'Mid', fund_name, re.IGNORECASE):
+            fund_subcat = 'LM-250'
+        else:
+            fund_subcat = 'L-100'
+    elif re.search(r'Mid', fund_name, re.IGNORECASE):
+        fund_subcat = 'M-150'
+    elif re.search(r'Small', fund_name, re.IGNORECASE):
+        fund_subcat = 'S-250'
+    elif re.search(r'Multi', fund_name, re.IGNORECASE):
+        fund_subcat = 'U-Multi'
+    elif re.search(r'Value', fund_name, re.IGNORECASE):
+        fund_subcat = 'U-Value'
+    elif re.search(r'Dividend', fund_name, re.IGNORECASE):
+        fund_subcat = 'U-Dividend'
+    elif re.search(r'Index', fund_name, re.IGNORECASE):
+        fund_subcat = 'U-Index'
+    elif re.search(r'ETF', fund_name, re.IGNORECASE):
+        fund_subcat = 'U-ETF'
+    else:
+        fund_subcat = 'U-Unknown'
+        """
+        if re.search('500', benchmark_name):
+            fund_subcat = 'F-500'
+        elif re.search('100', benchmark_name):
+            fund_subcat = 'L-100'
+        elif re.search('150', benchmark_name):
+            fund_subcat = 'M-150'
+        elif re.search('250', benchmark_name):
+            fund_subcat = 'S-250'
+        else:
+            pass
+        """
+    return fund_subcat
+
+
 # one parameter named request
 def comm_func_upload(request, template, columns_list, list_url_name, ignore_top_lines=0):
     # for quick debugging

@@ -41,7 +41,8 @@ from django_gotolong.gmutfun.views import GmutfunListView_Active_Flexi, \
     GmutfunListView_Active_Large, GmutfunListView_Active_Mid, GmutfunListView_Active_Small, \
     GmutfunListView_Active_Multi, GmutfunListView_Active_LargeMid, \
     GmutfunListView_Active_Value, GmutfunListView_Active_Dividend, \
-    GmutfunListView_Active_Select, GmutfunListView_Active_AUM
+    GmutfunListView_Active_Select, GmutfunListView_Active_Select_CapBox, \
+    GmutfunListView_Active_AUM, GmutfunListView_Active_AUM_CapBox
 
 urlpatterns = [
     path('list/', GmutfunListView.as_view(), name='gmutfun-list'),
@@ -79,8 +80,12 @@ urlpatterns = [
     path('list/active/dividend/', GmutfunListView_Active_Dividend.as_view(), name='gmutfun-list-active-dividend'),
     path('list/active-select/<int:score_grade>/<int:mf_captype_count>/',
          GmutfunListView_Active_Select.as_view(), name='gmutfun-list-active-select'),
+    path('list/active-select/capbox/<int:score_grade>/<int:mf_captype_count>/',
+         GmutfunListView_Active_Select_CapBox.as_view(), name='gmutfun-list-active-select-capbox'),
     path('list/active-aum/<int:mf_captype_count>/',
          GmutfunListView_Active_AUM.as_view(), name='gmutfun-list-active-aum'),
+    path('list/active-aum/capbox/<int:mf_captype_count>/',
+         GmutfunListView_Active_AUM_CapBox.as_view(), name='gmutfun-list-active-aum-capbox'),
     path('benchmark/all/', GmutfunListView_Benchmark_All.as_view(), name='gmutfun-benchmark-all-list'),
     path('benchmark/etf/', GmutfunListView_Benchmark_ETF.as_view(), name='gmutfun-benchmark-etf-list'),
     path('benchmark/fof/', GmutfunListView_Benchmark_FOF.as_view(), name='gmutfun-benchmark-fof-list'),

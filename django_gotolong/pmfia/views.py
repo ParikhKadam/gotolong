@@ -53,6 +53,13 @@ class PmfiaListView_Lead(ListView):
             filter(gmutfun_alpha_grade__gte=min_score_grade). \
             order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
 
+        qs_lami = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_subtype='LM-250')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
+
         qs_mid = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
             filter(Q(gmutfun_benchmark__contains='Midcap 150 Total Return Index') |
                    Q(gmutfun_benchmark__contains='150 MidCap Total Return Index')). \
@@ -69,17 +76,46 @@ class PmfiaListView_Lead(ListView):
             filter(gmutfun_alpha_grade__gte=min_score_grade). \
             order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
 
+        qs_multi = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_subtype='U-Multi')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
+
+        qs_value = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_subtype='U-Value')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
+
+        qs_divi = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_subtype='U-Dividend')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_alpha_pct', '-gmutfun_aum')
+
         flex_list = []
         large_list = []
+        lami_list = []
         mid_list = []
         small_list = []
+        multi_list = []
+        value_list = []
+        divi_list = []
 
-        for q1 in (qs_flexi | qs_large | qs_mid | qs_small):
+        # fill list
+
+        for q1 in (qs_flexi | qs_large | qs_lami | qs_mid | qs_small | qs_multi | qs_value | qs_divi):
             g_name = q1.gmutfun_scheme.lower()
             g_name = g_name.split("fund")[0]
             g_benchmark = q1.gmutfun_benchmark
+            g_subtype = q1.gmutfun_subtype
             # print(q1)
             for q2 in self.queryset:
+                u_subcat = q2.umfcent_subcat
                 # print(q2)
                 # print(g_name, ':', u_name)
                 if False:
@@ -120,26 +156,45 @@ class PmfiaListView_Lead(ListView):
                     break
 
             max_captype_mf = self.kwargs['max_captype_mf']
-            if re.search('500', g_benchmark):
-                if len(flex_list) < max_captype_mf:
-                    flex_list.append(g_name)
-            elif re.search('100', g_benchmark):
-                if len(large_list) < max_captype_mf:
-                    large_list.append(g_name)
-            elif re.search('150', g_benchmark):
-                if len(mid_list) < max_captype_mf:
-                    mid_list.append(g_name)
-            elif re.search('250', g_benchmark):
-                if len(small_list) < max_captype_mf:
-                    small_list.append(g_name)
+            if g_subtype == u_subcat:
+                if u_subcat == 'F-500':
+                    if len(flex_list) < max_captype_mf:
+                        flex_list.append(g_name)
+                elif u_subcat == 'L-100':
+                    if len(large_list) < max_captype_mf:
+                        large_list.append(g_name)
+                elif u_subcat == 'LM-250':
+                    if len(lami_list) < max_captype_mf:
+                        lami_list.append(g_name)
+                elif u_subcat == 'M-150':
+                    if len(mid_list) < max_captype_mf:
+                        mid_list.append(g_name)
+                elif u_subcat == 'S-250':
+                    if len(small_list) < max_captype_mf:
+                        small_list.append(g_name)
+                elif u_subcat == 'U-Multi':
+                    if len(multi_list) < max_captype_mf:
+                        multi_list.append(g_name)
+                elif u_subcat == 'U-Value':
+                    if len(value_list) < max_captype_mf:
+                        value_list.append(g_name)
+                elif u_subcat == 'U-Dividend':
+                    if len(divi_list) < max_captype_mf:
+                        divi_list.append(g_name)
 
         context["pmfia_flex_list"] = flex_list
         context["pmfia_large_list"] = large_list
+        context["pmfia_lami_list"] = lami_list
         context["pmfia_mid_list"] = mid_list
         context["pmfia_small_list"] = small_list
 
-        context["all_list"] = list(zip_longest(flex_list, large_list, mid_list, small_list, fillvalue='-'))
+        context["pmfia_multi_list"] = multi_list
+        context["pmfia_value_list"] = value_list
+        context["pmfia_divi_list"] = divi_list
 
+        context["all_list"] = list(zip_longest(flex_list, large_list, lami_list,
+                                               mid_list, small_list, multi_list,
+                                               value_list, divi_list, fillvalue='-'))
         return context
 
     def get_template_names(self):
@@ -147,7 +202,6 @@ class PmfiaListView_Lead(ListView):
         template_name_first = app_label + '/' + 'pmfia_list.html'
         template_names_list = [template_name_first]
         return template_names_list
-
 
 class PmfiaListView_AUM(ListView):
 
@@ -182,6 +236,13 @@ class PmfiaListView_AUM(ListView):
             filter(gmutfun_alpha_grade__gte=min_score_grade). \
             order_by('-gmutfun_aum', '-gmutfun_alpha_pct')
 
+        qs_lami = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_subtype='LM-250')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_aum', '-gmutfun_alpha_pct')
+
         qs_mid = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
             filter(Q(gmutfun_benchmark__contains='Midcap 150 Total Return Index') |
                    Q(gmutfun_benchmark__contains='150 MidCap Total Return Index')). \
@@ -191,8 +252,28 @@ class PmfiaListView_AUM(ListView):
             order_by('-gmutfun_aum', '-gmutfun_alpha_pct')
 
         qs_small = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
-            filter(Q(gmutfun_benchmark__contains='Smallcap 250 Total Return Index') |
-                   Q(gmutfun_benchmark__contains='250 SmallCap Total Return Index')). \
+            filter(Q(gmutfun_subtype='S-250')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_aum', '-gmutfun_alpha_pct')
+
+        qs_multi = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_subtype='U-Multi')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_aum', '-gmutfun_alpha_pct')
+
+        qs_value = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_subtype='U-Value')). \
+            exclude(gmutfun_benchmark__contains=','). \
+            filter(gmutfun_aum__gte=1000). \
+            filter(gmutfun_alpha_grade__gte=min_score_grade). \
+            order_by('-gmutfun_aum', '-gmutfun_alpha_pct')
+
+        qs_divi = Gmutfun.objects.all().filter(Q(gmutfun_type='Active')). \
+            filter(Q(gmutfun_subtype='U-Dividend')). \
             exclude(gmutfun_benchmark__contains=','). \
             filter(gmutfun_aum__gte=1000). \
             filter(gmutfun_alpha_grade__gte=min_score_grade). \
@@ -200,15 +281,23 @@ class PmfiaListView_AUM(ListView):
 
         flex_list = []
         large_list = []
+        lami_list = []
         mid_list = []
         small_list = []
+        multi_list = []
+        value_list = []
+        divi_list = []
 
-        for q1 in (qs_flexi | qs_large | qs_mid | qs_small):
+        # fill list
+
+        for q1 in (qs_flexi | qs_large | qs_lami | qs_mid | qs_small | qs_multi | qs_value | qs_divi):
             g_name = q1.gmutfun_scheme.lower()
             g_name = g_name.split("fund")[0]
             g_benchmark = q1.gmutfun_benchmark
+            g_subtype = q1.gmutfun_subtype
             # print(q1)
             for q2 in self.queryset:
+                u_subcat = q2.umfcent_subcat
                 # print(q2)
                 # print(g_name, ':', u_name)
                 if False:
@@ -219,6 +308,7 @@ class PmfiaListView_AUM(ListView):
                     # umf central path
                     u_name = q2.umfcent_name.lower()
                 u_name = u_name.split("fund")[0]
+
                 # print(g_name, ':', u_name)
 
                 # remove hyphen from mid-cap
@@ -248,25 +338,45 @@ class PmfiaListView_AUM(ListView):
                     break
 
             max_captype_mf = self.kwargs['max_captype_mf']
-            if re.search('500', g_benchmark):
-                if len(flex_list) < max_captype_mf:
-                    flex_list.append(g_name)
-            elif re.search('100', g_benchmark):
-                if len(large_list) < max_captype_mf:
-                    large_list.append(g_name)
-            elif re.search('150', g_benchmark):
-                if len(mid_list) < max_captype_mf:
-                    mid_list.append(g_name)
-            elif re.search('250', g_benchmark):
-                if len(small_list) < max_captype_mf:
-                    small_list.append(g_name)
+            if g_subtype == u_subcat:
+                if u_subcat == 'F-500':
+                    if len(flex_list) < max_captype_mf:
+                        flex_list.append(g_name)
+                elif u_subcat == 'L-100':
+                    if len(large_list) < max_captype_mf:
+                        large_list.append(g_name)
+                elif u_subcat == 'LM-250':
+                    if len(lami_list) < max_captype_mf:
+                        lami_list.append(g_name)
+                elif u_subcat == 'M-150':
+                    if len(mid_list) < max_captype_mf:
+                        mid_list.append(g_name)
+                elif u_subcat == 'S-250':
+                    if len(small_list) < max_captype_mf:
+                        small_list.append(g_name)
+                elif u_subcat == 'U-Multi':
+                    if len(multi_list) < max_captype_mf:
+                        multi_list.append(g_name)
+                elif u_subcat == 'U-Value':
+                    if len(value_list) < max_captype_mf:
+                        value_list.append(g_name)
+                elif u_subcat == 'U-Dividend':
+                    if len(divi_list) < max_captype_mf:
+                        divi_list.append(g_name)
 
         context["pmfia_flex_list"] = flex_list
         context["pmfia_large_list"] = large_list
+        context["pmfia_lami_list"] = lami_list
         context["pmfia_mid_list"] = mid_list
         context["pmfia_small_list"] = small_list
 
-        context["all_list"] = list(zip_longest(flex_list, large_list, mid_list, small_list, fillvalue='-'))
+        context["pmfia_multi_list"] = multi_list
+        context["pmfia_value_list"] = value_list
+        context["pmfia_divi_list"] = divi_list
+
+        context["all_list"] = list(zip_longest(flex_list, large_list, lami_list,
+                                               mid_list, small_list, multi_list,
+                                               value_list, divi_list, fillvalue='-'))
 
         return context
 
