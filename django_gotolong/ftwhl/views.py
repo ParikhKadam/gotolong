@@ -21,7 +21,7 @@ from django_gotolong.ftwhl.models import Ftwhl
 from django_gotolong.amfi.models import Amfi, amfi_load_rank
 from django_gotolong.dematsum.models import DematSum, dematsum_load_stocks
 from django_gotolong.comm import comfun
-from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update, lastrefd_same
+from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update, lastrefd_same_day
 
 class FtwhlListView(ListView):
     model = Ftwhl
@@ -76,7 +76,7 @@ def ftwhl_fetch(request):
     debug_level = 1
 
     # last refresh date is same
-    if lastrefd_same("ftwhl"):
+    if lastrefd_same_day("ftwhl"):
         print('ftwhl_fetch: skipped as last refresh date is same')
         return HttpResponseRedirect(reverse("ftwhl-list"))
 

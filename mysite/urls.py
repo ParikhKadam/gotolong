@@ -21,11 +21,6 @@ from django.conf.urls.static import static
 
 from django.views.generic import TemplateView, RedirectView
 
-from django_gotolong.bhav.views import BhavListView, bhav_fetch, bhav_upload
-
-#from django_gotolong.broker.icidir.isum.views import BrokerIcidirSumListView, BrokerIcidirSumUpload
-#from django_gotolong.broker.icidir.itxn.views import BrokerIcidirTxnListView, BrokerIcidirTxnUpload
-
 from django_gotolong.bstmtdiv.views import BstmtDivListView, bstmtdiv_upload
 from django_gotolong.bstmtdiv.views import BstmtDivYearArchiveView, BstmtDivMonthArchiveView, BstmtDivAmountView, \
     BstmtDivFrequencyView
@@ -67,23 +62,20 @@ urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('advisor/', include('django_gotolong.advisor.urls')),
                   path('amfi/', include('django_gotolong.amfi.urls')),
-                  path('bhav/list/', BhavListView.as_view(), name='bhav-list'),
-                  path('bhav/fetch/', bhav_fetch, name='bhav-fetch'),
-                  path('bhav/upload/', bhav_upload, name='bhav-upload'),
+                  path('bhav/', include('django_gotolong.bhav.urls')),
                   path('bstmtdiv/list/', BstmtDivListView.as_view(), name='bstmtdiv-list'),
                   path('bstmtdiv/list/<str:year>/', BstmtDivYearArchiveView.as_view(),
                        name='bstmtdiv_archive_year'),
-                path('bstmtdiv/list/<int:year>/<int:month>/',
-                     BstmtDivMonthArchiveView.as_view(month_format='%m'),
-                     name='bstmtdiv_archive_month_numeric'),
-                path('bstmtdiv/list/<int:year>/<str:month>/', BstmtDivMonthArchiveView.as_view(),
-                     name='bstmtdiv_archive_month'),
+                  path('bstmtdiv/list/<int:year>/<int:month>/',
+                       BstmtDivMonthArchiveView.as_view(month_format='%m'),
+                       name='bstmtdiv_archive_month_numeric'),
+                  path('bstmtdiv/list/<int:year>/<str:month>/', BstmtDivMonthArchiveView.as_view(),
+                       name='bstmtdiv_archive_month'),
                   path('bstmtdiv/amount/', BstmtDivAmountView.as_view(),
                        name='bstmtdiv-amount-list'),
                   path('bstmtdiv/frequency/', BstmtDivFrequencyView.as_view(),
                        name='bstmtdiv-frequency-list'),
                   path('bstmtdiv/upload/', bstmtdiv_upload, name='bstmt-upload'),
-                  path('bhav/fetch/', bhav_fetch, name='bhav-fetch'),
                   #                  path('broker/', include('django_gotolong.broker.urls')),
                   path('brokersum/', include('django_gotolong.brokersum.urls')),
                   path('brokertxn/', include('django_gotolong.brokertxn.urls')),

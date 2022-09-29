@@ -16,18 +16,38 @@ class Lastrefd(models.Model):
     class Meta:
         db_table = 'both_lastrefd'
 
-def lastrefd_same(module_name):
+
+def lastrefd_same_time(module_name):
     lastrefd_module = module_name
-    e = Lastrefd.objects.get(lastrefd_module=lastrefd_module)
-    lastrefd_date = e.lastrefd_date.strftime("%Y-%m-%d")
+    try:
+        e = Lastrefd.objects.get(lastrefd_module=lastrefd_module)
+    except:
+        return False
+    lastrefd_date = e.lastrefd_date.strftime("%Y-%m-%d %H:%M")
     now = timezone.now()
-    today_date = now.strftime("%Y-%m-%d")
-    print("lastrefd_same: ", lastrefd_module, 'last: ', lastrefd_date, 'today: ', today_date)
+    today_date = now.strftime("%Y-%m-%d %H:%M")
+    print("lastrefd_same_time: ", lastrefd_module, 'last: ', lastrefd_date, 'today: ', today_date)
     if lastrefd_date == today_date:
         return True
     else:
         return False
 
+
+def lastrefd_same_day(module_name):
+    lastrefd_module = module_name
+    try:
+        e = Lastrefd.objects.get(lastrefd_module=lastrefd_module)
+    except:
+        return False
+
+    lastrefd_date = e.lastrefd_date.strftime("%Y-%m-%d")
+    now = timezone.now()
+    today_date = now.strftime("%Y-%m-%d")
+    print("lastrefd_same_day: ", lastrefd_module, 'last: ', lastrefd_date, 'today: ', today_date)
+    if lastrefd_date == today_date:
+        return True
+    else:
+        return False
 
 def lastrefd_update(module_name):
     now = timezone.now()

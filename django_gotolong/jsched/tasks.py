@@ -8,7 +8,7 @@ from django.http import HttpResponseRedirect
 from datetime import date, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from django_gotolong.bhav.views import bhav_fetch
+from django_gotolong.bhav.views import bhav_fetch_yday
 from django_gotolong.ftwhl.views import ftwhl_fetch
 
 from django.utils import timezone

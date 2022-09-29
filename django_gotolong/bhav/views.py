@@ -7,12 +7,14 @@ from django.views.generic.list import ListView
 from django.urls import reverse
 
 from django.http import HttpResponseRedirect
+from django.db import transaction
 
 # from django_filters.rest_framework import DjangoFilterBackend, FilterSet, OrderingFilter
 
 import urllib.request
 import csv
 import io
+import requests
 
 from datetime import date, timedelta
 import pandas as pd
@@ -27,22 +29,8 @@ from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update
 
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update, lastrefd_same
-
-
-class BhavListView(ListView):
-    model = Bhav
-    # if pagination is desired
-    # paginate_by = 300
-    # filter_backends = [filters.OrderingFilter,]
-    # ordering_fields = ['sno', 'nse_symbol']
-    queryset = Bhav.objects.all()
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        refresh_url = bhav_url()
-        context["refresh_url"] = refresh_url
-        return context
+from django_gotolong.lastrefd.models import Lastrefd, lastrefd_update, \
+    lastrefd_same_day, lastrefd_same_time
 
 
 def bhav_url():
@@ -72,8 +60,32 @@ def bhav_url():
     return url
 
 
+def cmp_url():
+    # https://www.nseindia.com/api/quote-equity?symbol=TCS
+    # https://www.nseindia.com/api/equity-stockIndices?index=NIFTY%20500
+    url = "https://www.nseindia.com/api/equity-stockIndices?index=NIFTY%20500"
+    return url
+
+
+class BhavListView(ListView):
+    model = Bhav
+    # if pagination is desired
+    # paginate_by = 300
+    # filter_backends = [filters.OrderingFilter,]
+    # ordering_fields = ['sno', 'nse_symbol']
+    queryset = Bhav.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        refresh_url = bhav_url()
+        context["refresh_url"] = refresh_url
+        refresh_url_2 = cmp_url()
+        context["refresh_url_2"] = refresh_url_2
+        return context
+
+
 # one parameter named request
-def bhav_fetch(request):
+def bhav_fetch_yday(request):
     # for quick debugging
     #
     # import pdb; pdb.set_trace()
@@ -83,8 +95,8 @@ def bhav_fetch(request):
     debug_level = 1
 
     # last refresh date is same
-    if lastrefd_same("bhav"):
-        print('bhav_fetch: skipped as last refresh date is same')
+    if lastrefd_same_day("bhav"):
+        print('bhav_fetch_yday: skipped as last refresh date is same')
         return HttpResponseRedirect(reverse("bhav-list"))
 
     amfi_rank_dict = {}
@@ -149,7 +161,7 @@ def bhav_fetch(request):
     lastrefd_update("bhav")
 
     print('Skipped records ', skipped_records)
-    print('Completed updating Bhav data')
+    print('Completed updating Bhav data for yday')
     # context = {}
     # render(request, template, context)
 
@@ -157,9 +169,87 @@ def bhav_fetch(request):
     return HttpResponseRedirect(reverse("bhav-list"))
 
 
-# from django.http import HttpResponse
-# def index(request):
-#    return HttpResponse("Hello, world. You're at the polls index.")
+# one parameter named request
+def bhav_fetch_today(request):
+    # for quick debugging
+    #
+    # import pdb; pdb.set_trace()
+    #
+    # breakpoint()
+
+    debug_level = 1
+
+    # last refresh date is same
+    if lastrefd_same_time("bhav"):
+        print('bhav_fetch: skipped as last refresh date is same')
+        return HttpResponseRedirect(reverse("bhav-list"))
+
+    amfi_rank_dict = {}
+    dematsum_list = []
+
+    print("load amfi")
+    # load rank
+    amfi_load_rank(amfi_rank_dict)
+
+    print("load dematsum")
+    dematsum_load_stocks(dematsum_list)
+
+    # declaring template
+    template = "bhav/amfi_list.html"
+
+    url = cmp_url()
+
+    print(url)
+
+    # https://fineracy.com/get-live-data-of-national-stock-exchangense-stocks-of-all-symbolsnifty50-using-python/
+
+    headers = {'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; '
+                             'x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.117 Safari/537.36'}
+
+    main_url = "https://www.nseindia.com/"
+    response = requests.get(main_url, headers=headers)
+    print(response.status_code)
+    cookies = response.cookies
+
+    nifty500_data = requests.get(url, headers=headers, cookies=cookies)
+    print(nifty500_data.status_code)
+
+    if nifty500_data.status_code != 200:
+        print('Failed status code ', nifty500_data.status_code)
+        return HttpResponseRedirect(reverse("bhav-list"))
+
+    nifty500_data = nifty500_data.json()
+    print(nifty500_data)
+
+    with transaction.atomic():
+        for stocks in nifty500_data.get("data"):
+            bhav_ticker = stocks['symbol']
+            bhav_last = stocks['lastPrice']
+
+            if comfun.comm_func_ticker_match(bhav_ticker, amfi_rank_dict, dematsum_list):
+                Bhav.objects.filter(bhav_ticker=bhav_ticker).update(bhav_price=bhav_last)
+
+            """
+            _, created = Bhav.objects.update_or_create(
+                    bhav_ticker=bhav_ticker,
+                    bhav_price=bhav_last
+            )
+            """
+
+            # obj = Bhav.objects.get(bhav_ticker=bhav_ticker)
+            # new_values = {'bhav_last', bhav_last}
+            # for key, value in new_values.items():
+            #    setattr(obj, key, value)
+            # obj.save()
+
+    lastrefd_update("bhav")
+
+    print('Completed updating Bhav data for today')
+    # context = {}
+    # render(request, template, context)
+
+    return HttpResponseRedirect(reverse("bhav-list"))
+
 
 # one parameter named request
 def bhav_upload(request):

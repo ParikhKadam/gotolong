@@ -497,7 +497,7 @@ class GmutfunListView_Passive_Select_FOF_Capbox(ListView):
 
     def get_template_names(self):
         app_label = 'gmutfun'
-        template_name_first = app_label + '/' + 'gmutfun_capbox_list.html'
+        template_name_first = app_label + '/' + 'gmutfun_capbox_passive_list.html'
         template_names_list = [template_name_first]
         return template_names_list
 
@@ -605,7 +605,7 @@ class GmutfunListView_Passive_Select_ETF_Capbox(ListView):
 
     def get_template_names(self):
         app_label = 'gmutfun'
-        template_name_first = app_label + '/' + 'gmutfun_capbox_list.html'
+        template_name_first = app_label + '/' + 'gmutfun_capbox_passive_list.html'
         template_names_list = [template_name_first]
         return template_names_list
 
